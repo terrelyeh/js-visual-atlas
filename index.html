@@ -270,7 +270,8 @@ footer p b { color: var(--ink); font-weight: 700; }
 .an-dot { width: 46%; height: 46%; border-radius: 50%; }
 
 .d3w { position: absolute; inset: 0; }
-.dk-note { position: absolute; z-index: 3; font: 11.5px var(--mono); color: #8A93AD; pointer-events: none; white-space: nowrap; }
+.dk-note { position: absolute; z-index: 3; font: 11.5px var(--mono); color: #B4BCD3; pointer-events: none; white-space: nowrap; background: rgba(11,14,24,.78); padding: 3px 8px; border-radius: 6px; }
+.dk-bar .dk-note { background: none; padding: 0; color: #8A93AD; }
 .d3w .tick text { fill: #8A93AD; font-family: var(--mono); font-size: 11px; }
 .d3w .tick line { stroke: #262C3F; }
 .d3w .domain { stroke: #3A4260; }
@@ -826,6 +827,7 @@ const canvasSunset = el => {
       g.restore();
     });
   });
+  dkNote(el, '左右移動游標看遠近視差 · 點一下換一座山', { left: '14px', bottom: '16px' });
   return () => { stop(); el.removeEventListener('pointermove', onMove); el.removeEventListener('pointerdown', onDown); };
 };
 
@@ -845,7 +847,7 @@ function canvasNet(el) {
     while (P.length > N + 80) P.shift();
   };
   el.addEventListener('pointermove', onMove); el.addEventListener('pointerleave', onLeave); el.addEventListener('pointerdown', onDown);
-  dkNote(el, `${N} 個點 · 距離小於 ${Math.round(R)}px 就連線 · 游標會吸引附近的點 · 點一下撒新的點`, { left: '14px', bottom: '14px' });
+  dkNote(el, '移動游標，附近的點會被吸過來 · 點一下撒新的點', { left: '14px', bottom: '14px' });
   const stop = loop(() => {
     g.fillStyle = '#0B0E18'; g.fillRect(0, 0, w, H);
     for (const p of P) {
@@ -897,7 +899,7 @@ function canvasFireworks(el) {
   }
   const onDown = e => { const [x, y] = localPoint(el, e); launch(x, Math.min(y, H - 40)); };
   el.addEventListener('pointerdown', onDown);
-  dkNote(el, '點哪裡就往哪裡放一發 · 拖尾是每格蓋一層半透明底色 · 粒子用 lighter 疊加發光', { left: '14px', bottom: '14px' });
+  dkNote(el, '點哪裡，就往哪裡放一發煙火', { left: '14px', bottom: '14px' });
   const stop = loop((t, dt) => {
     const k = Math.min(3, dt * 60);
     g.globalCompositeOperation = 'source-over';
@@ -956,7 +958,7 @@ function canvasBrush(el) {
   function setMode(i) { mode = i; btns.forEach((b, k) => k < MODES.length && b.setAttribute('aria-pressed', String(k === i))); }
   const note = dkNote(el, '自動示範中 · 在畫面上拖曳就換你畫', { left: '14px', bottom: '16px' });
   let down = false;
-  const onDown = e => { down = true; user = true; note.textContent = '平滑：中點 + quadraticCurveTo · 線寬跟著筆速變'; begin(localPoint(el, e)); try { c.setPointerCapture(e.pointerId); } catch (_) {} };
+  const onDown = e => { down = true; user = true; note.textContent = '右下角換筆刷或清空 · 墨水筆畫得越快線越細'; begin(localPoint(el, e)); try { c.setPointerCapture(e.pointerId); } catch (_) {} };
   const onMove = e => { if (down) to(localPoint(el, e)); };
   const onUp = () => { down = false; prev = null; };
   c.addEventListener('pointerdown', onDown); c.addEventListener('pointermove', onMove); c.addEventListener('pointerup', onUp); c.addEventListener('pointercancel', onUp);
@@ -982,7 +984,7 @@ function canvasClock(el) {
   let smooth = true;
   const [btn] = dkBar(el, [['秒針：平滑', b => { smooth = !smooth; b.textContent = smooth ? '秒針：平滑' : '秒針：跳動'; }]]);
   btn.setAttribute('aria-label', '切換秒針走法');
-  dkNote(el, 'save → translate → rotate → 畫指針 → restore', { left: '14px', bottom: '16px' });
+  dkNote(el, '顯示現在的時間 · 右下角切換秒針要平滑走還是一格一格跳', { left: '14px', bottom: '16px' });
   function hand(angle, len, tail, wd, col) {
     g.save(); g.rotate(angle);
     g.strokeStyle = col; g.lineWidth = wd; g.lineCap = 'round';
@@ -1066,6 +1068,7 @@ const roughHouse = el => {
   draw();
   paper.addEventListener('click', draw);
   paper.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); draw(); } });
+  dkNote(el, '點紙卡重畫，每次的筆觸都不一樣', { left: '14px', bottom: '16px' });
   return () => anims.forEach(a => a.cancel());
 };
 
@@ -1121,7 +1124,7 @@ function roughChart(el) {
   }
   draw();
   paper.addEventListener('click', draw);
-  dkNote(el, '點紙卡換一組數據 · 長條用 hachure，圓餅用 rc.arc 加四種填充', { left: '14px', bottom: '16px' });
+  dkNote(el, '點紙卡換一組數據重畫', { left: '14px', bottom: '16px' });
   return () => anims.forEach(a => a.cancel());
 }
 
@@ -1186,7 +1189,7 @@ function roughFlow(el) {
   svg.style.touchAction = 'none';
   svg.addEventListener('pointerdown', onDown); svg.addEventListener('pointermove', onMove); svg.addEventListener('pointerup', onUp); svg.addEventListener('pointercancel', onUp);
   dkBar(el, [['換筆觸', () => { base = 1 + Math.floor(Math.random() * 999); anims.forEach(a => a.finish()); anims = []; render(); }], ['重排', () => { N = START.map(n => ({ ...n })); anims.forEach(a => a.finish()); anims = []; render(); }]]);
-  dkNote(el, '拖曳方塊，箭頭會跟著走 · 每個圖形固定 seed，所以重畫時筆觸不會亂跳', { left: '14px', bottom: '16px' });
+  dkNote(el, '拖曳方塊，箭頭會跟著走', { left: '14px', bottom: '16px' });
   return () => { cancelAnimationFrame(raf); anims.forEach(a => a.cancel()); };
 }
 
@@ -1211,6 +1214,7 @@ function roughFills(el) {
   const R = [['粗糙度 0.5', 0.5], ['1.5', 1.5], ['3', 3]], G = [['間距 5', 5], ['8', 8], ['14', 14]];
   const btns = dkBar(el, [...R.map(([n, v]) => [n, () => { rough_ = v; sync(); render(); }, v === rough_]), ...G.map(([n, v]) => [n, () => { gap = v; sync(); render(); }, v === gap]), ['換 seed', () => { seed = 1 + Math.floor(Math.random() * 999); render(); }]]);
   function sync() { btns.forEach((b, i) => { if (i < 3) b.setAttribute('aria-pressed', String(R[i][1] === rough_)); else if (i < 6) b.setAttribute('aria-pressed', String(G[i - 3][1] === gap)); }); }
+  dkNote(el, '八種填充樣式 · 右下角調粗糙度和線條間距', { left: '14px', bottom: '16px' });
   return () => anims.forEach(a => a.cancel());
 }
 
@@ -1223,7 +1227,7 @@ function roughBoil(el) {
   let boil = true, idx = 0, last = 0;
   const SEEDS = [11, 23, 37];
   dkBar(el, [['抖動：開', b => { boil = !boil; b.textContent = boil ? '抖動：開' : '抖動：關'; }]]);
-  dkNote(el, 'rough.canvas 每格重畫 · 每 0.12 秒在 3 個 seed 之間輪換，就是手繪動畫的「線條沸騰」', { left: '14px', bottom: '16px' });
+  dkNote(el, '線條一直微微抖動，是手繪動畫常見的效果 · 右下角可以關掉比較', { left: '14px', bottom: '16px' });
   const stop = loop(t => {
     if (boil && t - last > 0.12) { idx = (idx + 1) % 3; last = t; }
     const seed = boil ? SEEDS[idx] : SEEDS[0];
@@ -1317,6 +1321,7 @@ function p5Ink(el) {
   }, el);
   const onDown = e => { const [x, y] = localPoint(el, e); api.addDrop && api.addDrop(x, y); };
   el.addEventListener('pointerdown', onDown);
+  dkNote(el, '點一下，再滴一滴墨', { left: '14px', bottom: '16px' });
   return () => { el.removeEventListener('pointerdown', onDown); inst.remove(); };
 }
 
@@ -1380,7 +1385,7 @@ function p5Boids(el) {
   const onLeave = () => { px = py = -999; };
   const onDown = e => { const [x, y] = localPoint(el, e); for (const b of B) { const dx = b.x - x, dy = b.y - y, d = Math.hypot(dx, dy) + 1; b.vx += dx / d * 8; b.vy += dy / d * 8; } };
   el.addEventListener('pointermove', onMove); el.addEventListener('pointerleave', onLeave); el.addEventListener('pointerdown', onDown);
-  dkNote(el, `${N} 隻 · 游標附近會躲開 · 點一下炸開`, { left: '14px', bottom: '16px' });
+  dkNote(el, '游標附近的鳥會躲開 · 點一下嚇散牠們', { left: '14px', bottom: '16px' });
   return () => { el.removeEventListener('pointermove', onMove); el.removeEventListener('pointerleave', onLeave); el.removeEventListener('pointerdown', onDown); inst.remove(); };
 }
 
@@ -2159,7 +2164,7 @@ MOUNT.gsap = (el, api = {}) => {
 
 /* ---- 5. Anime.js grid stagger ---- */
 const animeGrid = el => {
-  const w = el.clientWidth, H = el.clientHeight - 8;
+  const w = el.clientWidth, H = el.clientHeight - 40;
   const cell = Math.max(18, Math.min(36, Math.floor(Math.min((w - 32) / 22, (H - 24) / 13))));
   const cols = Math.floor((w - 32) / cell), rows = Math.floor((H - 24) / cell);
   const wrap = h('div', { class: 'an' }), grid = h('div', { class: 'an-grid' });
@@ -2189,6 +2194,7 @@ const animeGrid = el => {
   grid.addEventListener('pointerdown', e => { const c = e.target.closest('.an-cell'); if (!c) return; lastClick = performance.now(); wave(+c.dataset.i); });
   wave('center');
   const iv = setInterval(() => { if (performance.now() - lastClick > 4000) wave(Math.floor(Math.random() * dots.length)); }, 3000);
+  dkNote(el, '點任何一格，波紋從那裡擴散出去', { left: '14px', bottom: '16px' });
   return () => { clearInterval(iv); anime.remove(dots); };
 };
 
@@ -2232,7 +2238,7 @@ function animeSvg(el) {
     <polygon class="as-morph" points="${STAR}" fill="#9C85FF"/>
     <text x="610" y="395" text-anchor="middle" fill="#8A93AD" font-family="JetBrains Mono, monospace" font-size="14">points 10 個頂點互相補間</text>
     <text x="265" y="30" text-anchor="middle" fill="#8A93AD" font-family="JetBrains Mono, monospace" font-size="14">setDashoffset 描線 + anime.path 沿路徑</text>
-  </svg><div class="anx-bar"><button class="dk-btn" type="button">重播</button><span>箭頭用 path('angle') 自動轉向</span></div>`;
+  </svg><div class="anx-bar"><button class="dk-btn" type="button">重播</button><span>箭頭沿著曲線走，會自己轉向</span></div>`;
   el.appendChild(box);
   const svg = box.querySelector('svg'), arrow = svg.querySelector('.as-arrow'), morph = svg.querySelector('.as-morph'), draws = svg.querySelectorAll('.as-draw');
   const path = anime.path(svg.querySelector('.as-guide'));
@@ -2255,7 +2261,7 @@ function animeEasing(el) {
   const EASES = ['linear', 'easeInOutQuad', 'easeOutExpo', 'easeOutBack', 'easeOutBounce', 'easeOutElastic(1, .5)', 'spring(1, 80, 10, 0)', 'steps(6)', 'cubicBezier(.7, 0, .2, 1)'];
   const box = h('div', { class: 'anx' });
   box.innerHTML = `<div class="ae">${EASES.map((e, i) => `<div class="ae-row"><span>${e}</span><div class="ae-track"><div class="ae-ball" style="background:${STAGE_COL[Object.keys(STAGE_COL)[i % 6]]}"></div></div></div>`).join('')}</div>
-    <div class="anx-bar"><button class="dk-btn" type="button">重播</button><span>同樣 1.6 秒、同樣距離，只換 easing · spring 會自己算時間</span></div>`;
+    <div class="anx-bar"><button class="dk-btn" type="button">重播</button><span>每顆球的時間和距離都一樣，只差在加速、減速的方式</span></div>`;
   el.appendChild(box);
   const balls = [...box.querySelectorAll('.ae-ball')];
   function run() {
@@ -2281,7 +2287,7 @@ function animeNumbers(el) {
       <text x="70" y="68" text-anchor="middle" fill="#E8ECF6" font-family="Archivo, sans-serif" font-weight="800" font-size="26" style="font-variant-numeric: tabular-nums" class="pct">0%</text>
       <text x="70" y="90" text-anchor="middle" fill="#8A93AD" font-family="JetBrains Mono, monospace" font-size="10">轉換率</text></svg></div>
     <div class="anum-bars">${'<i></i>'.repeat(12)}</div></div>
-    <div class="anx-bar"><button class="dk-btn" type="button">更新數據</button><span>補間的不是元素，是一個普通 JS 物件，再用 update 把數字寫回畫面</span></div>`;
+    <div class="anx-bar"><button class="dk-btn" type="button">更新數據</button><span>數字從舊值滾到新值 · 每 3.5 秒自動換一組</span></div>`;
   el.appendChild(box);
   const S = { rev: 0, users: 0, secs: 0, rate: 0 }, out = {}, C = 2 * Math.PI * 54;
   box.querySelectorAll('b[data-k]').forEach(b => { out[b.dataset.k] = b; });
@@ -2401,7 +2407,7 @@ function d3Force(el) {
     link.attr('stroke', l => l.source.id === d.id || l.target.id === d.id ? d.col : '#3A4260').style('opacity', l => l.source.id === d.id || l.target.id === d.id ? 1 : 0.08);
   }).on('mouseleave', () => { node.style('opacity', 1); link.attr('stroke', '#3A4260').style('opacity', 1); });
   dkBar(el, [['重新打散', () => { nodes.forEach(d => { d.x = Math.random() * w; d.y = Math.random() * H; }); sim.alpha(1).restart(); }]]);
-  dkNote(el, '資料：本頁分層圖裡的套件 → 瀏覽器 API', { left: '14px', bottom: '16px' });
+  dkNote(el, '資料是上面分層圖的套件和 API · 節點可以拖', { left: '14px', bottom: '16px' });
   return () => sim.stop();
 }
 
@@ -2450,7 +2456,7 @@ function d3Tree(el) {
   }, 2600);
   function stopAuto() { clearInterval(auto); }
   svg.on('pointerdown.auto', stopAuto);
-  dkNote(el, '點節點展開／收合 · 拖曳平移 · ⌘/Ctrl + 滾輪縮放', { left: '14px', bottom: '16px' });
+  dkNote(el, '點節點展開或收合 · 拖曳移動，⌘/Ctrl + 滾輪縮放', { left: '14px', bottom: '16px' });
   return () => { stopAuto(); svg.interrupt(); };
 }
 
@@ -2465,14 +2471,14 @@ function d3Stream(el) {
   const x = d3.scaleLinear([0, m - 1], [M.l, w - M.r]), y = d3.scaleLinear().range([H - M.b, M.t]);
   const area = d3.area().curve(d3.curveBasis).x((d, i) => x(i)).y0(d => y(d[0])).y1(d => y(d[1]));
   const svg = d3.select(el).append('svg').attr('width', w).attr('height', H);
-  const label = dkNote(el, '示範數據（隨機 bump 函數）', { left: '14px', bottom: '16px' });
+  const label = dkNote(el, '隨機示範數據，每 3 秒換一組 · 游標移到色帶上看名稱', { left: '14px', bottom: '16px' });
   let paths = svg.append('g').selectAll('path');
   function render(dur) {
     const series = stack.offset(off)(data);
     y.domain([d3.min(series, s => d3.min(s, d => d[0])), d3.max(series, s => d3.max(s, d => d[1]))]);
     paths = paths.data(series).join(en => en.append('path').attr('fill', (d, i) => COLS[i]).attr('fill-opacity', 0.9).attr('d', area)
       .on('mouseenter', (e, d) => { paths.attr('fill-opacity', p => p === d ? 1 : 0.22); label.textContent = NAMES[d.key]; })
-      .on('mouseleave', () => { paths.attr('fill-opacity', 0.9); label.textContent = '示範數據（隨機 bump 函數）'; }));
+      .on('mouseleave', () => { paths.attr('fill-opacity', 0.9); label.textContent = '隨機示範數據，每 3 秒換一組 · 游標移到色帶上看名稱'; }));
     paths.transition().duration(dur).ease(d3.easeCubicInOut).attr('d', area);
   }
   render(0);
@@ -2515,7 +2521,7 @@ function d3Scatter(el) {
   const stopAuto = () => clearInterval(auto);
   svg.on('pointerdown.auto', stopAuto);
   dkBar(el, [...CL.map(([, , , g], k) => [`放大群組 ${g}`, () => { stopAuto(); zoomTo(k); }]), ['重設', () => { stopAuto(); reset(); }]]);
-  dkNote(el, '示範數據 · 拖曳平移 · ⌘/Ctrl + 滾輪縮放', { left: '14px', bottom: '16px' });
+  dkNote(el, '游標移過去看最近的點 · 拖曳移動，⌘/Ctrl + 滾輪縮放', { left: '14px', bottom: '16px' });
   return () => { stopAuto(); svg.interrupt(); };
 }
 
@@ -2578,6 +2584,7 @@ function pixiGalaxy(el) {
       q.s.position.set(cx + lx * cr - ly * sr, cy + lx * sr + ly * cr);
     }
   });
+  dkNote(el, '上下移動游標改變星系傾斜 · 點一下送出衝擊波', { left: '14px', bottom: '16px' });
   return () => { el.removeEventListener('pointermove', onMove); el.removeEventListener('pointerdown', onDown); app.destroy(true, { children: true, texture: true, baseTexture: true }); };
 }
 
@@ -2642,11 +2649,11 @@ function pixiFilters(el) {
   const dtex = PIXI.Texture.from(nc); dtex.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
   const dsp = new PIXI.Sprite(dtex); dsp.scale.set(2); dsp.renderable = false; app.stage.addChild(dsp);
   const F = { disp: new PIXI.DisplacementFilter(dsp, 40), hue: new PIXI.ColorMatrixFilter(), blur: new PIXI.BlurFilter(6), noise: new PIXI.NoiseFilter(0.3) };
-  const NAMES = { disp: 'DisplacementFilter', hue: 'ColorMatrixFilter', blur: 'BlurFilter', noise: 'NoiseFilter' };
+  const LABEL = { disp: '位移扭曲', hue: '色相旋轉', blur: '模糊', noise: '雜訊' };
   let on = { disp: true };
   const KEYS = ['disp', 'hue', 'blur', 'noise'];
   const read = dkNote(el, '', { left: '14px', bottom: '16px' });
-  const apply = () => { const ks = KEYS.filter(k => on[k]); scene.filters = ks.map(k => F[k]); btns.forEach((b, i) => b.setAttribute('aria-pressed', String(!!on[KEYS[i]]))); read.textContent = 'filters = [' + ks.map(k => NAMES[k]).join(', ') + ']'; };
+  const apply = () => { const ks = KEYS.filter(k => on[k]); scene.filters = ks.map(k => F[k]); btns.forEach((b, i) => b.setAttribute('aria-pressed', String(!!on[KEYS[i]]))); read.textContent = '目前套用：' + (ks.length ? ks.map(k => LABEL[k]).join('、') : '無') + ' · 右下角可以自己組合'; };
   let manual = false;
   const btns = dkBar(el, [['位移扭曲', 'disp'], ['色相旋轉', 'hue'], ['模糊', 'blur'], ['雜訊', 'noise']].map(([n, k]) => [n, () => { manual = true; on[k] = !on[k]; apply(); }, false]));
   apply();
@@ -2685,7 +2692,7 @@ function pixiDrag(el) {
   app.stage.on('globalpointermove', e => { if (!drag) return; const nx = e.global.x - off.x, ny = e.global.y - off.y; drag.vx = nx - drag.x; drag.vy = ny - drag.y; drag.x = nx; drag.y = ny; });
   const end = () => { if (!drag) return; drag.scale.set(1); drag.cursor = 'grab'; drag = null; idleFrom = performance.now(); };
   app.stage.on('pointerup', end); app.stage.on('pointerupoutside', end);
-  dkNote(el, 'eventMode: static · 拖曳卡片、甩出去', { left: '14px', bottom: '16px' });
+  dkNote(el, '拖曳卡片，用力甩會滑出去', { left: '14px', bottom: '16px' });
   app.ticker.add(() => {
     const now = performance.now();
     if (!drag && now - idleFrom > 3000 && now - lastFling > 1800) { const c = cards[Math.floor(Math.random() * cards.length)]; c.vx = (Math.random() - 0.5) * 50; c.vy = (Math.random() - 0.5) * 50; lastFling = now; }
@@ -2716,7 +2723,7 @@ function pixiRope(el) {
   let px = 0, py = 0, lastMove = -1e9, t = 0;
   const onMove = e => { [px, py] = localPoint(el, e); lastMove = performance.now(); };
   el.addEventListener('pointermove', onMove);
-  dkNote(el, 'SimpleRope × 3 · 移動游標畫光帶', { left: '14px', bottom: '16px' });
+  dkNote(el, '移動游標畫出光帶 · 停下來它會自己繞圈', { left: '14px', bottom: '16px' });
   app.ticker.add(() => {
     t += app.ticker.deltaMS / 1000;
     const live = performance.now() - lastMove < 2000;
@@ -2811,6 +2818,7 @@ function matterGalton(el) {
       g.globalAlpha = 1;
     }
   });
+  dkNote(el, '點畫面上半部，從那裡再倒 40 顆', { left: '14px', top: '8px' });
   return () => { stop(); el.removeEventListener('pointerdown', onDown); Composite.clear(engine.world, false); Engine.clear(engine); };
 }
 
@@ -2872,7 +2880,7 @@ function matterSandbox(el) {
   const drop = n => { for (let i = 0; i < n; i++) Composite.add(engine.world, shape(w * 0.1 + Math.random() * w * 0.8, 40 + Math.random() * 80)); const d = dynamic(); d.slice(0, Math.max(0, d.length - 170)).forEach(b => Composite.remove(engine.world, b, true)); };
   build();
   dkBar(el, [['丟一把', () => drop(15)], ['重力反轉', () => { engine.gravity.y *= -1; }], ['重來', build]]);
-  dkNote(el, '拖曳任何物體、甩出去', { left: '14px', bottom: '16px' });
+  dkNote(el, '拖曳任何物體，用力甩出去', { left: '14px', bottom: '16px' });
   let next = 2;
   return M.run(t => { if (t > next) { next = t + 3; if (M.idle(4000) && dynamic().length < 110) drop(4); } });
 }
@@ -2901,7 +2909,7 @@ function matterCloth(el) {
   }
   build();
   const btns = dkBar(el, [['起風', b => { wind = !wind; b.setAttribute('aria-pressed', String(wind)); }, false], ['剪開', cut], ['重來', build]]);
-  dkNote(el, '拖曳布料或橘色球 · 黃點是釘住的點', { left: '14px', bottom: '16px' });
+  dkNote(el, '拖曳布料或橘色球 · 黃點是釘住的地方', { left: '14px', bottom: '16px' });
   let next = 2.5;
   return M.run(t => {
     if (wind) for (const b of cloth.bodies) if (!b.isStatic && Math.random() < 0.15) Body.applyForce(b, b.position, { x: b.mass * 0.0005 * (0.4 + Math.sin(t * 0.8) * 0.6 + Math.random() * 0.5), y: 0 });
@@ -2920,7 +2928,7 @@ function matterCradle(el) {
   }
   const pull = k => balls.forEach((b, i) => { if (i < k) { Body.setPosition(b, { x: b.anchorX - Math.sin(0.95) * L, y: y0 + Math.cos(0.95) * L }); } else Body.setPosition(b, { x: b.anchorX, y: y0 + L }); Body.setVelocity(b, { x: 0, y: 0 }); });
   dkBar(el, [['拉一顆', () => pull(1)], ['拉兩顆', () => pull(2)], ['拉三顆', () => pull(3)]]);
-  dkNote(el, 'restitution: 1 · 也可以直接拖球', { left: '14px', bottom: '16px' });
+  dkNote(el, '右下角拉起一到三顆球 · 也可以直接拖球', { left: '14px', bottom: '16px' });
   let next = 0.6, k = 0;
   return M.run(t => { if (t > next) { next = t + 8; if (M.idle(5000)) pull(1 + (k++ % 2)); } }, () => {
     g.fillStyle = '#3A4260'; g.fillRect(balls[0].anchorX - R * 1.5, y0 - 7, (balls[n - 1].anchorX - balls[0].anchorX) + R * 3, 7);
@@ -2943,7 +2951,7 @@ function matterBridge(el) {
   const add = b => { drops.push(b); Composite.add(engine.world, b); };
   const randomDrop = () => { const x = cliffW + 30 + Math.random() * (span - 60), s = plank * (0.35 + Math.random() * 0.4); add(Math.random() < 0.5 ? Bodies.circle(x, -40, s * 0.6, { render: { fillStyle: pick(PAL) } }) : Bodies.rectangle(x, -40, s, s, { chamfer: { radius: 3 }, render: { fillStyle: pick(PAL) } })); };
   dkBar(el, [['丟大箱子', () => add(Bodies.rectangle(w / 2 + (Math.random() - 0.5) * span * 0.4, -60, plank * 1.6, plank * 1.6, { density: 0.01, chamfer: { radius: 6 }, render: { fillStyle: '#FF8257' } }))], ['丟一堆球', () => { for (let i = 0; i < 12; i++) add(Bodies.circle(cliffW + 30 + Math.random() * (span - 60), -40 - Math.random() * 160, plank * 0.22, { restitution: 0.4, render: { fillStyle: pick(PAL) } })); }]]);
-  dkNote(el, 'Composites.chain 串起 14 片木板 · 物體可以拖', { left: '14px', bottom: '16px' });
+  dkNote(el, '箱子和球會一直掉到橋上 · 物體都可以拖', { left: '14px', bottom: '16px' });
   let next = 1;
   return M.run(t => {
     if (t > next) { next = t + 1.4; if (drops.length < 40) randomDrop(); }
@@ -3027,6 +3035,7 @@ const sandFall = el => {
     for (let i = 0; i < grid.length; i++) { const p = PAL[grid[i]]; px[i] = p[shade[i] % p.length]; }
     g.putImageData(img, 0, 0);
   });
+  dkNote(el, '在畫面上拖曳倒東西 · 右下角換沙、水、石頭', { left: '14px', bottom: '16px' });
   return stop;
 };
 
@@ -3123,7 +3132,7 @@ function sandFire(el) {
   const onLeave = () => { wind = 0; };
   cv.addEventListener('pointermove', onMove); cv.addEventListener('pointerleave', onLeave);
   dkBar(el, [['熄火', b => { lit = !lit; setBase(lit ? MAX : 0); b.textContent = lit ? '熄火' : '點火'; }], ['燃燒文字', b => { text = !text; b.setAttribute('aria-pressed', String(text)); }, true]]);
-  dkNote(el, 'DOOM 火焰：每格往上複製、隨機減 0 或 1、左右偏一點 · 游標左右吹風 · 拖曳加熱', { left: '14px', bottom: '16px' });
+  dkNote(el, '游標往左右移，火會被風吹過去 · 拖曳可以加熱', { left: '14px', bottom: '16px' });
   const stop = loop(() => {
     if (text) for (let i = 0; i < n; i++) if (mask[i] && Math.random() < 0.6) fire[i] = MAX;
     if (st.down && st.xy) { const [cx, cy] = st.xy; for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) { const x = cx + dx, y = cy + dy; if (x >= 0 && y >= 0 && x < cols && y < rows) fire[y * cols + x] = MAX; } }
@@ -3170,7 +3179,7 @@ function sandRD(el) {
   }
   const names = PRESETS.map(p => p[0]);
   const btns = dkBar(el, [...PRESETS.map(([nm, ff, kk], i) => [nm, () => { f = ff; k = kk; btns.forEach((b, j) => j < names.length && b.setAttribute('aria-pressed', String(j === i))); seed(); }, i === 0]), ['重新播種', () => seed()]]);
-  dkNote(el, 'Gray-Scott 反應擴散 · 只有兩條式子和兩個參數 f、k · 拖曳加入化學物質 B', { left: '14px', bottom: '16px' });
+  dkNote(el, '兩種化學物質互相反應，自己長出紋路 · 拖曳加一點進去', { left: '14px', bottom: '16px' });
   const stop = loop(() => {
     if (st.down && st.xy) blob(st.xy[0], st.xy[1], 3);
     for (let s = 0; s < 10; s++) step();
@@ -3206,7 +3215,7 @@ function sandAnt(el) {
     for (let i = 0; i < n; i++) px[i] = COL[grid[i]];
     for (const a of ants) px[a.y * cols + a.x] = 0xFFFFFFFF;
     P.flush();
-    note.textContent = `規則 ${rule}：踩到第 k 色就照第 k 個字母轉彎、把格子換下一色 · ${steps.toLocaleString()} 步 · 點畫面再放一隻`;
+    note.textContent = `${steps.toLocaleString()} 步 · 規則很簡單，圖案卻越長越複雜 · 點一下多放一隻`;
   });
   return () => { stop(); cv.removeEventListener('pointerdown', onDown); };
 }
@@ -3303,6 +3312,7 @@ function threeTower(el) {
     camera.lookAt(0, 3 + p * 15, 0);
     renderer.render(scene, camera);
   });
+  dkNote(el, '拖曳轉動視角', { left: '14px', bottom: '16px' });
   return () => {
     stop(); el.removeEventListener('pointerdown', onDown); el.removeEventListener('pointermove', onMove); el.removeEventListener('pointerup', onUp); el.removeEventListener('pointercancel', onUp);
     scene.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) o.material.dispose(); });
@@ -3391,6 +3401,7 @@ function threeParticles(el) {
     points.rotation.y = t * 0.18 + drag.ax; points.rotation.x = drag.ay + Math.sin(t * 0.3) * 0.15;
     renderer.render(scene, camera);
   });
+  dkNote(el, '右下角換形狀 · 拖曳轉動', { left: '14px', bottom: '16px' });
   return () => { stop(); drag.off(); T.dispose(); };
 }
 
@@ -3425,6 +3436,7 @@ function threePBR(el) {
     light.position.set(Math.cos(a) * 4, 1.5 + Math.sin(t * 0.4) * 1.2 - drag.ay * 3, 3 + Math.sin(a) * 1.5);
     renderer.render(scene, camera);
   });
+  dkNote(el, '往右越粗糙，每一列金屬感不同 · 拖曳轉動', { left: '14px', bottom: '16px' });
   return () => { stop(); drag.off(); T.dispose(); };
 }
 
@@ -3444,7 +3456,7 @@ function threeRaycast(el) {
   let lastMove = -10, hovered = -1, now = 0;
   const ripples = [];
   const read = dkNote(el, 'instanceId —', { right: '14px', bottom: '16px' });
-  dkNote(el, '移動游標 · 點一下送出漣漪', { left: '14px', bottom: '16px' });
+  dkNote(el, '游標指到的方塊會浮起來 · 點一下送出漣漪', { left: '14px', bottom: '16px' });
   const setNdc = e => { const [x, y] = localPoint(el, e); ndc.set(x / w * 2 - 1, -(y / H) * 2 + 1); ray.setFromCamera(ndc, camera); };
   const onMove = e => { setNdc(e); ray.ray.intersectPlane(ground, hp); const hit = ray.intersectObject(boxes)[0]; hovered = hit ? hit.instanceId : -1; read.textContent = 'instanceId ' + (hovered < 0 ? '—' : hovered); lastMove = now; };
   const onDown = e => { setNdc(e); const p = new THREE.Vector3(); if (ray.ray.intersectPlane(ground, p)) ripples.push({ x: p.x, z: p.z, t0: now }); };
@@ -3503,6 +3515,7 @@ function threeTerrain(el) {
     camera.position.x = smx * 6; camera.rotation.set(-0.12, 0, -smx * 0.25);
     renderer.render(scene, camera);
   });
+  dkNote(el, '左右移動游標，鏡頭跟著轉向', { left: '14px', bottom: '16px' });
   return () => { stop(); el.removeEventListener('pointermove', onMove); T.dispose(); };
 }
 
@@ -3568,6 +3581,7 @@ void main(){
     gl.uniform1f(uT, t); gl.uniform2f(uM, sm[0], sm[1]);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   });
+  dkNote(el, '移動游標推動液面 · 點一下換配色', { left: '14px', bottom: '16px' });
   return () => { stop(); el.removeEventListener('pointermove', onMove); el.removeEventListener('pointerdown', onDown); const ext = gl.getExtension('WEBGL_lose_context'); ext && ext.loseContext(); };
 };
 
@@ -3634,7 +3648,7 @@ void main(){
   gl_FragColor = vec4(pow(col, vec3(.4545)), 1.);
 }`, 1);
   if (!Q) return () => {};
-  dkNote(el, '沒有任何三角形模型：每個像素沿光線前進，用距離函數 SDF 找表面 · 游標轉動鏡頭', { left: '14px', bottom: '16px' });
+  dkNote(el, '移動游標轉動鏡頭 · 畫面裡沒有 3D 模型，全是數學算出來的', { left: '14px', bottom: '16px' });
   const stop = loop(t => Q.frame(t));
   return () => { stop(); Q.destroy(); };
 }
@@ -3665,7 +3679,7 @@ void main(){
   let mode = 0;
   const MODES = ['彩色細胞', '距離場', '彩繪玻璃'];
   const btns = dkBar(el, MODES.map((nm, i) => [nm, () => { mode = i; btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === i))); }, i === 0]));
-  dkNote(el, 'Voronoi：每個像素找最近的特徵點 · 游標是一個放大鏡', { left: '14px', bottom: '16px' });
+  dkNote(el, '游標是一個放大鏡 · 右下角換畫法', { left: '14px', bottom: '16px' });
   const stop = loop(t => { Q.gl.uniform1f(Q.U('u_mode'), mode); Q.frame(t); });
   return () => { stop(); Q.destroy(); };
 }
@@ -3713,7 +3727,7 @@ void main(){
   let mode = 1, lastClick = 0;
   const btns = dkBar(el, MODES.map((nm, i) => [nm, () => { mode = i; lastClick = performance.now(); sync(); }, i === mode]));
   const sync = () => btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === mode)));
-  dkNote(el, '同一張貼圖，只換 fragment shader 的取樣方式 · 游標控制效果中心', { left: '14px', bottom: '16px' });
+  dkNote(el, '同一張圖套不同濾鏡 · 游標控制效果中心，右下角切換', { left: '14px', bottom: '16px' });
   const stop = loop(t => {
     if (performance.now() - lastClick > 9000 && Math.floor(t / 4) % MODES.length !== mode) { mode = Math.floor(t / 4) % MODES.length; sync(); }
     gl.uniform1f(Q.U('u_mode'), mode); Q.frame(t);
@@ -3748,7 +3762,7 @@ void main(){
     ctr[0] += (tgt[0] - ctr[0]) * 0.04; ctr[1] += (tgt[1] - ctr[1]) * 0.04;
     Q.gl.uniform2f(Q.U('u_c'), ctr[0], ctr[1]); Q.gl.uniform1f(Q.U('u_zoom'), zoomOf());
     Q.frame(t);
-    note.textContent = `放大 ${Math.round(zoomOf()).toLocaleString()}× · z = z² + c 最多算 320 次 · 點一下把那裡移到中心`;
+    note.textContent = `放大 ${Math.round(zoomOf()).toLocaleString()} 倍 · 點一下把那裡移到中心`;
   });
   return () => { stop(); el.removeEventListener('pointerdown', onDown); Q.destroy(); };
 }
@@ -3948,7 +3962,7 @@ function toneKeys(el) {
     if (live) scope(g, v, 14, chH * 0.58, cw - 28, chH * 0.3, '#6DB2FF', 2.2);
     else { const d = Array.from({ length: 200 }, (_, i) => Math.sin(i / 199 * Math.PI * 6 + t * 2) * 0.12); scope(g, d, 14, chH * 0.58, cw - 28, chH * 0.3, '#2E3650', 1.5); }
     g.fillStyle = '#8A93AD'; g.font = '11.5px "JetBrains Mono", monospace'; g.textAlign = 'left';
-    g.fillText(held.size ? `${[...held].join(' ')} · ${type}` : '點琴鍵或用鍵盤 A W S E D F T G Y H U J K 彈 · 黃點是 A 小調五聲音階，跟配樂合得起來', 14, chH - 10);
+    g.fillText(held.size ? `${[...held].join(' ')} · ${type}` : '點琴鍵或按鍵盤 A–K 彈奏 · 有黃點的音跟背景配樂最搭', 14, chH - 10);
   });
   return () => { stop(); window.removeEventListener('keydown', kd); window.removeEventListener('keyup', ku); try { synth.releaseAll(); } catch (e) {} kit.kill(); };
 }
@@ -3995,6 +4009,7 @@ function toneSeq(el) {
     ['隨機旋律', () => { for (let r = 0; r < 6; r++) for (let s = 0; s < 16; s++) { pat[r][s] = Math.random() < 0.09 ? 1 : 0; cells[r][s].setAttribute('aria-pressed', String(!!pat[r][s])); } }],
     ['清空', () => { pat.forEach((row, r) => row.forEach((_, s) => { row[s] = 0; cells[r][s].setAttribute('aria-pressed', 'false'); })); }]], {});
   const sbar = btns[0].parentNode; sbar.style.position = 'static'; seqw.insertBefore(sbar, grid);
+  const sh = h('span', { class: 'dk-note' }, '點格子排節奏，再按播放'); sh.style.position = 'static'; sh.style.alignSelf = 'center'; sbar.appendChild(sh);
   function start() { kit.wake(); if (Music.playing || Music.starting) Music.stop(); step = 0; clock.start('+0.05'); playing = true; btns[0].textContent = '停止'; }
   function halt() { if (!playing) return; clock.stop(); playing = false; mark(-1); btns[0].textContent = '播放'; }
   function toggle() { playing ? halt() : start(); }
@@ -4052,7 +4067,7 @@ function toneXY(el) {
     trail.forEach(([x, y], i) => { g.fillStyle = `rgba(242,184,58,${i / trail.length * 0.5})`; g.beginPath(); g.arc(x, y, 2 + i / trail.length * 6, 0, Math.PI * 2); g.fill(); });
     g.strokeStyle = holding ? '#F2B83A' : '#5A6488'; g.lineWidth = 1.5; g.beginPath(); g.arc(px * w, py * H, 14, 0, Math.PI * 2); g.stroke();
     g.fillStyle = '#8A93AD'; g.textAlign = 'left'; g.font = '11.5px "JetBrains Mono", monospace';
-    g.fillText(`cutoff ${Math.round(fc)} Hz · Q ${q.toFixed(1)} · ${holding ? chord + ' 和弦發聲中' : user ? '按住畫面發聲' : '按住畫面發聲，左右調 cutoff、上下調共振'}`, 14, 20);
+    g.fillText(`cutoff ${Math.round(fc)} Hz · Q ${q.toFixed(1)} · ${holding ? chord + ' 和弦發聲中' : user ? '按住畫面發聲' : '按住畫面發聲 · 左右調亮暗（cutoff），上下調共鳴（Q）'}`, 14, 20);
   });
   return () => { stop(); up(); kit.kill(); };
 }
@@ -4097,7 +4112,7 @@ function toneSfx(el) {
     g.strokeStyle = '#1A2034'; g.lineWidth = 1; g.beginPath(); g.moveTo(14, chH / 2); g.lineTo(cw - 14, chH / 2); g.stroke();
     if (live) scope(g, v, 14, chH / 2, cw - 28, chH * 0.4, '#6DB2FF', 2);
     g.fillStyle = '#8A93AD'; g.font = '11.5px "JetBrains Mono", monospace'; g.textAlign = 'left';
-    g.fillText(live ? `▶ ${last}` : '每個音效都是當場合成的：振盪器 + 包絡 + 頻率滑音 · 按鈕或數字鍵 1–8', 14, 20);
+    g.fillText(live ? `▶ ${last}` : '點按鈕或按數字鍵 1–8 · 每個音效都是當場合成的', 14, 20);
   });
   return () => { stop(); window.removeEventListener('keydown', kd); kit.kill(); };
 }
