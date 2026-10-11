@@ -53,7 +53,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; margin: 0 0 10px; }
 h1 { font-family: var(--display); font-stretch: 125%; font-weight: 850; font-size: clamp(30px, 5vw, 56px); line-height: 1.02; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
 h1 .js { display: inline-block; padding: 0 .14em; margin-right: .08em; background: var(--ink); color: var(--bg); border-radius: 6px; }
-.lede { max-width: 62ch; color: var(--muted); margin: 14px 0 0; }
+.lede { max-width: 70ch; color: var(--muted); margin: 14px 0 0; text-wrap: pretty; }
+.lede .line, footer .line { display: block; }
 .stats { display: flex; gap: 28px; margin: 0; padding: 0; list-style: none; }
 .stats li { display: grid; }
 .stats b { font-family: var(--display); font-stretch: 112%; font-weight: 800; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -98,6 +99,7 @@ h1 .js { display: inline-block; padding: 0 .14em; margin-right: .08em; backgroun
 .info .eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .info h2 { font-family: var(--display); font-stretch: 118%; font-weight: 800; font-size: 30px; line-height: 1.05; margin: 4px 0 0; }
 .info .ver { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.info p, .info dd { text-wrap: pretty; }
 .info p { margin: 0; }
 .info dl { margin: 0; display: grid; gap: 10px; }
 .info dt { font-size: 12px; color: var(--muted); font-weight: 500; }
@@ -109,12 +111,14 @@ pre.code .k { color: #9C85FF; } pre.code .s { color: #F2B83A; } pre.code .c { co
 /* ask-the-AI section */
 .ask { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 10px; }
 .ask h3 { margin: 0; font-size: 15px; font-weight: 700; }
-.ask .formula { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-.ask .formula b { color: var(--ink); font-weight: 600; }
+.ask .steps { list-style: none; counter-reset: st; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 5px; font-size: 12.5px; }
+.ask .steps li { counter-increment: st; display: inline-flex; align-items: baseline; gap: 5px; padding: 2px 9px 2px 3px; border: 1px solid var(--line); border-radius: 99px; background: var(--bg); white-space: nowrap; }
+.ask .steps li::before { content: counter(st); display: inline-grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: var(--ink); color: var(--surface); font: 600 10.5px var(--mono); transform: translateY(-1px); }
+.ask .steps small { color: var(--muted); font-size: 11px; }
 .ask .lbl { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 5px; }
 .ask .terms { display: flex; flex-wrap: wrap; gap: 5px; }
 .ask .terms span { font: 12px var(--mono); padding: 1px 7px; border-radius: 5px; background: color-mix(in srgb, var(--accent) 11%, transparent); color: var(--accent); }
-.ask blockquote { margin: 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.75; }
+.ask blockquote { text-wrap: pretty; margin: 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.75; }
 .ask .copy { justify-self: start; height: 30px; font-size: 13px; }
 
 /* picker */
@@ -159,7 +163,7 @@ section.block { padding-block: 64px 0; }
 .apis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
 .api { position: relative; border-radius: var(--r); padding: 12px 12px 12px 14px; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--col); transition: opacity .15s; min-width: 0; }
 .api h3 { margin: 0; font-family: var(--display); font-stretch: 108%; font-size: 16px; font-weight: 800; color: var(--col); }
-.api p { margin: 4px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.api p { margin: 4px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.5; text-wrap: pretty; }
 .api .cnt { display: block; margin-top: 8px; font-family: var(--mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .hw { display: grid; grid-template-columns: 4fr 1fr 1fr; gap: 10px; }
 .hw span { text-align: center; font-family: var(--mono); font-size: 12px; color: var(--muted); padding: 9px; border-radius: var(--r); background: repeating-linear-gradient(-45deg, transparent 0 6px, color-mix(in srgb, var(--line) 60%, transparent) 6px 7px); border: 1px solid var(--line); }
@@ -175,9 +179,12 @@ table.guide { width: 100%; border-collapse: collapse; font-size: 14px; min-width
 .guide td:first-child { width: 38%; }
 .guide .lib { font-weight: 700; }
 .guide .alt { color: var(--muted); font-size: 13px; }
+.guide .cond { display: block; font-size: 12px; margin-top: 2px; opacity: .85; }
+.guide td { text-wrap: pretty; }
 
 footer { padding-block: 56px 48px; color: var(--muted); font-size: 13px; }
-footer p { max-width: 75ch; margin: 0 0 6px; }
+footer p { max-width: 75ch; margin: 0 0 10px; text-wrap: pretty; }
+footer p b { color: var(--ink); font-weight: 700; }
 
 /* ---------- demo internals (always on the dark stage) ---------- */
 .dk-btn { background: #1A2034; color: #E8ECF6; border: 1px solid #2E3650; border-radius: 7px; padding: 5px 11px; font-size: 12.5px; font-family: var(--body); }
@@ -297,6 +304,16 @@ footer p { max-width: 75ch; margin: 0 0 6px; }
   .cats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .apis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hw { grid-template-columns: minmax(0, 1fr); }
+  table.guide { min-width: 0; }
+  .guide thead { display: none; }
+  .guide, .guide tbody { display: block; }
+  .guide tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; padding: 11px 14px; border-bottom: 1px solid var(--line); }
+  .guide tr:last-child { border-bottom: 0; }
+  .guide td { display: block; padding: 0; border: 0; width: auto !important; }
+  .guide td.lib { text-align: right; }
+  .guide td.alt { grid-column: 1 / -1; margin-top: 4px; }
+  .guide td.alt::before { content: '也可以看看：'; }
+  .guide td.none { display: none; }
   .gs { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; align-content: center; }
   .hud-tl .hint { display: none; }
   .controls .lbl-txt { display: none; }
@@ -377,7 +394,7 @@ footer p { max-width: 75ch; margin: 0 0 6px; }
   <div>
     <p class="kicker">JavaScript visual ecosystem · 12 demos · 60 live effects</p>
     <h1><span class="js">JS</span>視覺生態圖譜</h1>
-    <p class="lede">2D 繪圖、3D、動畫、物理、資料視覺化和聲音，各挑一個代表套件現場跑給你看。這一頁沒有任何圖片、影片或音檔，每一格畫面、每一個音符都是瀏覽器裡的 JavaScript 即時算出來的。</p>
+    <p class="lede">2D、3D、動畫、物理、資料視覺化、聲音，<span class="nw">各挑代表套件</span><span class="nw">現場跑給你看。</span><span class="line">沒有圖片、影片或音檔，畫面和聲音全是 JavaScript 即時算出來的。</span></p>
   </div>
   <ul class="stats" aria-label="這一頁的組成">
     <li><b id="st-demos">60</b><span>種即時效果</span></li>
@@ -421,30 +438,30 @@ footer p { max-width: 75ch; margin: 0 0 6px; }
     <div class="diagram" id="diagram">
       <svg class="wires" id="wires" aria-hidden="true"></svg>
       <div class="tier"><div class="tier-label">套件與作法</div><div class="cats" id="cats"></div></div>
-      <div class="raf">所有畫面動畫共用同一個節拍：<b>requestAnimationFrame</b>，跟著螢幕更新率（通常 60 Hz）每一格叫醒一次</div>
+      <div class="raf">所有動畫跟著同一個節拍 <b>requestAnimationFrame</b>：<span class="nw">螢幕每刷新一次（通常一秒 60 次），</span><span class="nw">就一起畫下一格</span></div>
       <div class="tier"><div class="tier-label">瀏覽器原生 API</div><div class="apis" id="apis"></div></div>
-      <div class="tier"><div class="tier-label">硬體</div><div class="hw"><span>CPU 排版、繪製　→　GPU 合成與著色</span><span>GPU 運算</span><span>音效輸出</span></div></div>
+      <div class="tier"><div class="tier-label">硬體</div><div class="hw"><span>CPU 算版面、畫圖　→　GPU 疊圖層、上色</span><span>GPU 大量運算</span><span>音效輸出</span></div></div>
     </div>
     <p class="dnote" id="dnote">移到任何一個套件上看說明。</p>
   </section>
 
   <section class="block">
     <h2 class="sec">想做什麼，先試哪一個</h2>
-    <p class="sub">一個起點，不是排名。很多專案會混用：用 GSAP 排時間軸、Three.js 畫場景、Tone.js 配聲音。</p>
+    <p class="sub">表上是建議的起點，不是排名。<span class="line">很多專案會混用，例如 <span class="nw">GSAP 排動畫、</span><span class="nw">Three.js 畫 3D、</span><span class="nw">Tone.js 配聲音。</span></span></p>
     <div class="guide-wrap">
       <table class="guide">
         <thead><tr><th>想做的東西</th><th>先試</th><th>也可以看看</th></tr></thead>
         <tbody>
-          <tr><td>3D 場景、產品展示、建築或地景</td><td class="lib">Three.js</td><td class="alt">Babylon.js、PlayCanvas；要扁平插畫感的 3D 用 Zdog</td></tr>
-          <tr><td>大量 2D 精靈、粒子、網頁小遊戲</td><td class="lib">PixiJS</td><td class="alt">Phaser（完整遊戲框架）</td></tr>
+          <tr><td>3D 場景、產品展示、建築或地景</td><td class="lib">Three.js</td><td class="alt">Babylon.js、PlayCanvas<span class="cond">想要扁平插畫風的 3D：Zdog</span></td></tr>
+          <tr><td>大量 2D 角色或圖片、粒子、網頁小遊戲</td><td class="lib">PixiJS</td><td class="alt">Phaser（完整遊戲框架）</td></tr>
           <tr><td>生成藝術、教學、快速做出一個想法</td><td class="lib">p5.js</td><td class="alt">直接寫 Canvas 2D</td></tr>
           <tr><td>可拖拉、可編輯的圖形編輯器</td><td class="lib">Konva / Fabric.js</td><td class="alt">Paper.js（向量路徑運算）</td></tr>
-          <tr><td>網站動態、捲動動畫、複雜時間軸</td><td class="lib">GSAP</td><td class="alt">Motion；輕量 DOM / SVG 動畫用 Anime.js</td></tr>
-          <tr><td>拖、丟、碰撞的 2D 物理互動</td><td class="lib">Matter.js</td><td class="alt">3D 物理用 Rapier 或 cannon-es，畫面交給 Three.js</td></tr>
-          <tr><td>客製化資料視覺化、新聞圖表</td><td class="lib">D3.js</td><td class="alt">要開箱即用的圖表：ECharts、Chart.js、Observable Plot</td></tr>
-          <tr><td>手繪草圖感的圖解</td><td class="lib">Rough.js</td><td class="alt">—</td></tr>
-          <tr><td>背景特效、轉場、逐像素濾鏡</td><td class="lib">GLSL Shader</td><td class="alt">在 Three.js 裡用 ShaderMaterial 寫</td></tr>
-          <tr><td>互動音樂、合成音效、節奏遊戲</td><td class="lib">Tone.js</td><td class="alt">只要播音效檔：Howler.js</td></tr>
+          <tr><td>網站動態、捲動動畫、複雜時間軸</td><td class="lib">GSAP</td><td class="alt">Motion<span class="cond">只要輕量的 DOM / SVG 動畫：Anime.js</span></td></tr>
+          <tr><td>拖、丟、碰撞的 2D 物理互動</td><td class="lib">Matter.js</td><td class="alt">3D 物理：Rapier 或 cannon-es<span class="cond">它們只算物理，畫面交給 Three.js</span></td></tr>
+          <tr><td>客製化資料視覺化、新聞圖表</td><td class="lib">D3.js</td><td class="alt">ECharts、Chart.js、Observable Plot<span class="cond">要開箱即用的現成圖表時</span></td></tr>
+          <tr><td>手繪草圖感的圖解</td><td class="lib">Rough.js</td><td class="alt none">—</td></tr>
+          <tr><td>背景特效、轉場、影像濾鏡</td><td class="lib">GLSL Shader</td><td class="alt">在 Three.js 裡用 ShaderMaterial 寫</td></tr>
+          <tr><td>互動音樂、合成音效、節奏遊戲</td><td class="lib">Tone.js</td><td class="alt">Howler.js<span class="cond">只要播放現成的音效檔時</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -452,7 +469,7 @@ footer p { max-width: 75ch; margin: 0 0 6px; }
 </main>
 
 <footer class="wrap">
-  <p>製作條件：所有畫面和聲音都只用 JavaScript 寫成。沒有圖片或影片素材，沒有 AI 生成的影像或語音。發光粒子的貼圖、窗戶燈光、紙張紋理，全都是程式在執行時畫出來的。</p>
+  <p><b>製作條件</b>　畫面和聲音全部用 JavaScript 寫成，沒有任何圖片、影片或音檔。<span class="line">也沒有 AI 生成的內容：粒子貼圖、窗戶燈光、紙張紋理，都是程式當場畫的。</span></p>
   <p id="versions"></p>
 </footer>
 
@@ -462,12 +479,12 @@ footer p { max-width: 75ch; margin: 0 0 6px; }
 
 /* ================= data ================= */
 const BASES = {
-  dom:    { name: 'DOM + CSS', note: '網頁元素本身，transform 和 opacity 交給合成器處理' },
-  svg:    { name: 'SVG',       note: '向量圖形，每個形狀都是一個可以綁資料的節點' },
-  canvas: { name: 'Canvas 2D', note: '一張點陣畫布，逐筆或逐像素自己畫' },
-  webgl:  { name: 'WebGL',     note: '用 GLSL shader 直接驅動 GPU 畫三角形' },
-  webgpu: { name: 'WebGPU',    note: '新一代 GPU API，也能做通用運算' },
-  audio:  { name: 'Web Audio', note: '振盪器、濾波器、效果器串成的音訊節點圖' },
+  dom:    { name: 'DOM + CSS', note: '網頁上的文字、按鈕、區塊，用 CSS 讓它們動起來' },
+  svg:    { name: 'SVG',       note: '向量圖形，每個形狀都能綁上資料' },
+  canvas: { name: 'Canvas 2D', note: '一張點陣畫布，用程式一筆一筆畫' },
+  webgl:  { name: 'WebGL',     note: '直接叫顯示卡（GPU）畫圖，3D 和大量粒子都靠它' },
+  webgpu: { name: 'WebGPU',    note: '新一代的顯示卡介面，也能做大量運算' },
+  audio:  { name: 'Web Audio', note: '把振盪器、濾波器、效果器串起來，即時合成聲音' },
 };
 
 const CDN = {
@@ -489,8 +506,8 @@ const CDN = {
 
 const DEMOS = [
   { id: 'canvas', name: 'Canvas 2D', cat: '2D 繪圖', native: true, base: ['canvas'], ver: '瀏覽器原生 API',
-    blurb: '原生 Canvas 2D 的五種常見用法：分層插畫、粒子連線、煙火、繪圖筆刷、類比時鐘。',
-    hint: '用上方分頁切換 · 每一頁都可以用滑鼠互動',
+    blurb: '瀏覽器內建的畫布，不用裝任何套件。用程式一筆一筆畫，每個細節都由你決定。',
+    hint: '每一頁都能用滑鼠玩，說明在左下角',
     fit: '插畫、背景、小遊戲，任何想自己控制每一筆的畫面',
     site: 'https://developer.mozilla.org/docs/Web/API/Canvas_API',
     code: `<span class="k">const</span> g = canvas.getContext(<span class="s">'2d'</span>);
@@ -500,8 +517,8 @@ sky.addColorStop(<span class="n">1</span>, <span class="s">'#f7a35c'</span>);
 g.fillStyle = sky;
 g.fillRect(<span class="n">0</span>, <span class="n">0</span>, w, h);` },
   { id: 'rough', name: 'Rough.js', cat: '2D 繪圖', lib: 'rough', base: ['svg', 'canvas'], ver: 'roughjs 4.6.6',
-    blurb: 'Rough.js 的五種用法：手繪插畫、手繪圖表、可拖曳的流程圖、八種填充樣式、線條抖動的手繪動畫。',
-    hint: '用上方分頁切換 · 流程圖的方塊可以拖',
+    blurb: '讓圖形看起來像手畫的：給它方形、圓形和線條，它畫出歪歪的筆觸和鉛筆排線。',
+    hint: '流程圖那頁的方塊可以拖，其他頁點紙卡或右下角按鈕',
     fit: '草圖感的圖解、白板風流程圖、讓圖表看起來像手畫的',
     site: 'https://roughjs.com',
     code: `<span class="k">const</span> rc = rough.svg(svg);
@@ -511,8 +528,8 @@ svg.append(rc.rectangle(<span class="n">200</span>, <span class="n">260</span>, 
 }));
 svg.append(rc.circle(<span class="n">660</span>, <span class="n">110</span>, <span class="n">80</span>, { fill: <span class="s">'#f6c945'</span> }));` },
   { id: 'p5', name: 'p5.js', cat: '2D 繪圖', lib: 'p5', base: ['canvas', 'webgl'], ver: 'p5.js 1.9.4',
-    blurb: 'p5.js 的五種經典題材：水墨暈染、碎形樹、Boids 群聚、WEBGL 3D、粒子文字。',
-    hint: '用上方分頁切換 · 大多可以用滑鼠互動',
+    blurb: '為藝術家和初學者設計的繪圖工具，幾行程式就能畫出會動、能互動的畫面。',
+    hint: '大多能用滑鼠互動，說明在左下角',
     fit: '生成藝術、創意程式教學、快速做出一個視覺想法',
     site: 'https://p5js.org',
     code: `p.draw = () => {
@@ -525,17 +542,17 @@ svg.append(rc.circle(<span class="n">660</span>, <span class="n">110</span>, <sp
   }
 };` },
   { id: 'gsap', name: 'GSAP', cat: '動畫', lib: 'gsap', base: ['dom', 'svg'], ver: 'gsap 3.13.0 + 5 個官方 plugin',
-    blurb: 'GSAP 核心加上官方 plugin：時間軸與緩動、ScrollTrigger 捲動驅動、SplitText 拆字、Flip 版面轉場、MotionPath 沿路徑移動。',
-    hint: '用上方分頁切換 plugin · ScrollTrigger 那頁可以直接在畫面裡捲動',
-    fit: '網站動態、捲動動畫、需要精準排程的長序列',
+    blurb: '專做網頁動畫，用時間軸精準安排每個動作的先後和節奏；官方外掛再補上捲動、拆字、版面轉場。',
+    hint: 'ScrollTrigger 那頁可以直接在畫面裡捲動',
+    fit: '網站動態、捲動動畫、要精準排時間的長段動畫',
     site: 'https://gsap.com',
     code: `<span class="k">const</span> tl = gsap.timeline();
 tl.from(chars, { yPercent: <span class="n">120</span>, opacity: <span class="n">0</span>,
                  stagger: <span class="n">0.05</span>, ease: <span class="s">'back.out(1.7)'</span> })
   .from(rule, { scaleX: <span class="n">0</span>, ease: <span class="s">'expo.inOut'</span> }, <span class="s">'-=0.4'</span>);` },
   { id: 'anime', name: 'Anime.js', cat: '動畫', lib: 'anime', base: ['dom', 'svg'], ver: 'animejs 3.2.2',
-    blurb: 'Anime.js 的五種常見用法：網格錯開、時間軸、SVG 描線與變形、easing 對照、數字補間。',
-    hint: '用上方分頁切換 · 時間軸那頁可以拖曳進度',
+    blurb: '輕量的動畫工具，讓網頁元素和 SVG 動起來，寫法比 GSAP 更精簡。',
+    hint: '時間軸那頁可以拖曳下方的進度條',
     fit: '輕量的 DOM、SVG、CSS 動畫，介面上的小互動',
     site: 'https://animejs.com',
     code: `anime({
@@ -546,8 +563,8 @@ tl.from(chars, { yPercent: <span class="n">120</span>, opacity: <span class="n">
   })
 });` },
   { id: 'd3', name: 'D3.js', cat: '資料視覺化', lib: 'd3', base: ['svg', 'canvas'], ver: 'd3 7.9.0',
-    blurb: 'D3 的五種常見圖表：資料綁定長條圖、力導向網路圖、可收合樹狀圖、河流圖、可縮放散佈圖。',
-    hint: '用上方分頁切換圖表 · 每一頁都可以直接操作',
+    blurb: '把資料變成圖表的工具。它不給現成圖表，而是把每一筆資料綁到一個圖形上，長相由你決定。',
+    hint: '每一頁都能直接操作：拖曳、點擊或滑過',
     fit: '客製化資料視覺化、新聞圖表，現成圖表庫做不到的版面',
     site: 'https://d3js.org',
     code: `svg.selectAll(<span class="s">'rect'</span>)
@@ -557,8 +574,8 @@ tl.from(chars, { yPercent: <span class="n">120</span>, opacity: <span class="n">
   .attr(<span class="s">'y'</span>, d => y(d.value))
   .attr(<span class="s">'height'</span>, d => y(<span class="n">0</span>) - y(d.value));` },
   { id: 'pixi', name: 'PixiJS', cat: '2D 繪圖', lib: 'pixi', base: ['webgl', 'webgpu'], ver: 'pixi.js 7.4.2',
-    blurb: 'PixiJS 的五種常見用法：發光粒子星系、大量 sprite 壓力測試、內建濾鏡、拖曳互動、SimpleRope 光帶。',
-    hint: '用上方分頁切換效果',
+    blurb: '用顯示卡（GPU）畫 2D 的工具，同時畫上萬個圖形也很順，常用來做網頁遊戲。',
+    hint: '大多能用滑鼠互動，說明在左下角',
     fit: '2D 遊戲、大量精靈和粒子、互動廣告',
     site: 'https://pixijs.com',
     code: `<span class="k">const</span> stars = <span class="k">new</span> PIXI.ParticleContainer(<span class="n">6000</span>);
@@ -568,8 +585,8 @@ stars.blendMode = PIXI.BLEND_MODES.ADD;   <span class="c">// 疊加發光</span>
 }
 app.ticker.add(() => orbit(stars));` },
   { id: 'matter', name: 'Matter.js', cat: '物理', lib: 'matter', base: ['canvas'], ver: 'matter-js 0.19.0',
-    blurb: 'Matter.js 的五種常見物理場景：釘板常態分佈、拖拉丟擲沙盒、布料、牛頓擺、吊橋。',
-    hint: '用上方分頁切換 · 物體大多可以用滑鼠拖',
+    blurb: '2D 物理引擎：幫你算重力、碰撞、反彈和繩索，你只負責把結果畫出來。',
+    hint: '物體大多可以用滑鼠抓起來丟',
     fit: '2D 物理互動、益智遊戲、可以拖拉丟擲的介面',
     site: 'https://brm.io/matter-js/',
     code: `<span class="k">const</span> engine = Matter.Engine.create();
@@ -579,8 +596,8 @@ app.ticker.add(() => orbit(stars));` },
 Matter.Composite.add(engine.world, ball);
 Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</span>);` },
   { id: 'sand', name: 'Falling Sand', cat: '2D 繪圖', native: true, base: ['canvas'], ver: '不用套件 · ImageData',
-    blurb: '不用套件，只靠幾條逐格規則：落沙與水流、生命遊戲、DOOM 火焰、反應擴散、蘭頓螞蟻。',
-    hint: '用上方分頁切換 · 大多可以在畫面上拖曳',
+    blurb: '不用套件，只給每一格幾條簡單規則，整個畫面就自己長出複雜的樣子。',
+    hint: '大多可以直接在畫面上拖曳作畫',
     fit: '細胞自動機、像素風遊戲，看簡單規則怎麼長出複雜的樣子',
     site: 'https://developer.mozilla.org/docs/Web/API/ImageData',
     code: `<span class="c">// 1. 下面空著就往下掉</span>
@@ -590,8 +607,8 @@ Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</s
 <span class="c">// 3. 水多一條：往左右流</span>
 <span class="k">else if</span> (water && empty(x + d, y)) move(x, y, x + d, y);` },
   { id: 'three', name: 'Three.js', cat: '3D', lib: 'three', base: ['webgl', 'webgpu'], ver: 'three.js r149',
-    blurb: 'Three.js 的五種常見用法：程式生成建築、粒子變形、PBR 材質、Raycaster 滑鼠互動、低多邊形地形。',
-    hint: '用上方分頁切換效果 · 大多可以拖曳轉動',
+    blurb: '最常用的網頁 3D 工具，幫你處理相機、燈光、材質和模型，底下用 WebGL 叫顯示卡畫圖。',
+    hint: '大多可以拖曳轉動視角',
     fit: '3D 場景、產品展示、建築與資料地景、WebXR',
     site: 'https://threejs.org',
     code: `<span class="k">for</span> (<span class="k">let</span> i = <span class="n">0</span>; i < <span class="n">44</span>; i++) {
@@ -601,8 +618,8 @@ Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</s
   tower.add(floor);
 }` },
   { id: 'glsl', name: 'GLSL Shader', cat: '3D / GPU', native: true, base: ['webgl'], ver: '不用套件 · WebGL 1',
-    blurb: '直接寫給 GPU 的 fragment shader：液態漸層、raymarching 3D、Voronoi 細胞、影像後製濾鏡、Mandelbrot 碎形。',
-    hint: '用上方分頁切換 · 游標會影響畫面',
+    blurb: '直接寫給顯示卡跑的小程式（shader）。每個像素同時各算一次，再重的特效也跑得動。',
+    hint: '游標會影響畫面，切換按鈕在右下角',
     fit: '背景特效、轉場、影像濾鏡，任何逐像素的運算',
     site: 'https://developer.mozilla.org/docs/Web/API/WebGL_API',
     code: `vec2 q = vec2(fbm(p + t), fbm(p + vec2(<span class="n">5.2</span>, <span class="n">1.3</span>)));
@@ -611,8 +628,8 @@ vec2 r = vec2(fbm(p + <span class="n">3.0</span> * q + t),
 <span class="k">float</span> f = fbm(p + <span class="n">3.0</span> * r);     <span class="c">// 域扭曲</span>
 gl_FragColor = vec4(palette(f + length(q)), <span class="n">1.0</span>);` },
   { id: 'tone', name: 'Tone.js', cat: '聲音', lib: 'tone', base: ['audio', 'canvas'], ver: 'tone 14.8.49',
-    blurb: 'Tone.js 的五種常見用法：即時合成配樂、鍵盤合成器、步進音序器、濾波器 XY 控制板、合成遊戲音效。',
-    hint: '每一頁都要按一下才會出聲 · 想邊看邊聽，開「配樂」或自動巡覽',
+    blurb: '在瀏覽器裡即時合成聲音的工具，有合成器、效果器和節拍器，不用任何音檔。',
+    hint: '每一頁都要點一下才會出聲；想邊看邊聽，打開下方「配樂」',
     fit: '互動音樂、合成音效、節奏遊戲、聲音裝置',
     site: 'https://tonejs.github.io',
     code: `<span class="k">const</span> pad = <span class="k">new</span> Tone.PolySynth(Tone.Synth).connect(reverb);
@@ -4106,11 +4123,11 @@ function renderInfo(d) {
       <h2>${d.name}</h2>
       <div class="ver">${d.ver}</div>
     </div>
-    <p>${d.blurb}</p>
+    <p>${phr(d.blurb)}</p>
     <dl>
-      <div><dt>建立在</dt><dd class="tags">${baseTags(d.base)}</dd></div>
-      <div><dt>怎麼玩</dt><dd>${d.hint}</dd></div>
-      <div><dt>適合拿來做</dt><dd>${d.fit}</dd></div>
+      <div><dt>用到的瀏覽器 API</dt><dd class="tags">${baseTags(d.base)}</dd></div>
+      <div><dt>怎麼玩</dt><dd>${phr(d.hint)}</dd></div>
+      <div><dt>適合拿來做</dt><dd>${phr(d.fit)}</dd></div>
     </dl>
     <pre class="code">${d.code}</pre>
     <section class="ask" aria-label="跟 AI 這樣說"></section>
@@ -4118,15 +4135,17 @@ function renderInfo(d) {
   renderAsk(ASK[d.id]);
 }
 
+const phr = (t, n = 10) => t.replace(new RegExp(`(^|[、，；：。（）()\\s>])([^、，；：。（）()\\s<>]{2,${n}})(?=[、，；。]|$)`, 'g'), '$1<span class="nw">$2</span>');
 const esc = t => t.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function renderAsk(a) {
   const box = $('#info .ask');
   if (!box || !a) return;
   box.innerHTML = `
     <h3>跟 AI 這樣說</h3>
-    <p class="formula">照這個順序講最少來回：<b>套件</b> → <b>畫面有什麼</b> → <b>怎麼動</b>（順序、秒數、ease）→ <b>怎麼互動</b> → <b>限制</b></p>
-    <div><div class="lbl">關鍵詞，直接用這些字</div><div class="terms">${a.terms.map(t => `<span>${esc(t)}</span>`).join('')}</div></div>
-    <blockquote id="ask-prompt">${esc(a.prompt)}</blockquote>
+    <div><div class="lbl">照這個順序描述，AI 最快做對</div>
+      <ol class="steps"><li>用哪個套件</li><li>畫面上有什麼</li><li>怎麼動<small>順序、秒數、ease</small></li><li>怎麼互動</li><li>有什麼限制</li></ol></div>
+    <div><div class="lbl">關鍵詞：直接用這些字，AI 比較不會猜錯</div><div class="terms">${a.terms.map(t => `<span>${esc(t)}</span>`).join('')}</div></div>
+    <div><div class="lbl">範例提示詞</div><blockquote id="ask-prompt">${esc(a.prompt)}</blockquote></div>
     <button class="btn copy" type="button" id="ask-copy"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M3 10.5V3.8A1.3 1.3 0 0 1 4.3 2.5H10"/></svg>複製提示詞</button>`;
   const btn = $('#ask-copy');
   btn.onclick = () => {
@@ -4254,12 +4273,12 @@ CATS.forEach(cat => {
 Object.entries(BASES).forEach(([id, b]) => {
   const el = h('div', { class: 'api', tabindex: '0', 'data-id': id });
   el.style.setProperty('--col', `var(--c-${id})`);
-  el.innerHTML = `<h3>${b.name}</h3><p>${b.note}</p><span class="cnt">${usage[id]} 個套件用到</span>`;
+  el.innerHTML = `<h3>${b.name}</h3><p>${phr(b.note, 13)}</p><span class="cnt">${usage[id]} 個套件用到</span>`;
   const on = () => focusApi(id, el), off = () => clearFocus();
   el.addEventListener('mouseenter', on); el.addEventListener('focus', on); el.addEventListener('mouseleave', off); el.addEventListener('blur', off);
   apisEl.appendChild(el);
 });
-$('#versions').textContent = '示範使用的版本：' + DEMOS.filter(d => d.lib).map(d => d.ver).join('、') + '。';
+$('#versions').innerHTML = '示範使用的版本：' + DEMOS.filter(d => d.lib).map(d => `<span class="nw">${d.ver}</span>`).join('、') + '。';
 
 function rel(el) { const r = el.getBoundingClientRect(), o = diagram.getBoundingClientRect(); return { x: r.left - o.left, y: r.top - o.top, w: r.width, h: r.height }; }
 function wire(from, to, col) {
