@@ -130,7 +130,15 @@ pre.code .k { color: #9C85FF; } pre.code .s { color: #F2B83A; } pre.code .c { co
 /* ---------- atlas ---------- */
 section.block { padding-block: 64px 0; }
 .block h2.sec { font-family: var(--display); font-stretch: 118%; font-weight: 800; font-size: clamp(24px, 3.2vw, 36px); line-height: 1.1; margin: 0; text-wrap: balance; }
-.block .sub { color: var(--muted); max-width: 66ch; margin: 10px 0 24px; }
+.block .sub { color: var(--muted); max-width: 66ch; margin: 10px 0 24px; text-wrap: pretty; }
+.block .sub b { color: var(--ink); font-weight: 700; white-space: nowrap; }
+.block .sub:has(+ .howto) { margin-bottom: 12px; }
+.nw { white-space: nowrap; }
+.block .sub .line { display: block; }
+.howto { list-style: none; padding: 0; margin: 0 0 24px; display: grid; gap: 6px; max-width: 84ch; font-size: 14px; color: var(--muted); text-wrap: pretty; }
+.howto li { display: grid; grid-template-columns: 7.5em minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.howto b { color: var(--ink); font-weight: 700; white-space: nowrap; }
+@media (max-width: 640px) { .howto li { grid-template-columns: minmax(0, 1fr); gap: 0; } }
 .diagram { position: relative; display: grid; gap: 10px; }
 .wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; overflow: visible; }
 .tier { position: relative; border-radius: var(--r); }
@@ -405,7 +413,11 @@ footer p { max-width: 75ch; margin: 0 0 6px; }
 
   <section class="block" id="atlas">
     <h2 class="sec">這些套件站在哪一層</h2>
-    <p class="sub">套件不會憑空畫圖，它們都建立在瀏覽器提供的原生 API 上。把游標移到套件或 API 上，看它們怎麼連起來；深色的套件在上面有即時示範，點一下就跳過去。</p>
+    <p class="sub">套件不會憑空畫圖，每一個都是蓋在<span class="nw">瀏覽器原生 API&nbsp;上</span>的一層。<span class="line">這張圖<b>由上往下讀</b>：<span class="nw">套件 → 瀏覽器 API → 硬體</span>。</span></p>
+    <ul class="howto">
+      <li><b>看連線</b>游標移到套件上，會畫線連到它用的 API；移到 API&nbsp;上，會亮出所有用到它的套件。</li>
+      <li><b>深色 = 有示範</b>深色的套件在上方有即時示範，點一下就跳過去；淺色的只是列出來參考。</li>
+    </ul>
     <div class="diagram" id="diagram">
       <svg class="wires" id="wires" aria-hidden="true"></svg>
       <div class="tier"><div class="tier-label">套件與作法</div><div class="cats" id="cats"></div></div>
