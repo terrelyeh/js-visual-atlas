@@ -99,7 +99,8 @@ h1 .js { display: inline-block; padding: 0 .14em; margin-right: .08em; backgroun
 .info { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 14px; min-width: 0; align-content: start; grid-template-rows: auto auto auto minmax(0, 1fr) auto; }
 .info-code { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 6px; min-height: 0; }
 .info-code dd { margin: 0; min-height: 0; display: grid; }
-.info-code pre.code { min-height: 0; overflow: auto; font-size: 11px; line-height: 1.55; padding: 10px 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.info-code pre.code { min-height: 0; overflow: auto; font-size: 11px; line-height: 1.55; padding: 10px 12px 10px 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.info-code .ln { display: block; }
 @media (min-width: 1081px) { .info { contain: size; overflow: hidden; } .info-code pre.code { height: 100%; } }
 .info > a { align-self: end; }
 .info .eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
@@ -4253,6 +4254,8 @@ function copyText(text, done) {
   const legacy = () => { const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} t.remove(); done(ok); };
   try { navigator.clipboard.writeText(text).then(() => done(true), legacy); } catch (e) { legacy(); }
 }
+// one block per source line, so a line that wraps in the narrow card gets a hanging indent instead of looking like a new line
+const codeLines = html => html.split('\n').map(l => { const n = l.match(/^ */)[0].length; return `<span class="ln" style="padding-left: ${n + 2}ch; text-indent: -2ch">${l.slice(n) || ' '}</span>`; }).join('');
 function renderInfo(d) {
   $('#info').innerHTML = `
     <div>
@@ -4267,7 +4270,7 @@ function renderInfo(d) {
       <div id="info-play-row" style="display: none"><dt>這一頁怎麼玩</dt><dd id="info-play"></dd></div>
       <div><dt>適合拿來做</dt><dd>${phr(d.fit, 12)}</dd></div>
     </dl>
-    <dl class="info-code"><dt>程式碼片段</dt><dd><pre class="code" id="ask-code">${d.code}</pre></dd></dl>
+    <dl class="info-code"><dt>程式碼片段</dt><dd><pre class="code" id="ask-code">${codeLines(d.code)}</pre></dd></dl>
     <a href="${d.site}" target="_blank" rel="noopener">${d.native ? 'MDN 文件' : '官方網站'} ↗</a>`;
   // show the demo's first-tab prompt right away; the tab that actually opens replaces it a moment later
   askCode = d.code; renderAsk(ASK[d.id]);
@@ -4338,7 +4341,7 @@ async function select(i, opts = {}) {
   }
   veil.hidden = true;
   lastSize = stage.clientWidth + 'x' + stage.clientHeight;
-  const api = { touring: tourOn, hashTab: !opts.keepHash, setCode: html => { askCode = html; const pre = $('#ask-code'); if (pre) pre.innerHTML = html; }, setAsk: renderAsk, setPlay: t => { const dd = $('#info-play'); if (dd) { dd.innerHTML = phr(t); dd.parentElement.style.display = ''; } } };
+  const api = { touring: tourOn, hashTab: !opts.keepHash, setCode: html => { askCode = html; const pre = $('#ask-code'); if (pre) pre.innerHTML = codeLines(html); }, setAsk: renderAsk, setPlay: t => { const dd = $('#info-play'); if (dd) { dd.innerHTML = phr(t); dd.parentElement.style.display = ''; } } };
   try { dispose = MOUNT[d.id](mountEl, api); }
   catch (e) { console.error(e); veil.hidden = false; veil.innerHTML = `<div>${d.name} 示範啟動失敗：${e.message}</div><button type="button" id="retry">再試一次</button>`; $('#retry').onclick = () => select(current); }
   if (tourOn) restartTour();
