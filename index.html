@@ -369,7 +369,7 @@ footer p b { color: var(--ink); font-weight: 700; }
 .anum-ring svg { width: min(100%, 220px); max-height: 100%; }
 .anum-bars { grid-column: 1 / 4; display: flex; align-items: flex-end; gap: 8px; background: #141A2E; border: 1px solid #262C3F; border-radius: 12px; padding: 14px; min-height: 0; }
 .anum-bars i { flex: 1; height: 10%; border-radius: 6px 6px 2px 2px; background: linear-gradient(#FF8257, #9C85FF); }
-@container (max-width: 560px) { .anum-card { padding: 9px 8px; } .anum-card span { font-size: 11px; } .anum-card b { font-size: 15px; } .anum { grid-template-columns: repeat(3, minmax(0, 1fr)); } .anum-ring { display: none; } .ae-row { grid-template-columns: 112px minmax(0, 1fr); font-size: 11px; } }
+@container (max-width: 560px) { .anum-card { padding: 9px 8px; } .anum-card span { font-size: 10.5px; white-space: nowrap; } .anum-card b { font-size: 15px; } .anum { grid-template-columns: repeat(3, minmax(0, 1fr)); } .anum-ring { display: none; } .ae-row { grid-template-columns: 112px minmax(0, 1fr); font-size: 11px; } }
 /* Tone.js tabs */
 .tk { position: absolute; inset: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; }
 .tk canvas { display: block; }
@@ -520,7 +520,6 @@ const CDN = {
 const DEMOS = [
   { id: 'canvas', name: 'Canvas 2D', cat: '2D 繪圖', native: true, base: ['canvas'], ver: '瀏覽器原生 API',
     blurb: '瀏覽器內建的畫布，不用裝任何套件。用程式一筆一筆畫，每個細節都由你決定。',
-    hint: '每一頁都能用滑鼠玩，玩法寫在畫面左下角',
     fit: '插畫背景、粒子特效、繪圖板、時鐘儀表，想自己控制每一筆的畫面',
     site: 'https://developer.mozilla.org/docs/Web/API/Canvas_API',
     code: `<span class="k">const</span> g = canvas.getContext(<span class="s">'2d'</span>);
@@ -531,7 +530,6 @@ g.fillStyle = sky;
 g.fillRect(<span class="n">0</span>, <span class="n">0</span>, w, h);` },
   { id: 'rough', name: 'Rough.js', cat: '2D 繪圖', lib: 'rough', base: ['svg', 'canvas'], ver: 'roughjs 4.6.6',
     blurb: '讓圖形看起來像手畫的：給它方形、圓形和線條，它畫出歪歪的筆觸和鉛筆排線。',
-    hint: '點紙卡重畫，或用右下角的按鈕；流程圖的方塊可以拖',
     fit: '草圖感的圖解、白板風流程圖、手畫感圖表，和微微抖動的手繪動畫',
     site: 'https://roughjs.com',
     code: `<span class="k">const</span> rc = rough.svg(svg);
@@ -542,7 +540,6 @@ svg.append(rc.rectangle(<span class="n">200</span>, <span class="n">260</span>, 
 svg.append(rc.circle(<span class="n">660</span>, <span class="n">110</span>, <span class="n">80</span>, { fill: <span class="s">'#f6c945'</span> }));` },
   { id: 'p5', name: 'p5.js', cat: '2D 繪圖', lib: 'p5', base: ['canvas', 'webgl'], ver: 'p5.js 1.9.4',
     blurb: '為藝術家和初學者設計的繪圖工具，幾行程式就能畫出會動、能互動的畫面，2D、3D 都可以。',
-    hint: '每一頁都能用滑鼠玩，玩法寫在畫面左下角',
     fit: '生成藝術、自然模擬（碎形樹、鳥群）、粒子文字，快速做出一個視覺想法',
     site: 'https://p5js.org',
     code: `p.draw = () => {
@@ -556,7 +553,6 @@ svg.append(rc.circle(<span class="n">660</span>, <span class="n">110</span>, <sp
 };` },
   { id: 'gsap', name: 'GSAP', cat: '動畫', lib: 'gsap', base: ['dom', 'svg'], ver: 'gsap 3.13.0 + 5 個官方 plugin',
     blurb: '專做網頁動畫，用時間軸精準安排每個動作的先後和節奏；官方外掛再補上捲動、拆字、版面轉場和沿路徑移動。',
-    hint: '每一頁都會自己播放，也能用下方的按鈕、進度條或捲動來控制',
     fit: '網站進場和文字動畫、捲動敘事、版面切換、要精準排時間的長段動畫',
     site: 'https://gsap.com',
     code: `<span class="k">const</span> tl = gsap.timeline({
@@ -570,7 +566,6 @@ tl.from(line1Chars, { yPercent: <span class="n">120</span>,
   .from(rule, { scaleX: <span class="n">0</span> }, <span class="s">'-=0.5'</span>);` },
   { id: 'anime', name: 'Anime.js', cat: '動畫', lib: 'anime', base: ['dom', 'svg'], ver: 'animejs 3.2.2',
     blurb: '輕量的動畫工具，讓網頁元素和 SVG 動起來，寫法比 GSAP 更精簡；錯開、時間軸、描線變形、數字滾動都內建。',
-    hint: '每一頁都會自己播放；可以點畫面，或用下方的按鈕、進度條控制',
     fit: '介面小動畫、錯開進場、SVG 描線與變形、儀表板的數字滾動',
     site: 'https://animejs.com',
     code: `anime({
@@ -582,7 +577,6 @@ tl.from(line1Chars, { yPercent: <span class="n">120</span>,
 });` },
   { id: 'd3', name: 'D3.js', cat: '資料視覺化', lib: 'd3', base: ['svg'], ver: 'd3 7.9.0',
     blurb: '把資料變成圖表的工具。它不給現成圖表，而是把每一筆資料綁到一個圖形上，長相由你決定。',
-    hint: '每一頁都能直接操作：拖曳、點擊或滑過',
     fit: '客製化圖表、關係網路、階層樹、可以縮放探索的大量資料，現成圖表庫做不到的版面',
     site: 'https://d3js.org',
     code: `svg.selectAll(<span class="s">'rect'</span>)
@@ -593,7 +587,6 @@ tl.from(line1Chars, { yPercent: <span class="n">120</span>,
   .attr(<span class="s">'height'</span>, d => y(<span class="n">0</span>) - y(d.value));` },
   { id: 'pixi', name: 'PixiJS', cat: '2D 繪圖', lib: 'pixi', base: ['webgl'], ver: 'pixi.js 7.4.2',
     blurb: '用顯示卡（GPU）畫 2D 的工具，同時畫上萬個圖形也很順，常用來做網頁遊戲。',
-    hint: '每一頁都能用滑鼠玩，玩法寫在畫面左下角',
     fit: '2D 遊戲、大量精靈和粒子、濾鏡特效、可以拖曳的互動畫面',
     site: 'https://pixijs.com',
     code: `<span class="k">const</span> stars = <span class="k">new</span> PIXI.ParticleContainer(<span class="n">6000</span>);
@@ -604,7 +597,6 @@ stars.blendMode = PIXI.BLEND_MODES.ADD;   <span class="c">// 疊加發光</span>
 app.ticker.add(() => orbit(stars));` },
   { id: 'matter', name: 'Matter.js', cat: '物理', lib: 'matter', base: ['canvas'], ver: 'matter-js 0.19.0',
     blurb: '2D 物理引擎：幫你算重力、碰撞、反彈、繩索和布料，你只負責把結果畫出來。',
-    hint: '物體大多能用滑鼠抓起來丟，玩法寫在畫面左下角',
     fit: '2D 物理互動、益智遊戲、物理教學演示、可以拖拉丟擲的介面',
     site: 'https://brm.io/matter-js/',
     code: `<span class="k">const</span> engine = Matter.Engine.create();
@@ -615,7 +607,6 @@ Matter.Composite.add(engine.world, ball);
 Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</span>);` },
   { id: 'sand', name: 'Falling Sand', cat: '像素模擬', native: true, base: ['canvas'], ver: '不用套件 · ImageData',
     blurb: '不用套件，只給每一格幾條簡單規則，整個畫面就自己長出複雜的樣子。',
-    hint: '每一頁都能在畫面上拖曳或點擊，玩法寫在畫面左下角',
     fit: '細胞自動機、像素風遊戲、火焰特效、有機紋路生成',
     site: 'https://developer.mozilla.org/docs/Web/API/ImageData',
     code: `<span class="c">// 1. 下面空著就往下掉</span>
@@ -626,7 +617,6 @@ Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</s
 <span class="k">else if</span> (water && empty(x + d, y)) move(x, y, x + d, y);` },
   { id: 'three', name: 'Three.js', cat: '3D', lib: 'three', base: ['webgl'], ver: 'three.js r149',
     blurb: '最常用的網頁 3D 工具，幫你處理相機、燈光、材質和模型，底下用 WebGL 叫顯示卡畫圖。',
-    hint: '大多能拖曳轉動視角，玩法寫在畫面左下角',
     fit: '3D 場景、產品材質展示、粒子特效、可點選的立體介面、地形與資料地景',
     site: 'https://threejs.org',
     code: `<span class="k">for</span> (<span class="k">let</span> i = <span class="n">0</span>; i < <span class="n">44</span>; i++) {
@@ -637,7 +627,6 @@ Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</s
 }` },
   { id: 'glsl', name: 'GLSL Shader', cat: 'GPU 特效', native: true, base: ['webgl'], ver: '不用套件 · WebGL 1',
     blurb: '直接寫給顯示卡跑的小程式（shader）。每個像素同時各算一次，再重的特效也跑得動。',
-    hint: '移動游標就會改變畫面，有幾頁右下角還能切換效果',
     fit: '背景特效、影像濾鏡、程序生成的圖樣和碎形、不用模型的立體畫面',
     site: 'https://developer.mozilla.org/docs/Web/API/WebGL_API',
     code: `vec2 q = vec2(fbm(p + t), fbm(p + vec2(<span class="n">5.2</span>, <span class="n">1.3</span>)));
@@ -647,7 +636,6 @@ vec2 r = vec2(fbm(p + <span class="n">3.0</span> * q + t),
 gl_FragColor = vec4(palette(f + length(q)), <span class="n">1.0</span>);` },
   { id: 'tone', name: 'Tone.js', cat: '聲音', lib: 'tone', base: ['audio', 'canvas'], ver: 'tone 14.8.49',
     blurb: '在瀏覽器裡即時合成聲音的工具，有合成器、效果器和節拍器，不用任何音檔。',
-    hint: '每一頁都要點一下才會出聲；想邊看邊聽，打開下方「配樂」',
     fit: '網頁樂器、節奏編排、互動音樂、遊戲音效',
     site: 'https://tonejs.github.io',
     code: `<span class="k">const</span> pad = <span class="k">new</span> Tone.PolySynth(Tone.Synth).connect(reverb);
@@ -3190,7 +3178,9 @@ function sandFire(el) {
   (() => {
     const oc = document.createElement('canvas'); oc.width = cols; oc.height = rows;
     const og = oc.getContext('2d'); og.fillStyle = '#fff'; og.textAlign = 'center'; og.textBaseline = 'middle';
-    og.font = `900 ${Math.round(rows * 0.34)}px "Noto Sans TC", Archivo, sans-serif`; og.fillText('FIRE 火', cols / 2, rows * 0.58);
+    let fs = Math.round(rows * 0.34); og.font = `900 ${fs}px "Noto Sans TC", Archivo, sans-serif`;
+    const tw = og.measureText('FIRE 火').width; if (tw > cols * 0.86) { fs = Math.floor(fs * cols * 0.86 / tw); og.font = `900 ${fs}px "Noto Sans TC", Archivo, sans-serif`; }
+    og.fillText('FIRE 火', cols / 2, rows * 0.58);
     const d = og.getImageData(0, 0, cols, rows).data;
     for (let i = 0; i < n; i++) mask[i] = d[i * 4 + 3] > 128 ? 1 : 0;
   })();
@@ -4050,7 +4040,10 @@ function toneKeys(el) {
     if (live) scope(g, v, 14, chH * 0.58, cw - 28, chH * 0.3, '#6DB2FF', 2.2);
     else { const d = Array.from({ length: 200 }, (_, i) => Math.sin(i / 199 * Math.PI * 6 + t * 2) * 0.12); scope(g, d, 14, chH * 0.58, cw - 28, chH * 0.3, '#2E3650', 1.5); }
     g.fillStyle = '#8A93AD'; g.font = '11.5px "JetBrains Mono", monospace'; g.textAlign = 'left';
-    g.fillText(held.size ? `${[...held].join(' ')} · ${type}` : '點琴鍵或按鍵盤 A–K 彈奏 · 有黃點的音跟背景配樂最搭', 14, chH - 10);
+    const msg = held.size ? `${[...held].join(' ')} · ${type}` : '點琴鍵或按鍵盤 A–K 彈奏 · 有黃點的音跟背景配樂最搭';
+    // split at the dot when the line is wider than the canvas
+    const lines = g.measureText(msg).width > cw - 28 ? msg.split(' · ') : [msg];
+    lines.forEach((ln, i) => g.fillText(ln, 14, chH - 10 - (lines.length - 1 - i) * 16));
   });
   return () => { stop(); window.removeEventListener('keydown', kd); window.removeEventListener('keyup', ku); try { synth.releaseAll(); } catch (e) {} kit.kill(); };
 }
@@ -4230,7 +4223,7 @@ function renderInfo(d) {
     <p>${phr(d.blurb, 13)}</p>
     <dl>
       <div><dt>用到的瀏覽器 API</dt><dd class="tags">${baseTags(d.base)}</dd></div>
-      <div><dt>這一頁怎麼玩</dt><dd id="info-play">${phr(d.hint)}</dd></div>
+      <div id="info-play-row" style="display: none"><dt>這一頁怎麼玩</dt><dd id="info-play"></dd></div>
       <div><dt>適合拿來做</dt><dd>${phr(d.fit, 12)}</dd></div>
     </dl>
     <pre class="code">${d.code}</pre>
@@ -4282,7 +4275,7 @@ async function select(i, opts = {}) {
   }
   veil.hidden = true;
   lastSize = stage.clientWidth + 'x' + stage.clientHeight;
-  const api = { touring: tourOn, setCode: html => { const pre = $('#info pre.code'); if (pre) pre.innerHTML = html; }, setAsk: renderAsk, setPlay: t => { const dd = $('#info-play'); if (dd) dd.innerHTML = phr(t); } };
+  const api = { touring: tourOn, setCode: html => { const pre = $('#info pre.code'); if (pre) pre.innerHTML = html; }, setAsk: renderAsk, setPlay: t => { const dd = $('#info-play'); if (dd) { dd.innerHTML = phr(t); dd.parentElement.style.display = ''; } } };
   try { dispose = MOUNT[d.id](mountEl, api); }
   catch (e) { console.error(e); veil.hidden = false; veil.innerHTML = `<div>${d.name} 示範啟動失敗：${e.message}</div><button type="button" id="retry">再試一次</button>`; $('#retry').onclick = () => select(current); }
   if (tourOn) restartTour();
