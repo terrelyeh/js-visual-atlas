@@ -146,7 +146,11 @@ section.block { padding-block: 64px 0; }
 .diagram { position: relative; display: grid; gap: 10px; }
 .wires { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; overflow: visible; }
 .tier { position: relative; border-radius: var(--r); }
-.tier-label { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.tier-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-bottom: 10px; }
+.tier-label i { align-self: center; flex: none; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--ink); color: var(--bg); font: 700 13px var(--mono); font-style: normal; font-variant-numeric: tabular-nums; }
+.tier-label b { font: 800 18px/1.3 var(--display); color: var(--ink); }
+.tier-label > span { font-size: 13.5px; color: var(--muted); }
+.diagram > .tier:not(:first-of-type) { margin-top: 18px; }
 .cats { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; }
 .cat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; display: grid; align-content: start; gap: 8px; min-width: 0; }
 .cat h3 { margin: 0; font-size: 13px; font-weight: 700; }
@@ -442,10 +446,10 @@ footer p b { color: var(--ink); font-weight: 700; }
     </ul>
     <div class="diagram" id="diagram">
       <svg class="wires" id="wires" aria-hidden="true"></svg>
-      <div class="tier"><div class="tier-label">套件與作法</div><div class="cats" id="cats"></div></div>
+      <div class="tier"><div class="tier-label"><i>1</i><b>套件與作法</b><span>寫程式時引用的工具；最右一欄是<span class="nw">不靠套件、直接寫的作法</span></span></div><div class="cats" id="cats"></div></div>
       <div class="raf">所有動畫跟著同一個節拍 <b>requestAnimationFrame</b>：<span class="nw">螢幕每刷新一次（通常一秒 60 次），</span><span class="nw">就一起畫下一格</span></div>
-      <div class="tier"><div class="tier-label">瀏覽器原生 API</div><div class="apis" id="apis"></div></div>
-      <div class="tier"><div class="tier-label">硬體</div><div class="hw"><span>CPU 算版面、畫圖　→　GPU 疊圖層、上色</span><span>GPU 大量運算</span><span>音效輸出</span></div></div>
+      <div class="tier"><div class="tier-label"><i>2</i><b>瀏覽器原生 API</b><span>瀏覽器內建的畫圖、發聲能力，<span class="nw">上面每個套件都是在呼叫它們</span></span></div><div class="apis" id="apis"></div></div>
+      <div class="tier"><div class="tier-label"><i>3</i><b>硬體</b><span>最後真正算圖、發出聲音的地方</span></div><div class="hw"><span>CPU 算版面、畫圖　→　GPU 疊圖層、上色</span><span>GPU 大量運算</span><span>音效輸出</span></div></div>
     </div>
     <p class="dnote" id="dnote">移到任何一個套件上看說明。</p>
   </section>
