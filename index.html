@@ -124,7 +124,8 @@ pre.code .k { color: #9C85FF; } pre.code .s { color: #F2B83A; } pre.code .c { co
 .ask .slot { background: color-mix(in srgb, var(--accent) 14%, transparent); color: inherit; border-radius: 3px; padding: 1px 1px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .ask .lbl .slot { padding: 0 2px; }
 .ask blockquote .step { font-weight: 700; color: var(--accent); }
-.ask .copy { justify-self: start; height: 30px; font-size: 13px; }
+.ask .copy { height: 30px; font-size: 13px; }
+.ask .copies { display: flex; flex-wrap: wrap; gap: 6px; }
 .ask .steps li.off { opacity: .6; }
 .ask .steps li.off s { color: var(--muted); }
 .ask .seg { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
@@ -4275,13 +4276,19 @@ function renderAsk(a) {
     <div><div class="lbl">關鍵詞：直接用這些字，AI 比較不會猜錯</div><div class="terms">${a.terms.map(t => `<span>${esc(t)}</span>`).join('')}</div></div>
     <div class="seg" role="group" aria-label="提示詞版本"><button type="button" data-v="0" aria-pressed="${!askVideo}">網頁版</button><button type="button" data-v="1" aria-pressed="${askVideo}">影片版</button><span>${askVideo ? '拿掉互動，補上錄影片需要的限制' : '要錄成影片時切到「影片版」'}</span></div>
     <div><div class="lbl">範例提示詞：${text.includes('【') ? '<span class="slot">【】</span>裡是這個示範的主題，換成你要的內容；其他部分是做出這個效果的寫法' : '整段都是做出這個效果的寫法'}</div><blockquote id="ask-prompt">${esc(text).replace(/【[^【】]*】/g, m => `<span class="slot">${m}</span>`).replace(/(畫面|怎麼動|互動|限制)：/g, '<br><b class="step">$1：</b>')}</blockquote></div>
-    <button class="btn copy" type="button" id="ask-copy"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M3 10.5V3.8A1.3 1.3 0 0 1 4.3 2.5H10"/></svg>複製提示詞</button>`;
+    <div class="copies"><button class="btn copy" type="button" id="ask-copy"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M3 10.5V3.8A1.3 1.3 0 0 1 4.3 2.5H10"/></svg>複製提示詞</button><button class="btn copy" type="button" id="ask-both" title="給同事或工程師：附上效果連結，再接提示詞"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6.8 9.2a3 3 0 0 0 4.2 0l2.1-2.1a3 3 0 0 0-4.2-4.2l-.9.9"/><path d="M9.2 6.8a3 3 0 0 0-4.2 0L2.9 8.9a3 3 0 0 0 4.2 4.2l.9-.9"/></svg>連結＋提示詞一起複製</button></div>`;
   box.querySelectorAll('.seg button').forEach(b => b.onclick = () => { askVideo = b.dataset.v === '1'; try { localStorage.setItem('jsatlas-video', askVideo ? '1' : '0'); } catch (e) {} renderAsk(a); });
   const btn = $('#ask-copy');
   btn.onclick = () => {
     const done = msg => { btn.lastChild.textContent = msg; setTimeout(() => { btn.lastChild.textContent = '複製提示詞'; }, 1800); };
     const fallback = () => { const r = document.createRange(); r.selectNodeContents($('#ask-prompt')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); done('已選取，按 ⌘C 複製'); };
     try { navigator.clipboard.writeText(text.replace(/(畫面|怎麼動|互動|限制)：/g, '\n$1：')).then(() => done('已複製'), fallback); } catch (e) { fallback(); }
+  };
+  // for handing to a person: the live link first, then the prompt (web or video version, whichever is showing)
+  const both = $('#ask-both');
+  both.onclick = () => {
+    const bundle = `效果長這樣：${tabLink(DEMOS[current])}\n\n${text.replace(/(畫面|怎麼動|互動|限制)：/g, '\n$1：')}`;
+    copyText(bundle, ok => { both.lastChild.textContent = ok ? '已複製連結和提示詞' : '複製失敗，請分開複製'; setTimeout(() => { both.lastChild.textContent = '連結＋提示詞一起複製'; }, 1800); });
   };
 }
 
