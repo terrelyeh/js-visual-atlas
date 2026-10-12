@@ -655,23 +655,23 @@ Tone.Transport.scheduleRepeat(time => {
 /* how to ask an AI for each effect: the vocabulary that gets it right on the first try, plus a sample prompt */
 const ASK = {
   canvas: { terms: ['Canvas 2D', 'createLinearGradient', '逐層錯開進場', '視差 parallax', 'easeOutCubic'],
-    prompt: '用原生 Canvas 2D（不用套件）畫一張【黃昏山景】。畫面：天空是由上到下【深藍→洋紅→橘】的線性漸層，中間一顆【下半部有水平條紋缺口的太陽】，前面五層由遠到近、顏色越來越深的【山稜線】，最近兩層加【松樹剪影】。怎麼動：進場時【太陽】先升起，【山稜】再依序從下方滑上來（easeOutCubic，每層間隔 0.4 秒）。互動：滑鼠左右移動時，各層用不同幅度做視差；點一下重新隨機生成【山形】。限制：所有圖形都用程式畫，不用圖片檔；動畫用 requestAnimationFrame。' },
+    prompt: '用原生 Canvas 2D（不用套件）畫一張【黃昏山景】。畫面：天空是由上到下【深藍→洋紅→橘】的線性漸層，中間一顆【下半部有水平條紋缺口的太陽】，前面五層由遠到近、顏色越來越深的【山稜線】，最近三層加【松樹剪影】。怎麼動：進場時【太陽】先升起，【山稜】再依序從下方滑上來（easeOutCubic，每層間隔 0.4 秒）。互動：滑鼠左右移動時，各層用不同幅度做視差；點一下重新隨機生成【山形】。限制：所有圖形都用程式畫，不用圖片檔；動畫用 requestAnimationFrame。' },
   rough: { terms: ['Rough.js', 'rough.svg()', 'hachure / cross-hatch 填充', 'stroke-dashoffset 描線', 'seed'],
     prompt: '用 Rough.js 的 SVG 模式畫手繪風小插畫。畫面：【一棟房子】（牆用 hachure、屋頂用 cross-hatch 填充）、【一棵樹、一顆有光芒的太陽】，放在【有橫線的米色筆記紙卡】上。怎麼動：用 stroke-dasharray / stroke-dashoffset 讓每條路徑依序一筆一筆畫出來，先描外框再填色，總長約 7 秒。互動：點紙卡就換一個 seed 重畫。限制：重畫前先停掉上一輪還沒跑完的描線動畫。' },
   p5: { terms: ['p5.js instance mode', 'Perlin noise 流場', 'createGraphics 圖層', '低透明度累積'],
     prompt: '用 p5.js（instance mode）做水墨暈染。畫面：【米色紙紋】背景，最後右下角會出現一個【紅色方形印章，裡面是米白色的「墨」字】。怎麼動：三滴墨在不同位置依序落下，每滴墨放出粒子，沿著 Perlin noise 流場移動，用很低的透明度慢慢累積出墨暈；約 7 秒後印章用縮放的動畫蓋下。互動：點畫面可以再滴一滴墨。限制：用 instance mode，不要污染全域；墨跡畫在一個 createGraphics 圖層上，不要每格清掉。' },
-  gsap: { terms: ['gsap.timeline', 'stagger', "ease: 'back.out(1.7)'", "位置參數 '-=0.4'", 'progress()'],
+  gsap: { terms: ['gsap.timeline', 'stagger', "ease: 'back.out(1.7)'", "位置參數 '-=0.55'", 'progress()'],
     prompt: "用 GSAP 的 gsap.timeline 做文字進場。畫面：【兩行標題】和一條底線；旁邊用 SVG 畫出目前 ease 的曲線，上面有一顆點。怎麼動：把標題拆成單字，讓字依序從下方彈上來（stagger 0.06、ease 'back.out(1.7)'），第二行用 '-=0.55' 跟第一行重疊，最後底線從左往右展開；曲線上的點同步沿曲線跑。互動：提供按鈕切換 ease（曲線跟著重畫），再加一個 range 拉桿可以拖曳 timeline 的 progress。限制：切換 ease 時先 kill 舊的 timeline、清掉已套用的樣式再重建。" },
   anime: { terms: ['Anime.js v3', 'anime.stagger({ grid, from })', '屬性關鍵影格', 'easeOutElastic'],
     prompt: '用 Anime.js v3 做點陣網格的波紋。畫面：畫面鋪滿【彩色圓點】。怎麼動：用 anime.stagger(55, { grid: [cols, rows], from: index }) 讓波紋從某一格往外擴散：圓點先縮小、往起點方向偏移、變白，再用 easeOutElastic 彈回原狀和原色。互動：點任何一格就從那格觸發；閒置時每 3 秒從隨機一格自動觸發一次。限制：觸發新的波紋前先用 anime.remove 停掉上一輪，避免動畫疊在一起。' },
   d3: { terms: ['D3 v7', 'selection.join', 'key function', 'enter / update / exit', 'transition', 'scaleBand'],
-    prompt: '用 D3 v7 做會動的長條圖。畫面：資料是【[{ key, value }]】，每筆一根長條、上面有數字標籤，顏色依數值用 d3.interpolatePlasma；圖上方即時顯示目前的 data 陣列。怎麼動：所有變化都用 750ms transition 過渡，數字標籤用 tween 從舊值數到新值。互動：按鈕「隨機更新、排序、新增一筆、移除一筆」；閒置時每 2 秒自動更新。限制：用 selection.join 搭配 key function 處理 enter / update / exit，不要每次清空重畫。' },
+    prompt: '用 D3 v7 做會動的長條圖。畫面：資料是【[{ key, value }]】，每筆一根長條、上面有數字標籤，顏色依數值用 d3.interpolatePlasma；圖上方即時顯示目前的 data 陣列。怎麼動：所有變化都用 750ms transition 過渡，數字標籤用 tween 從舊值數到新值。互動：按鈕「更新數值、排序、新增一筆、移除一筆」，再加一個「自動更新」開關；開著時閒置每 2 秒自動更新。限制：用 selection.join 搭配 key function 處理 enter / update / exit，不要每次清空重畫。' },
   pixi: { terms: ['PixiJS v7', 'ParticleContainer', 'BLEND_MODES.ADD', '程式產生發光貼圖', '差速旋轉'],
     prompt: '用 PixiJS v7 做 6,000 顆發光粒子的【螺旋星系】。畫面：粒子分【兩條旋臂】，顏色從中心的【暖黃】漸變到外圍的【藍紫】。怎麼動：內圈轉得比外圈快，粒子用 blendMode ADD 疊加發光。互動：滑鼠上下移動改變星系傾角；點一下從中心送出一圈往外推的衝擊波。限制：發光貼圖用 canvas 徑向漸層產生，不用圖片檔；粒子全部放進 ParticleContainer。' },
   matter: { terms: ['Matter.js', 'Galton board 釘板', '二項分佈', '自訂 Canvas 繪製', 'Engine.update'],
     prompt: '用 Matter.js 做高爾頓釘板。畫面：12 排交錯的固定釘子，下面 13 個隔槽。怎麼動：從頂部中央逐顆放下【400 顆小球】，讓它們自己堆出常態分佈；球都停下後疊上一條 N(6, 3) 的常態曲線做對照。互動：點畫面上半部，從那裡再倒 40 顆。限制：用自己的 Canvas 2D 迴圈畫（不用 Matter.Render），每格呼叫 Engine.update；為了接近理想的二項分佈，每格稍微衰減小球的水平速度。' },
   sand: { terms: ['細胞自動機', 'falling sand', 'ImageData + Uint32Array', '由下往上掃描', 'image-rendering: pixelated'],
-    prompt: '不用套件，用 Canvas 2D 的 ImageData 做 falling sand 細胞自動機。畫面：每一格是空、【沙、水或石頭】，上方有【兩個出沙口】。怎麼動：下面空就往下掉，不然試左下或右下；水多一條規則，會往左右流；沙可以沉進水裡；出沙口會左右擺動。互動：滑鼠拖曳可以倒【沙、水、石頭】或擦掉。限制：每格由下往上掃描，左右方向逐格交替，避免往一邊偏；用小解析度畫完，再用 image-rendering: pixelated 放大。' },
+    prompt: '不用套件，用 Canvas 2D 的 ImageData 做 falling sand 細胞自動機。畫面：每一格是空、【沙、水或石頭】，上方有【兩個出沙口】。怎麼動：下面空就往下掉，不然試左下或右下；水多一條規則，會往左右流；沙可以沉進水裡；出沙口會左右擺動。互動：滑鼠拖曳可以倒【沙、水、石頭】或擦掉，另有一顆「清空」按鈕。限制：每格由下往上掃描，左右方向逐格交替，避免往一邊偏；用小解析度畫完，再用 image-rendering: pixelated 放大。' },
   three: { terms: ['Three.js', '程式生成 procedural', 'InstancedMesh', 'Points 大量光點', 'emissive', '相機環繞'],
     prompt: '用 Three.js 做程式生成的【夜景】。畫面：中央一棟【44 層的扭轉高塔】，每層樓板比下一層多轉 0.045 弧度、越高越窄；四周放【240 棟深色大樓】，【窗戶】用 Points 表示。怎麼動：樓板依序從上方落下就位，落定後玻璃慢慢亮起暖色 emissive；窗戶隨時間一盞盞點亮；相機在 16 秒內一邊繞塔旋轉一邊往上升。互動：可以左右拖曳調整相機角度。限制：大樓用一個 InstancedMesh 畫，不要一棟一個 Mesh。' },
   glsl: { terms: ['fragment shader', 'fbm 分形噪聲', 'domain warping 域扭曲', 'uniform 時間與滑鼠', '全螢幕三角形'],
@@ -1703,11 +1703,11 @@ function gsPath(host, ctx) {
 const GS_ASK = {
   timeline: ASK.gsap,
   scroll: { terms: ['ScrollTrigger', 'pin', 'scrub', '橫向捲動', 'ScrollTrigger.batch', 'scroller'],
-    prompt: '用 GSAP + ScrollTrigger 做一段捲動敘事。畫面：頂端一條進度條；第二段一個【方塊】和進度百分比；第三段【五張卡片】橫向排成一列；第四段幾張【數字卡片】。怎麼動：進度條跟著捲動進度變長（scrub）；第二段 pin 住，捲動時方塊旋轉 360 度、變圓、變色；第三段 pin 住，改成橫向捲動卡片；第四段的卡片用 ScrollTrigger.batch 進場，數字從 0 數到目標值。互動：使用者自己捲動；一開始自動捲一輪示範，一碰就交還控制。限制：捲動容器是頁面裡的一個 div，每個 ScrollTrigger 都要設 scroller。' },
+    prompt: '用 GSAP + ScrollTrigger 做一段捲動敘事。畫面：頂端一條進度條；第二段一個【方塊】和進度百分比；第三段【五張卡片】橫向排成一列；第四段幾張【數字卡片】。怎麼動：進度條跟著捲動進度變長（scrub）；第二段 pin 住，捲動時方塊旋轉 360 度、變圓、變色；第三段 pin 住，改成橫向捲動卡片；第四段的卡片用 ScrollTrigger.batch 進場，數字從 0 數到目標值。互動：使用者自己捲動；一開始會自動往下捲到底、再回到頂端，反覆示範，一碰就交還控制。限制：捲動容器是頁面裡的一個 div，每個 ScrollTrigger 都要設 scroller。' },
   split: { terms: ['SplitText.create', "type: 'chars' / 'words' / 'lines'", "mask: 'lines'", "stagger from 'random'", 'revert()'],
-    prompt: "用 GSAP 3.13 的 SplitText 做【標題】動畫。畫面：一段大標題，下方一排效果按鈕。怎麼動：四種效果——逐字彈出（chars + 隨機旋轉）、逐行遮罩上滑（type 'lines'、mask 'lines'）、逐詞 3D 翻轉（rotationX）、隨機順序模糊浮現（stagger from 'random'）；每 3 秒自動換一種。互動：按按鈕直接播放某一種效果。限制：每次切換前先 revert 上一次的拆分；中文要能逐字拆，英文拆字時保持單字完整，不要在字中間斷行。" },
+    prompt: "用 GSAP 3.13 的 SplitText 做【標題】動畫。畫面：一段大標題，下方一排效果按鈕。怎麼動：四種效果——逐字彈出（chars + 隨機旋轉）、逐行遮罩上滑（type 'lines'、mask 'lines'）、逐詞 3D 翻轉（rotationX）、隨機順序模糊浮現（stagger from 'random'）；約每 3.4 秒自動換一種。互動：按按鈕直接播放某一種效果，按了就停止自動輪播。限制：每次切換前先 revert 上一次的拆分；中文要能逐字拆，英文拆字時保持單字完整，不要在字中間斷行。" },
   flip: { terms: ['Flip.getState', 'Flip.from', 'absolute: true', 'onEnter / onLeave', 'FLIP 版面轉場'],
-    prompt: '用 GSAP 的 Flip plugin 做卡片牆。畫面：【12 張彩色卡片】排成格狀。怎麼動：每次版面變化都照 Flip.getState → 改 DOM → Flip.from 的順序，讓卡片平滑移到新位置（absolute: true）；篩選時用 onEnter / onLeave 做縮放淡入淡出。互動：三個按鈕——洗牌（重排 DOM 順序）、切換格狀／清單版面（切 class）、篩選只顯示【某一類】（display: none）。限制：只改 DOM 和 class，不要自己算座標，位置交給 Flip。' },
+    prompt: '用 GSAP 的 Flip plugin 做卡片牆。畫面：【12 張彩色卡片】排成格狀。怎麼動：每次版面變化都照 Flip.getState → 改 DOM → Flip.from 的順序，讓卡片平滑移到新位置（absolute: true）；篩選時用 onEnter / onLeave 做縮放淡入淡出；沒人操作時每 2.6 秒自動輪流做一個動作。互動：三個按鈕——洗牌（重排 DOM 順序）、切換格狀／清單版面（切 class）、篩選只顯示【某一類】（display: none）。限制：只改 DOM 和 class，不要自己算座標，位置交給 Flip。' },
   path: { terms: ['MotionPathPlugin', 'align', 'autoRotate', 'DrawSVGPlugin', 'timeScale'],
     prompt: '用 GSAP 的 MotionPathPlugin 和 DrawSVGPlugin 做路徑動畫。畫面：一條 SVG 的【∞ 形】路徑、【一個箭頭】，後面跟一串越來越小的【尾巴圓點】。怎麼動：路徑先用 DrawSVGPlugin 從 0% 畫到 100%；箭頭沿路徑無限循環移動（align 到路徑、autoRotate），尾巴圓點走同一條路徑、時間錯開。互動：0.5× / 1× / 2× 速度按鈕（timeScale）和「重畫路徑」按鈕。限制：箭頭和圓點共用同一條 path，不要另外算座標。' },
 };
@@ -1785,13 +1785,13 @@ ${K('const')} i = delaunay.find(zx.invert(px), zy.invert(py));`,
 };
 const D3_ASK = {
   force: { terms: ['d3.forceSimulation', 'forceLink / forceManyBody', 'forceCollide', 'd3.drag', 'fx / fy 固定'],
-    prompt: '用 D3 v7 的 d3-force 畫網路圖。畫面：節點是【6 個瀏覽器 API】（大圓、實心）和【約 30 個套件】（小圓、空心、用【它主要依賴的 API】上色），連線是「【套件 → 它用到的 API】」。怎麼動：用 forceLink、forceManyBody、forceCollide、forceX / forceY 排版，節點自己散開到平衡。互動：節點可以用 d3.drag 拖曳；滑鼠移到節點上時，只亮它和它的鄰居，其他變淡。限制：拖曳時設 fx / fy、放開時清掉；節點要限制在畫面內。' },
+    prompt: '用 D3 v7 的 d3-force 畫網路圖。畫面：節點是【6 個瀏覽器 API】（大圓、實心）和【約 26 個套件】（小圓、空心、用【它主要依賴的 API】上色），連線是「【套件 → 它用到的 API】」。怎麼動：用 forceLink、forceManyBody、forceCollide、forceX / forceY 排版，節點自己散開到平衡。互動：節點可以用 d3.drag 拖曳；「重新打散」按鈕把節點隨機撒開、重新排版；滑鼠移到節點上時，只亮它和它的鄰居，其他變淡。限制：拖曳時設 fx / fy、放開時清掉；節點要限制在畫面內。' },
   tree: { terms: ['d3.hierarchy', 'd3.tree().nodeSize', 'linkHorizontal', '可收合 collapsible', 'enter 從父節點長出', 'd3.zoom'],
     prompt: '用 D3 v7 做可收合的橫向樹狀圖。畫面：資料是「【瀏覽器視覺生態 → 分類 → 套件 → 用到的 API】」四層，用 d3.hierarchy + d3.tree().nodeSize() 排版、linkHorizontal 畫連線。怎麼動：展開時新節點從被點的父節點位置長出來，收合時縮回父節點（500ms transition）。互動：點節點展開或收合子節點；可以拖曳平移、⌘＋滾輪縮放。限制：整張圖包在 d3.zoom 裡，一般滾輪不要縮放，避免搶走頁面捲動。' },
   stream: { terms: ['d3.stack', 'stackOffsetWiggle', 'stackOrderInsideOut', 'd3.area + curveBasis', 'streamgraph'],
-    prompt: '用 D3 v7 畫 streamgraph（河流圖）。畫面：【6 個系列、64 個時間點的隨機示範數據（用 bump 函數產生）】，用 d3.stack 搭配 stackOrderInsideOut 和 stackOffsetWiggle 堆疊，d3.area 加 curveBasis 畫平滑區域。怎麼動：每 3 秒換一組資料，用 transition 平滑變形。互動：按鈕切換 offset（wiggle、silhouette、expand、none）；滑鼠移到某一條上時亮起它並顯示名稱，其他變淡。限制：換資料時沿用同一組 path 做 transition，不要刪掉重畫。' },
+    prompt: '用 D3 v7 畫 streamgraph（河流圖）。畫面：【6 個系列、64 個時間點的隨機示範數據（用 bump 函數產生）】，用 d3.stack 搭配 stackOrderInsideOut 和 stackOffsetWiggle 堆疊，d3.area 加 curveBasis 畫平滑區域。怎麼動：每 3 秒換一組資料，用 transition 平滑變形。互動：「換一組資料」按鈕（按了就停止自動換），以及切換 offset 的按鈕（wiggle、silhouette、expand、none）；滑鼠移到某一條上時亮起它並顯示名稱，其他變淡。限制：換資料時沿用同一組 path 做 transition，不要刪掉重畫。' },
   scatter: { terms: ['d3.zoom', 'transform.rescaleX', 'clipPath', 'd3.Delaunay.find', 'zoom.transform 動畫'],
-    prompt: '用 D3 v7 做可縮放的散佈圖。畫面：【三群常態分佈的示範點共 900 個】和兩條座標軸。怎麼動：按按鈕時用 zoom.transform 平滑縮放到目標範圍，座標軸跟著重算刻度（transform.rescaleX / rescaleY）。互動：滑鼠移動時用 d3.Delaunay 找最近的一點，畫一個圓圈並顯示群組和座標；按鈕「放大到群組 A / B / C」和「重設」；也能拖曳和 ⌘＋滾輪縮放。限制：點用 clipPath 限制在繪圖區內；一般滾輪不要縮放，避免搶走頁面捲動。' },
+    prompt: '用 D3 v7 做可縮放的散佈圖。畫面：【三群常態分佈的示範點共 900 個】和兩條座標軸。怎麼動：按按鈕時用 zoom.transform 平滑縮放到目標範圍，座標軸跟著重算刻度（transform.rescaleX / rescaleY）。互動：滑鼠移動時用 d3.Delaunay 找最近的一點，畫一個圓圈並顯示群組和座標；按鈕「放大群組 A / B / C」和「重設」；也能拖曳和 ⌘＋滾輪縮放。限制：點用 clipPath 限制在繪圖區內；一般滾輪不要縮放，避免搶走頁面捲動。' },
 };
 
 const code = id => DEMOS.find(d => d.id === id).code;
@@ -1878,7 +1878,7 @@ const P5_ASK = {
   tree: { terms: ['遞迴 recursion', 'push / pop / rotate', 'randomSeed', 'noise 風', '碎形 fractal'],
     prompt: '用 p5.js（instance mode）畫會隨風擺動的【碎形樹】。畫面：從畫面底部中央開始遞迴，每層分 2～3 枝、角度和長度隨機，枝幹從粗到細、從【褐色】漸變到末端的【粉紅花朵】。怎麼動：樹從樹幹開始一層層長出來；用 noise 依深度和時間算風的偏移，越末端擺越多。互動：滑鼠左右位置影響風向，點一下重新長一棵。限制：每格用同一個 randomSeed 讓樹形固定；用 push / pop / rotate 處理座標。' },
   boids: { terms: ['Boids 群聚', 'separation / alignment / cohesion', '限速', '邊界環繞 wrap', 'Nature of Code'],
-    prompt: '用 p5.js 做 Boids 群聚模擬。畫面：約 180 隻【小三角形】，朝速度方向、依方向上色。怎麼動：每隻看 42px 內的鄰居，套三條規則——分離（太近就散開）、對齊（跟鄰居同方向）、聚集（往鄰居中心靠）；背景用半透明覆蓋留下短拖尾。互動：游標附近的會躲開，點一下讓牠們炸開四散。限制：速度要限制在一個範圍內；畫面邊界環繞。' },
+    prompt: '用 p5.js 做 Boids 群聚模擬。畫面：依畫面大小約 80～220 隻【小三角形】，朝速度方向、依方向上色。怎麼動：每隻看 42px 內的鄰居，套三條規則——分離（太近就散開）、對齊（跟鄰居同方向）、聚集（往鄰居中心靠）；背景用半透明覆蓋留下短拖尾。互動：游標附近的會躲開，點一下讓牠們炸開四散。限制：速度要限制在一個範圍內；畫面邊界環繞。' },
   web: { terms: ['WEBGL 模式', 'normalMaterial', '依距離算相位的波浪陣列', 'push / translate', 'sin 波'],
     prompt: '用 p5.js 的 WEBGL 模式做 3D 波浪方塊陣列。畫面：【9 × 9 根方柱】放在地面上，用 normalMaterial 上色；正上方浮著一個【torus】。怎麼動：方柱高度依「到中心的距離 + 時間」的 sin 波起伏，torus 持續旋轉，整個場景緩慢自轉。互動：用滑鼠拖曳改變視角。限制：自己寫拖曳，不要用 orbitControl 的滾輪縮放，避免搶走頁面捲動。' },
   text: { terms: ['createGraphics 離屏畫布', 'loadPixels 取樣', 'arrive 轉向', '滑鼠排斥', '粒子文字'],
@@ -1917,9 +1917,9 @@ ${C_('// 頭尾再用 Constraint 綁到兩邊的懸崖')}`,
 };
 const MATTER_ASK = {
   sandbox: { terms: ['MouseConstraint', 'Composites.pyramid', 'Bodies.polygon', 'gravity 反轉', 'restitution'],
-    prompt: '用 Matter.js 做物理沙盒。畫面：四周有牆，中間用 Composites.pyramid 疊一座【方塊金字塔】，旁邊散落【圓形和多邊形】（Bodies.polygon），每個形狀不同顏色。怎麼動：物體受重力掉落、碰撞、堆疊。互動：所有物體都能拖曳、甩出去；按鈕「丟一把」隨機掉 15 個形狀、「重力反轉」把 engine.gravity.y 正負對調、「重來」。限制：拖曳用 MouseConstraint，記得移除 Mouse 的滾輪監聽，避免擋住頁面捲動；用自己的 Canvas 迴圈繪製。' },
+    prompt: '用 Matter.js 做物理沙盒。畫面：四周有牆，中間用 Composites.pyramid 疊一座【方塊金字塔】，上方會陸續掉下【圓形、多邊形和圓角方塊】（Bodies.polygon），每個形狀不同顏色。怎麼動：物體受重力掉落、碰撞、堆疊；沒人操作時每 3 秒自動掉 4 個。互動：所有物體都能拖曳、甩出去；按鈕「丟一把」隨機掉 15 個形狀、「重力反轉」把 engine.gravity.y 正負對調、「重來」。限制：拖曳用 MouseConstraint，記得移除 Mouse 的滾輪監聽，避免擋住頁面捲動；用自己的 Canvas 迴圈繪製。' },
   cloth: { terms: ['Composites.stack + mesh', 'Constraint stiffness', 'collisionFilter group', 'Body.setStatic 釘點', 'applyForce 風'],
-    prompt: '用 Matter.js 做布料。畫面：22 × 14 個點連成的網布，上緣每隔幾個點釘住，旁邊一顆可以拖曳的【大球】。怎麼動：布受重力下垂，被球撞到會晃動。互動：布和球都能拖曳；按鈕「起風」（隨機對點 applyForce）、「剪開」（移除中間一欄的約束）和「重來」。限制：用 Composites.stack 建點（collisionFilter.group 設負數讓它們互不碰撞），Composites.mesh 用 Constraint 連起相鄰點，Body.setStatic 釘住上緣；畫面只畫約束線。' },
+    prompt: '用 Matter.js 做布料。畫面：22 × 14 個點連成的網布，上緣每隔幾個點釘住，旁邊一顆可以拖曳的【大球】。怎麼動：布受重力下垂，被球撞到會晃動。互動：布和球都能拖曳；按鈕「起風」（隨機對點 applyForce）、「剪開」（移除中間一欄的約束）和「重來」。限制：用 Composites.stack 建點（collisionFilter.group 設負數讓它們互不碰撞），Composites.mesh 用 Constraint 連起相鄰點，Body.setStatic 釘住上緣；布只畫約束線，釘住的點畫成【黃點】。' },
   cradle: { terms: ['牛頓擺', 'Constraint 擺錘', 'restitution: 1', 'inertia: Infinity', '子步 substeps'],
     prompt: '用 Matter.js 做牛頓擺。畫面：5 顆並排的球，各用一條線從上方橫桿垂下，球用放射漸層畫出【金屬感】。怎麼動：拉起的球放開後撞擊，能量傳到另一端把球彈起。互動：按鈕「拉一顆／兩顆／三顆」（把左邊的球沿圓弧拉起後放開），也可以用滑鼠直接拖球。限制：每顆球用一條 Constraint 吊著，設 restitution 1、friction 0、frictionAir 0.0001、inertia Infinity、slop 1；每格分 4 個子步呼叫 Engine.update。' },
   bridge: { terms: ['Composites.chain', 'Body.nextGroup', 'chamfer 圓角', 'Constraint 錨點', '鏈條承重下垂'],
@@ -1959,13 +1959,13 @@ g.restore();                 ${C_('// 座標系還原，換下一根指針')}`,
 };
 const CANVAS_ASK = {
   net: { terms: ['Canvas 2D', '粒子網路 particle network', '距離閾值連線', '透明度隨距離衰減', '滑鼠吸引'],
-    prompt: '用原生 Canvas 2D 做粒子網路背景。畫面：約 100 個點，距離小於 120px 的兩點之間畫一條線；背景【深藍】、點和線用【淺色】。怎麼動：點以隨機慢速漂移、碰到邊界反彈；線的透明度隨距離線性變淡（越近越亮）。互動：滑鼠也算一個節點，附近的點會被輕輕吸過去，並和游標連出【橘色】的線；點一下從點擊處撒出 10 個新點。限制：點的總數要有上限，避免越點越慢。' },
+    prompt: '用原生 Canvas 2D 做粒子網路背景。畫面：依畫面大小約 50～150 個點，距離小於 120px 的兩點之間畫一條線；背景【深藍】、點和線用【淺色】。怎麼動：點以隨機慢速漂移、碰到邊界反彈；線的透明度隨距離線性變淡（越近越亮）。互動：滑鼠也算一個節點，附近的點會被輕輕吸過去，並和游標連出【橘色】的線；點一下從點擊處撒出 10 個新點。限制：點的總數要有上限，避免越點越慢。' },
   fireworks: { terms: ['Canvas 2D', '半透明覆蓋拖尾', "globalCompositeOperation 'lighter'", '重力 + 空氣阻力', '粒子壽命'],
     prompt: "用原生 Canvas 2D 做煙火。畫面：夜空中的火箭和爆炸火花，爆炸分三種：【隨機速度的牡丹、等速一圈的圓環、慢慢下垂的金色柳樹】。怎麼動：每 0.5～1.4 秒從底部射出一發火箭，用初速度算好剛好在隨機高度到達頂點時爆炸；每顆火花有重力、空氣阻力和遞減的壽命，並微微閃爍。互動：點畫面就往那個位置放一發。限制：拖尾不清空畫布，而是每格蓋一層 rgba 半透明底色；火花用 globalCompositeOperation 'lighter' 疊加發光。" },
   brush: { terms: ['Canvas 2D', 'Pointer Events + setPointerCapture', 'quadraticCurveTo 平滑', '線寬依筆速', 'shadowBlur 霓虹'],
     prompt: '用原生 Canvas 2D 做繪圖板。畫面：深色畫布，右下角有四種筆刷和清空按鈕。怎麼動：使用者還沒動手前，讓一支自動筆畫【利薩茹曲線】示範。互動：用滑鼠或觸控畫畫；四種筆刷：彩虹（色相隨筆畫轉動）、墨水（線寬隨筆速變細）、噴槍（在筆尖周圍隨機灑點）、霓虹（shadowBlur 發光 + lighter 疊加）。限制：用 Pointer Events 搭配 setPointerCapture 收集筆跡；每一段用「上一個點當控制點、兩點中點當端點」的 quadraticCurveTo 畫，線條才不會有折角。' },
   clock: { terms: ['Canvas 2D', 'save / translate / rotate / restore', '刻度迴圈', '跳動秒針 easeOutBack', 'requestAnimationFrame'],
-    prompt: '用原生 Canvas 2D 畫類比時鐘。畫面：放射漸層的表盤、60 個刻度（每 5 格粗一點）、1～12 數字、帶陰影的時針分針秒針，表盤下方顯示數位時間。怎麼動：時針和分針依分秒連續轉動；秒針可以平滑地走，或跳動——每秒用 easeOutBack 在 0.2 秒內彈到下一格。互動：按鈕切換秒針要平滑還是跳動。限制：刻度用迴圈 rotate 畫；每根指針各自 save → translate 到中心 → rotate → 畫線 → restore。' },
+    prompt: '用原生 Canvas 2D 畫類比時鐘。畫面：放射漸層的表盤、60 個刻度（每 5 格粗一點）、1～12 數字、帶陰影的時針分針秒針，表盤下方顯示數位時間。怎麼動：時針和分針依分秒連續轉動；秒針可以平滑地走，或跳動——每秒用 easeOutBack 在 0.2 秒內彈到下一格。互動：按鈕切換秒針要平滑還是跳動。限制：刻度用迴圈 rotate 畫；整個表盤先 translate 到中心，每根指針再各自 save → rotate → 畫線 → restore。' },
 };
 const ROUGH_CODE = {
   chart: `${K('const')} rc = rough.svg(svg);
@@ -2079,9 +2079,9 @@ const SAND_ASK = {
   life: { terms: ['Conway 生命遊戲', '細胞自動機', 'B3/S23 規則', '雙緩衝 Uint8Array', '環繞邊界 toroidal', 'Gosper 滑翔機槍'],
     prompt: '不用套件，用 Canvas 2D 的 ImageData 做 Conway 生命遊戲。畫面：每格 6px 左右的細胞網格，活細胞依存活代數變色（【新生亮黃 → 橘 → 紫 → 藍綠】），剛死的格子留一點【暗紫】殘影；角落顯示代數和族群數。怎麼動：規則 B3/S23——活細胞有 2 或 3 個鄰居才存活，死細胞剛好 3 個鄰居就誕生，每秒約 24 代。互動：可以拖曳畫細胞；按鈕：隨機、放一座 Gosper 滑翔機槍、清空、暫停。限制：用兩個 Uint8Array 輪流當這一代和下一代；邊界上下左右環繞。' },
   fire: { terms: ['DOOM 火焰演算法', 'Fabien Sanglard', '37 色調色盤', '往上傳播 + 隨機衰減', 'ImageData'],
-    prompt: '不用套件，用 Canvas 2D 的 ImageData 重現 PSX DOOM 的火焰。畫面：像素火焰，用經典的 37 色調色盤（【黑 → 紅 → 橘 → 黃 → 白】）上色，「【FIRE 火】」字樣在火中燃燒。怎麼動：最底一列固定最高溫 36；每格從下往上掃，把溫度複製到上一列、隨機減 0 或 1、位置隨機左右偏一格。互動：游標左右位置當風向；拖曳可以加熱；按鈕切換熄火／點火、燃燒文字。限制：一個整數陣列存每格溫度 0～36；文字寫在離屏畫布上當永久熱源；用 image-rendering: pixelated 放大。' },
+    prompt: '不用套件，用 Canvas 2D 的 ImageData 重現 PSX DOOM 的火焰。畫面：像素火焰，用經典的 37 色調色盤（【黑 → 紅 → 橘 → 黃 → 白】）上色，「【FIRE 火】」字樣在火中燃燒。怎麼動：最底一列固定最高溫 36；每格逐欄由上往下掃，把溫度複製到上一列、隨機減 0 或 1、位置隨機左右偏一格。互動：游標左右位置當風向；拖曳可以加熱；按鈕切換熄火／點火、燃燒文字。限制：一個整數陣列存每格溫度 0～36；文字寫在離屏畫布上當永久熱源；用 image-rendering: pixelated 放大。' },
   rd: { terms: ['反應擴散 reaction-diffusion', 'Gray-Scott 模型', 'feed f / kill k', '拉普拉斯 3×3 卷積', 'Float32Array'],
-    prompt: '不用套件，用 Canvas 2D 的 ImageData 做 Gray-Scott 反應擴散。畫面：依化學物質 B 的濃度，用【深藍 → 紫 → 橘 → 米白】的色表上色的有機紋路。怎麼動：初始 A=1、B=0，隨機撒十幾個 B 的小圓點，紋路自己長出來；dA=1、dB=0.5，每格跑 10 次迭代。互動：預設參數按鈕——珊瑚（f .0545, k .062）、細胞分裂（.0367, .0649）、迷宮（.029, .057）、斑點（.025, .06）；拖曳可以加入 B。限制：兩個 Float32Array 存 A、B；拉普拉斯用 3×3 卷積（上下左右 0.2、斜角 0.05、中心 −1）；邊界環繞。' },
+    prompt: '不用套件，用 Canvas 2D 的 ImageData 做 Gray-Scott 反應擴散。畫面：依化學物質 B 的濃度，用【深藍 → 紫 → 橘 → 米白】的色表上色的有機紋路。怎麼動：初始 A=1、B=0，隨機撒十幾個 B 的小圓點，紋路自己長出來；dA=1、dB=0.5，每格跑 10 次迭代。互動：預設參數按鈕——珊瑚（f .0545, k .062）、細胞分裂（.0367, .0649）、迷宮（.029, .057）、斑點（.025, .06），再加一個「重新播種」；拖曳可以加入 B。限制：兩個 Float32Array 存 A、B；拉普拉斯用 3×3 卷積（上下左右 0.2、斜角 0.05、中心 −1）；邊界環繞。' },
   ant: { terms: ["蘭頓螞蟻 Langton's ant", 'turmite 多色規則', 'RL / LLRR / LRRRRRLLR', '高速公路 highway', '每格多步'],
     prompt: "不用套件，用 Canvas 2D 的 ImageData 做蘭頓螞蟻。畫面：每格 4px 左右的網格，角落顯示步數。怎麼動：規則字串如 'RL'——螞蟻踩到第 k 種顏色的格子時，照字串第 k 個字母右轉或左轉，把格子換成下一種顏色，再往前走一格；一開始每格只走 1 步讓人看清楚，之後逐漸加速到每格 600 步，RL 規則約一萬步後會長出斜向的「高速公路」。互動：按鈕切換規則（RL、RLR、LLRR、LRRRRRLLR）和重來，點畫面多放一隻螞蟻。限制：邊界環繞；一格走很多步時，只在最後畫一次。" },
 };
@@ -2165,7 +2165,7 @@ setTimeout(() => s.dispose(), ${N_(2000)});   ${C_('// 一次性的音源用完�
 };
 const TONE_ASK = {
   keys: { terms: ['Tone.js', 'PolySynth', 'triggerAttack / triggerRelease', 'oscillator type', 'Tone.Waveform 示波器'],
-    prompt: '用 Tone.js 做網頁鍵盤合成器。畫面：【兩個八度（C4–C6）】的鋼琴鍵，上方一排音色和回音按鈕，以及用 Tone.Waveform 畫的即時示波器。怎麼動：按下 triggerAttack、放開 triggerRelease，示波器跟著聲音跳動。互動：白鍵黑鍵都能按，支援滑過去連彈；也能用電腦鍵盤 A W S E D F T G Y H U J K O L P ; 彈；按鈕切換音色（sine、triangle、square、sawtooth、fatsawtooth）和回音（FeedbackDelay）。限制：用 PolySynth 才能彈和弦，後面接 Reverb；鍵盤事件忽略 repeat；連彈用 pointer capture + elementFromPoint；第一次按鍵時才呼叫 Tone.start() 解鎖音訊。' },
+    prompt: '用 Tone.js 做網頁鍵盤合成器。畫面：【兩個八度（C4–C6）】的鋼琴鍵，上方一排音色和回音按鈕，以及用 Tone.Waveform 畫的即時示波器。怎麼動：按下 triggerAttack、放開 triggerRelease，示波器跟著聲音跳動。互動：白鍵黑鍵都能按，支援滑過去連彈；也能用電腦鍵盤 A W S E D F T G Y H U J K O L P ; 彈；按鈕切換音色（正弦 sine、三角 triangle、方波 square、鋸齒 sawtooth、超鋸齒 fatsawtooth）和回音（FeedbackDelay）。限制：用 PolySynth 才能彈和弦，後面接 Reverb；鍵盤事件忽略 repeat；連彈用 pointer capture + elementFromPoint；第一次按鍵時才呼叫 Tone.start() 解鎖音訊。' },
   seq: { terms: ['Tone.js', '步進音序器 step sequencer', 'Tone.Clock', 'Tone.Draw.schedule', 'MembraneSynth / NoiseSynth'],
     prompt: '用 Tone.js 做 16 步音序器。畫面：9 列 × 16 格的按鈕網格，上面 6 列是【A 小調五聲音階（A4 G4 E4 D4 C4 A3，用方波 PolySynth）】，下面 3 列是 Hi-hat（NoiseSynth + highpass）、Snare（NoiseSynth + bandpass）、Kick（MembraneSynth），附一組預設節奏。怎麼動：以 16 分音符逐格往前播，播放頭同步亮起。互動：點格子開關音符；按鈕：播放／停止、90 / 110 / 130 BPM、隨機旋律、清空。限制：用 Tone.Clock 觸發（頻率 = BPM / 60 × 4），所有聲音用 callback 給的 time 排程，播放頭用 Tone.Draw.schedule 同步。' },
   xy: { terms: ['Tone.js', 'Tone.Filter lowpass', 'cutoff / Q 共振', 'XY pad', 'Tone.FFT', 'Distortion / FeedbackDelay'],
@@ -3154,7 +3154,7 @@ function sandLife(el) {
   const stop = loop((t, dt) => {
     if (st.down && st.xy) { const [cx, cy] = st.xy; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const x = cx + dx, y = cy + dy; if (x >= 0 && y >= 0 && x < cols && y < rows && Math.random() < 0.7) A[y * cols + x] = 1; } }
     acc += dt;
-    if (!paused && acc > 1 / 24) { acc = 0; step(); }
+    if (!paused && acc > 1 / 24) { acc = Math.min(acc - 1 / 24, 1 / 24); step(); }
     for (let i = 0; i < n; i++) {
       if (A[i]) px[i] = AGE[Math.min(63, age[i] >> 1)];
       else if (trail[i]) { px[i] = TRAIL[trail[i]]; if (!paused) trail[i]--; }
@@ -4168,7 +4168,7 @@ function toneSfx(el) {
     ['金幣', 'square B5 → E6', () => once(() => syn('square', env(0.001, 0.4, 0.2, 0.1), -16), ([s], t) => { s.triggerAttackRelease('B5', 0.07, t); s.triggerAttackRelease('E6', 0.35, t + 0.08); })],
     ['跳躍', 'square 220 → 900 Hz', () => once(() => syn('square', env(0.001, 0.2), -16), ([s], t) => { s.triggerAttackRelease(220, 0.2, t); s.frequency.exponentialRampTo(900, 0.18, t); })],
     ['爆炸', 'brown noise + lowpass ↓', () => { once(() => [new Tone.NoiseSynth({ noise: { type: 'brown' }, envelope: env(0.005, 1.3) }), new Tone.Filter(2400, 'lowpass')], ([n, f], t) => { n.triggerAttackRelease(1.3, t); f.frequency.exponentialRampTo(60, 1.3, t); }); once(() => new Tone.MembraneSynth({ octaves: 4, envelope: env(0.001, 0.9) }), ([m], t) => m.triggerAttackRelease('A0', 0.9, t)); }],
-    ['升級', 'triangle C5 E5 G5 C6', () => once(() => syn('triangle', env(0.001, 0.15, 0.3, 0.2), -8), ([s], t) => ['C5', 'E5', 'G5', 'C6', 'E6'].forEach((n, i) => s.triggerAttackRelease(n, i === 4 ? 0.4 : 0.07, t + i * 0.075)))],
+    ['升級', 'triangle C5 E5 G5 C6 E6', () => once(() => syn('triangle', env(0.001, 0.15, 0.3, 0.2), -8), ([s], t) => ['C5', 'E5', 'G5', 'C6', 'E6'].forEach((n, i) => s.triggerAttackRelease(n, i === 4 ? 0.4 : 0.07, t + i * 0.075)))],
     ['受傷', 'square 400 → 60 Hz', () => once(() => [syn('square', env(0.001, 0.35), -14), new Tone.Distortion(0.5)], ([s], t) => { s.triggerAttackRelease(400, 0.35, t); s.frequency.exponentialRampTo(60, 0.35, t); })],
     ['按鈕', 'sine 1200 Hz 30 ms', () => once(() => syn('sine', env(0.001, 0.04), -8), ([s], t) => s.triggerAttackRelease(1200, 0.03, t), 800)],
     ['警報', 'saw 880 / 660 × 4', () => once(() => syn('sawtooth', env(0.01, 0.1, 0.8, 0.03), -18), ([s], t) => { for (let i = 0; i < 8; i++) s.triggerAttackRelease(i % 2 ? 660 : 880, 0.11, t + i * 0.13); }, 3000)],
