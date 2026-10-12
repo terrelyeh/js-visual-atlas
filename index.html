@@ -61,7 +61,7 @@ h1 .js { display: inline-block; padding: 0 .14em; margin-right: .08em; backgroun
 .stats li > span { font-size: 12px; color: var(--muted); margin-top: 6px; }
 
 /* ---------- studio ---------- */
-.studio { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 18px; align-items: stretch; }
+.studio { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; align-items: stretch; }
 .studio > .ask { align-self: start; }
 .stage-col { min-width: 0; display: grid; gap: 10px; align-content: start; }
 .stage { position: relative; width: 100%; height: clamp(360px, 64vh, 660px); background: var(--stage); color: var(--stage-ink); border-radius: var(--r); overflow: hidden; isolation: isolate; }
@@ -96,7 +96,11 @@ h1 .js { display: inline-block; padding: 0 .14em; margin-right: .08em; backgroun
 .tourbar i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--ink); }
 
 /* info panel */
-.info { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 14px; min-width: 0; align-content: start; grid-template-rows: auto auto auto 1fr; }
+.info { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; display: grid; gap: 14px; min-width: 0; align-content: start; grid-template-rows: auto auto auto minmax(0, 1fr) auto; }
+.info-code { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 6px; min-height: 0; }
+.info-code dd { margin: 0; min-height: 0; display: grid; }
+.info-code pre.code { min-height: 0; overflow: auto; font-size: 11px; line-height: 1.55; padding: 10px 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (min-width: 1081px) { .info { contain: size; overflow: hidden; } .info-code pre.code { height: 100%; } }
 .info > a { align-self: end; }
 .info .eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .info h2 { font-family: var(--display); font-stretch: 118%; font-weight: 800; font-size: 30px; line-height: 1.05; margin: 4px 0 0; }
@@ -117,20 +121,20 @@ pre.code .k { color: #9C85FF; } pre.code .s { color: #F2B83A; } pre.code .c { co
 .ask:empty { display: none; }
 .ask-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 28px; align-items: start; }
 .ask-head h3, .ask-head .seg { grid-column: 1 / -1; }
-.ask-body { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.ask-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; align-items: start; }
 .ask-main, .ask-code { display: grid; gap: 10px; min-width: 0; align-content: start; }
 .ask-main > div:first-child { display: grid; gap: 10px; }
 .ask-main > div:first-child .lbl, .ask-code .lbl { margin-bottom: 0; min-height: 1.5em; }
 @media (max-width: 860px) { .ask-head, .ask-body { grid-template-columns: minmax(0, 1fr); } .ask { padding: 18px 16px; } }
 .ask h3 { margin: 0; font: 800 20px/1.2 var(--display); }
-.ask .steps { list-style: none; counter-reset: st; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 5px; font-size: 12.5px; }
+.ask .steps { list-style: none; counter-reset: st; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; font-size: 13.5px; }
 .ask .steps li { counter-increment: st; display: inline-flex; align-items: baseline; gap: 5px; padding: 2px 9px 2px 3px; border: 1px solid var(--line); border-radius: 99px; background: var(--bg); white-space: nowrap; }
 .ask .steps li::before { content: counter(st); display: inline-grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: var(--ink); color: var(--surface); font: 600 10.5px var(--mono); transform: translateY(-1px); }
 .ask .steps small { color: var(--muted); font-size: 11px; }
-.ask .lbl { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 5px; }
+.ask .lbl { font-size: 13px; color: var(--muted); font-weight: 500; margin-bottom: 5px; }
 .ask .terms { display: flex; flex-wrap: wrap; gap: 5px; }
-.ask .terms span { font: 12px var(--mono); padding: 1px 7px; border-radius: 5px; background: color-mix(in srgb, var(--accent) 11%, transparent); color: var(--accent); }
-.ask blockquote { text-wrap: pretty; margin: 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; font-size: 13.5px; line-height: 1.75; }
+.ask .terms span { font: 13px var(--mono); padding: 1px 7px; border-radius: 5px; background: color-mix(in srgb, var(--accent) 11%, transparent); color: var(--accent); }
+.ask blockquote { text-wrap: pretty; margin: 0; padding: 10px 12px; border-left: 3px solid var(--accent); background: var(--bg); border-radius: 0 8px 8px 0; font-size: 15px; line-height: 1.85; padding: 14px 18px; }
 .ask .slot { background: color-mix(in srgb, var(--accent) 14%, transparent); color: inherit; border-radius: 3px; padding: 1px 1px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .ask .lbl .slot { padding: 0 2px; }
 .ask blockquote .step { font-weight: 700; color: var(--accent); }
@@ -4263,6 +4267,7 @@ function renderInfo(d) {
       <div id="info-play-row" style="display: none"><dt>這一頁怎麼玩</dt><dd id="info-play"></dd></div>
       <div><dt>適合拿來做</dt><dd>${phr(d.fit, 12)}</dd></div>
     </dl>
+    <dl class="info-code"><dt>程式碼片段</dt><dd><pre class="code" id="ask-code">${d.code}</pre></dd></dl>
     <a href="${d.site}" target="_blank" rel="noopener">${d.native ? 'MDN 文件' : '官方網站'} ↗</a>`;
   // show the demo's first-tab prompt right away; the tab that actually opens replaces it a moment later
   askCode = d.code; renderAsk(ASK[d.id]);
@@ -4294,7 +4299,6 @@ function renderAsk(a) {
     <div class="ask-main"><div><div class="lbl">範例提示詞：${text.includes('【') ? '<span class="slot">【】</span>裡是這個示範的主題，換成你要的內容；其他部分是做出這個效果的寫法' : '整段都是做出這個效果的寫法'}</div><blockquote id="ask-prompt">${esc(text).replace(/【[^【】]*】/g, m => `<span class="slot">${m}</span>`).replace(/(畫面|怎麼動|互動|限制)：/g, '<br><b class="step">$1：</b>')}</blockquote></div>
     <div class="copies"><button class="btn copy" type="button" id="ask-copy"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M3 10.5V3.8A1.3 1.3 0 0 1 4.3 2.5H10"/></svg>複製提示詞</button><button class="btn copy" type="button" id="ask-both" title="給同事或工程師：附上效果連結，再接提示詞"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6.8 9.2a3 3 0 0 0 4.2 0l2.1-2.1a3 3 0 0 0-4.2-4.2l-.9.9"/><path d="M9.2 6.8a3 3 0 0 0-4.2 0L2.9 8.9a3 3 0 0 0 4.2 4.2l.9-.9"/></svg>連結＋提示詞一起複製</button></div>
     </div>
-    <div class="ask-code"><div class="lbl">程式碼片段：這個效果的核心寫法</div><pre class="code" id="ask-code">${askCode}</pre></div>
     </div>`;
   box.querySelectorAll('.seg button').forEach(b => b.onclick = () => { askVideo = b.dataset.v === '1'; try { localStorage.setItem('jsatlas-video', askVideo ? '1' : '0'); } catch (e) {} renderAsk(a); });
   const btn = $('#ask-copy');
