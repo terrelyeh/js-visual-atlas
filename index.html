@@ -516,7 +516,7 @@ const CDN = {
 const DEMOS = [
   { id: 'canvas', name: 'Canvas 2D', cat: '2D 繪圖', native: true, base: ['canvas'], ver: '瀏覽器原生 API',
     blurb: '瀏覽器內建的畫布，不用裝任何套件。用程式一筆一筆畫，每個細節都由你決定。',
-    hint: '每一頁都能用滑鼠玩，說明在左下角',
+    hint: '每一頁都能用滑鼠玩，玩法寫在畫面左下角',
     fit: '插畫、背景、小遊戲，任何想自己控制每一筆的畫面',
     site: 'https://developer.mozilla.org/docs/Web/API/Canvas_API',
     code: `<span class="k">const</span> g = canvas.getContext(<span class="s">'2d'</span>);
@@ -527,7 +527,7 @@ g.fillStyle = sky;
 g.fillRect(<span class="n">0</span>, <span class="n">0</span>, w, h);` },
   { id: 'rough', name: 'Rough.js', cat: '2D 繪圖', lib: 'rough', base: ['svg', 'canvas'], ver: 'roughjs 4.6.6',
     blurb: '讓圖形看起來像手畫的：給它方形、圓形和線條，它畫出歪歪的筆觸和鉛筆排線。',
-    hint: '流程圖那頁的方塊可以拖，其他頁點紙卡或右下角按鈕',
+    hint: '點紙卡重畫，或用右下角的按鈕；流程圖的方塊可以拖',
     fit: '草圖感的圖解、白板風流程圖、讓圖表看起來像手畫的',
     site: 'https://roughjs.com',
     code: `<span class="k">const</span> rc = rough.svg(svg);
@@ -538,7 +538,7 @@ svg.append(rc.rectangle(<span class="n">200</span>, <span class="n">260</span>, 
 svg.append(rc.circle(<span class="n">660</span>, <span class="n">110</span>, <span class="n">80</span>, { fill: <span class="s">'#f6c945'</span> }));` },
   { id: 'p5', name: 'p5.js', cat: '2D 繪圖', lib: 'p5', base: ['canvas', 'webgl'], ver: 'p5.js 1.9.4',
     blurb: '為藝術家和初學者設計的繪圖工具，幾行程式就能畫出會動、能互動的畫面。',
-    hint: '大多能用滑鼠互動，說明在左下角',
+    hint: '每一頁都能用滑鼠玩，玩法寫在畫面左下角',
     fit: '生成藝術、創意程式教學、快速做出一個視覺想法',
     site: 'https://p5js.org',
     code: `p.draw = () => {
@@ -552,7 +552,7 @@ svg.append(rc.circle(<span class="n">660</span>, <span class="n">110</span>, <sp
 };` },
   { id: 'gsap', name: 'GSAP', cat: '動畫', lib: 'gsap', base: ['dom', 'svg'], ver: 'gsap 3.13.0 + 5 個官方 plugin',
     blurb: '專做網頁動畫，用時間軸精準安排每個動作的先後和節奏；官方外掛再補上捲動、拆字、版面轉場。',
-    hint: 'ScrollTrigger 那頁可以直接在畫面裡捲動',
+    hint: '每一頁都會自己播放，也能用下方的按鈕、進度條或捲動來控制',
     fit: '網站動態、捲動動畫、要精準排時間的長段動畫',
     site: 'https://gsap.com',
     code: `<span class="k">const</span> tl = gsap.timeline();
@@ -561,7 +561,7 @@ tl.from(chars, { yPercent: <span class="n">120</span>, opacity: <span class="n">
   .from(rule, { scaleX: <span class="n">0</span>, ease: <span class="s">'expo.inOut'</span> }, <span class="s">'-=0.4'</span>);` },
   { id: 'anime', name: 'Anime.js', cat: '動畫', lib: 'anime', base: ['dom', 'svg'], ver: 'animejs 3.2.2',
     blurb: '輕量的動畫工具，讓網頁元素和 SVG 動起來，寫法比 GSAP 更精簡。',
-    hint: '時間軸那頁可以拖曳下方的進度條',
+    hint: '每一頁都會自己播放；可以點畫面，或用下方的按鈕、進度條控制',
     fit: '輕量的 DOM、SVG、CSS 動畫，介面上的小互動',
     site: 'https://animejs.com',
     code: `anime({
@@ -584,7 +584,7 @@ tl.from(chars, { yPercent: <span class="n">120</span>, opacity: <span class="n">
   .attr(<span class="s">'height'</span>, d => y(<span class="n">0</span>) - y(d.value));` },
   { id: 'pixi', name: 'PixiJS', cat: '2D 繪圖', lib: 'pixi', base: ['webgl', 'webgpu'], ver: 'pixi.js 7.4.2',
     blurb: '用顯示卡（GPU）畫 2D 的工具，同時畫上萬個圖形也很順，常用來做網頁遊戲。',
-    hint: '大多能用滑鼠互動，說明在左下角',
+    hint: '每一頁都能用滑鼠玩，玩法寫在畫面左下角',
     fit: '2D 遊戲、大量精靈和粒子、互動廣告',
     site: 'https://pixijs.com',
     code: `<span class="k">const</span> stars = <span class="k">new</span> PIXI.ParticleContainer(<span class="n">6000</span>);
@@ -595,7 +595,7 @@ stars.blendMode = PIXI.BLEND_MODES.ADD;   <span class="c">// 疊加發光</span>
 app.ticker.add(() => orbit(stars));` },
   { id: 'matter', name: 'Matter.js', cat: '物理', lib: 'matter', base: ['canvas'], ver: 'matter-js 0.19.0',
     blurb: '2D 物理引擎：幫你算重力、碰撞、反彈和繩索，你只負責把結果畫出來。',
-    hint: '物體大多可以用滑鼠抓起來丟',
+    hint: '物體大多能用滑鼠抓起來丟，玩法寫在畫面左下角',
     fit: '2D 物理互動、益智遊戲、可以拖拉丟擲的介面',
     site: 'https://brm.io/matter-js/',
     code: `<span class="k">const</span> engine = Matter.Engine.create();
@@ -606,7 +606,7 @@ Matter.Composite.add(engine.world, ball);
 Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</span>);` },
   { id: 'sand', name: 'Falling Sand', cat: '2D 繪圖', native: true, base: ['canvas'], ver: '不用套件 · ImageData',
     blurb: '不用套件，只給每一格幾條簡單規則，整個畫面就自己長出複雜的樣子。',
-    hint: '大多可以直接在畫面上拖曳作畫',
+    hint: '每一頁都能在畫面上拖曳或點擊，玩法寫在畫面左下角',
     fit: '細胞自動機、像素風遊戲，看簡單規則怎麼長出複雜的樣子',
     site: 'https://developer.mozilla.org/docs/Web/API/ImageData',
     code: `<span class="c">// 1. 下面空著就往下掉</span>
@@ -617,7 +617,7 @@ Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</s
 <span class="k">else if</span> (water && empty(x + d, y)) move(x, y, x + d, y);` },
   { id: 'three', name: 'Three.js', cat: '3D', lib: 'three', base: ['webgl', 'webgpu'], ver: 'three.js r149',
     blurb: '最常用的網頁 3D 工具，幫你處理相機、燈光、材質和模型，底下用 WebGL 叫顯示卡畫圖。',
-    hint: '大多可以拖曳轉動視角',
+    hint: '大多能拖曳轉動視角，玩法寫在畫面左下角',
     fit: '3D 場景、產品展示、建築與資料地景、WebXR',
     site: 'https://threejs.org',
     code: `<span class="k">for</span> (<span class="k">let</span> i = <span class="n">0</span>; i < <span class="n">44</span>; i++) {
@@ -628,7 +628,7 @@ Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</s
 }` },
   { id: 'glsl', name: 'GLSL Shader', cat: '3D / GPU', native: true, base: ['webgl'], ver: '不用套件 · WebGL 1',
     blurb: '直接寫給顯示卡跑的小程式（shader）。每個像素同時各算一次，再重的特效也跑得動。',
-    hint: '游標會影響畫面，切換按鈕在右下角',
+    hint: '移動游標就會改變畫面，有幾頁右下角還能切換效果',
     fit: '背景特效、轉場、影像濾鏡，任何逐像素的運算',
     site: 'https://developer.mozilla.org/docs/Web/API/WebGL_API',
     code: `vec2 q = vec2(fbm(p + t), fbm(p + vec2(<span class="n">5.2</span>, <span class="n">1.3</span>)));
