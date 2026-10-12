@@ -282,7 +282,7 @@ footer p b { color: var(--ink); font-weight: 700; }
 
 .sand-cv { width: 100%; height: 100%; image-rendering: pixelated; touch-action: none; cursor: crosshair; }
 
-.tone-play { position: absolute; z-index: 4; left: 50%; top: 50%; transform: translate(-50%, -50%); display: inline-flex; align-items: center; gap: 10px; background: #E8ECF6; color: #0B0E18; border: 0; border-radius: 99px; padding: 12px 22px 12px 18px; font-weight: 700; font-size: 15px; box-shadow: 0 10px 30px #0009; }
+.tone-play { white-space: nowrap; position: absolute; z-index: 4; left: 50%; top: 50%; transform: translate(-50%, -50%); display: inline-flex; align-items: center; gap: 10px; background: #E8ECF6; color: #0B0E18; border: 0; border-radius: 99px; padding: 12px 22px 12px 18px; font-weight: 700; font-size: 15px; box-shadow: 0 10px 30px #0009; }
 .tone-play svg { width: 18px; height: 18px; }
 .tone-play.small { top: auto; bottom: 58px; transform: translateX(-50%); padding: 8px 16px; font-size: 13px; }
 .tone-chords { position: absolute; z-index: 4; left: 50%; bottom: 18px; transform: translateX(-50%); display: flex; gap: 6px; font-family: var(--mono); font-size: 13px; }
@@ -326,12 +326,13 @@ footer p b { color: var(--ink); font-weight: 700; }
 .rough-paper canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .rough-txt { font: 700 19px "Comic Sans MS", "Chalkboard SE", "Marker Felt", cursive; fill: #3B342D; pointer-events: none; }
 .rough-txt.sm { font-size: 15px; fill: #6E6455; }
+.rough-txt.fl { font-size: 30px; fill: #6E6455; }
 .rough-node { cursor: grab; }
 .rough-node:active { cursor: grabbing; }
-.anx { position: absolute; inset: 0 18px 14px; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 10px; color: #E8ECF6; }
+.anx { position: absolute; inset: 0 18px 14px; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 10px; color: #E8ECF6; }
 .anx-bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font: 12px var(--mono); color: #8A93AD; font-variant-numeric: tabular-nums; }
 .anx-bar input[type=range] { flex: 1; min-width: 120px; accent-color: #FF8257; }
-.at-stage { position: relative; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 10px; min-height: 0; }
+.at-stage { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; gap: 10px; min-height: 0; }
 .at-scene { position: relative; display: flex; align-items: center; justify-content: center; gap: 4cqw; min-height: 0; }
 .at-shapes { display: flex; gap: 3cqw; align-items: center; }
 .at-sq, .at-ci, .at-tr { width: min(11cqw, 15cqh); aspect-ratio: 1; }
@@ -360,7 +361,7 @@ footer p b { color: var(--ink); font-weight: 700; }
 .anum-ring svg { width: min(100%, 220px); max-height: 100%; }
 .anum-bars { grid-column: 1 / 4; display: flex; align-items: flex-end; gap: 8px; background: #141A2E; border: 1px solid #262C3F; border-radius: 12px; padding: 14px; min-height: 0; }
 .anum-bars i { flex: 1; height: 10%; border-radius: 6px 6px 2px 2px; background: linear-gradient(#FF8257, #9C85FF); }
-@container (max-width: 560px) { .anum-card { padding: 9px 10px; } .anum-card b { font-size: 17px; } .anum { grid-template-columns: repeat(3, minmax(0, 1fr)); } .anum-ring { display: none; } .ae-row { grid-template-columns: 112px minmax(0, 1fr); font-size: 11px; } }
+@container (max-width: 560px) { .anum-card { padding: 9px 8px; } .anum-card span { font-size: 11px; } .anum-card b { font-size: 15px; } .anum { grid-template-columns: repeat(3, minmax(0, 1fr)); } .anum-ring { display: none; } .ae-row { grid-template-columns: 112px minmax(0, 1fr); font-size: 11px; } }
 /* Tone.js tabs */
 .tk { position: absolute; inset: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; }
 .tk canvas { display: block; }
@@ -386,7 +387,10 @@ footer p b { color: var(--ink); font-weight: 700; }
 .sfx-b:hover { border-color: #6DB2FF; }
 .sfx-b.hit { background: #6DB2FF; color: #0B0E18; border-color: #6DB2FF; }
 .sfx-b.hit span { color: #0B0E18; }
-@container (max-width: 560px) { .dk-note:not(.dk-lbl):not([style*="top"]) { white-space: normal; right: 14px; bottom: 54px !important; } .sfx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .seq { grid-template-columns: 44px repeat(16, minmax(0, 1fr)); gap: 2px; } }
+@container (max-width: 560px) { .dk-note:not(.dk-lbl):not([style*="top"]) { white-space: normal; right: 14px; bottom: 54px !important; } .sfx-b { padding: 7px 10px; } .sfx-b b { font-size: 14px; } .sfx-b span { white-space: normal; }
+  .gs { align-content: safe center; gap: 12px; } .gs-line.l1 { font-size: 26px; } .gs-line.l2 { font-size: 18px; } .gs-rule { margin-top: 8px; } .gs-code { display: none; } .gs-ease svg { max-height: 30cqh; } .gs-chips .dk-btn { padding: 4px 9px; font-size: 12px; }
+  .fl-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; } .fl-card { padding: 7px 8px; } .fl-card b { font-size: 12.5px; } .fl-card span { font-size: 10px; }
+  .at-scene { flex-wrap: wrap; gap: 8px 4cqw; } .sfx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .seq { grid-template-columns: 44px repeat(16, minmax(0, 1fr)); gap: 2px; } }
 
 .stage, .gs, .rough-card { container-type: size; }
 </style>
@@ -730,6 +734,7 @@ function tabbed(el, api, key, TABS) {
     teardown(); cur = tabMemory[key] = i;
     btns.forEach((b, k) => b.setAttribute('aria-selected', String(k === i)));
     extra = TABS[i].mount(host) || null;
+    fitFoot(host); setTimeout(() => { if (cur === i) fitFoot(host); }, 900);
     api.setCode && TABS[i].code && api.setCode(TABS[i].code);
     api.setAsk && TABS[i].ask && api.setAsk(TABS[i].ask);
   }
@@ -747,6 +752,16 @@ function dkBar(parent, items, pos = { right: '14px', bottom: '12px' }) {
   parent.appendChild(bar); return btns;
 }
 function dkNote(parent, text, pos) { const n = h('div', { class: 'dk-note' }); Object.assign(n.style, pos); n.textContent = text; parent.appendChild(n); return n; }
+// on a narrow stage the button bar wraps onto two rows; stack the hints just above it so they never overlap.
+// returns how many px at the bottom the controls take (0 on a wide stage), so a chart can stop above them
+function fitFoot(host) {
+  if (host.clientWidth > 560) return 0;
+  const hb = host.getBoundingClientRect().bottom;
+  let base = 12;
+  host.querySelectorAll('.dk-bar').forEach(b => { if (b.style.top || !b.querySelector('button')) return; const r = b.getBoundingClientRect(); if (r.height) base = Math.max(base, Math.ceil(hb - r.top) + 6); });
+  host.querySelectorAll('.dk-note:not(.dk-lbl)').forEach(n => { if (n.closest('.dk-bar') || n.style.top || n.style.position === 'static') return; n.style.setProperty('bottom', base + 'px', 'important'); base += n.offsetHeight + 4; });
+  return base;
+}
 const zoomFilter = e => e.type === 'wheel' ? (e.ctrlKey || e.metaKey) : (!e.button && e.type !== 'dblclick');
 
 /* ---- 1. Canvas 2D sunset ---- */
@@ -1197,6 +1212,7 @@ function roughFills(el) {
   const { svg } = roughPaper(el, false);
   const STY = ['hachure', 'solid', 'zigzag', 'cross-hatch', 'dots', 'dashed', 'zigzag-line', 'sunburst'];
   let rough_ = 1.5, gap = 8, seed = 7, anims = [];
+  const big = el.clientWidth < 560;
   function render(animate) {
     anims.forEach(a => a.cancel()); anims = []; svg.innerHTML = '';
     const rc = rough.svg(svg), shapes = [];
@@ -1206,7 +1222,7 @@ function roughFills(el) {
       const s = i % 4 === 0 ? rc.rectangle(cx - 70, cy - 70, 140, 140, o) : i % 4 === 1 ? rc.circle(cx, cy, 150, o)
         : i % 4 === 2 ? rc.polygon(Array.from({ length: 6 }, (_, k) => [cx + Math.cos(k / 6 * Math.PI * 2) * 78, cy + Math.sin(k / 6 * Math.PI * 2) * 78]), o) : rc.ellipse(cx, cy, 160, 120, o);
       svg.appendChild(s); shapes.push(s);
-      svgText(svg, cx, cy + 100, fs, 'rough-txt sm');
+      svgText(svg, cx, cy + 100, fs, big ? 'rough-txt fl' : 'rough-txt sm');
     });
     if (animate) anims = sketchIn(shapes, 4);
   }
@@ -1604,10 +1620,10 @@ function gsSplit(host, ctx) {
   host.appendChild(root);
   const zh = root.querySelector('.sp-zh'), en = root.querySelector('.sp-en'), bar = root.querySelector('.sp-bar');
   const FX = [
-    ['逐字彈出', "type: 'chars'", () => { const sp = SplitText.create([zh, en], { type: 'chars' }); return [sp, gsap.from(sp.chars, { y: 50, opacity: 0, rotate: () => gsap.utils.random(-40, 40), duration: .8, ease: 'back.out(2)', stagger: .022 })]; }],
+    ['逐字彈出', "type: 'words, chars'", () => { const sp = SplitText.create([zh, en], { type: 'words, chars' }); return [sp, gsap.from(sp.chars, { y: 50, opacity: 0, rotate: () => gsap.utils.random(-40, 40), duration: .8, ease: 'back.out(2)', stagger: .022 })]; }],
     ['逐行遮罩', "type: 'lines', mask: 'lines'", () => { const sp = SplitText.create([zh, en], { type: 'lines', mask: 'lines' }); return [sp, gsap.from(sp.lines, { yPercent: 110, duration: 1.1, ease: 'expo.out', stagger: .14 })]; }],
     ['逐詞翻轉', "type: 'words'", () => { const sp = SplitText.create([zh, en], { type: 'words' }); return [sp, gsap.from(sp.words, { rotationX: -95, opacity: 0, transformOrigin: '50% 100%', duration: .9, ease: 'power3.out', stagger: .08 })]; }],
-    ['隨機浮現', "type: 'chars' } + stagger { from: 'random'", () => { const sp = SplitText.create([zh, en], { type: 'chars' }); return [sp, gsap.from(sp.chars, { opacity: 0, scale: 0, filter: 'blur(10px)', duration: .7, ease: 'power2.out', stagger: { each: .018, from: 'random' } })]; }],
+    ['隨機浮現', "type: 'words, chars' } + stagger { from: 'random'", () => { const sp = SplitText.create([zh, en], { type: 'words, chars' }); return [sp, gsap.from(sp.chars, { opacity: 0, scale: 0, filter: 'blur(10px)', duration: .7, ease: 'power2.out', stagger: { each: .018, from: 'random' } })]; }],
   ];
   const code = h('span', { class: 'sp-code' });
   let cur = null, k = 0, timer;
@@ -2164,7 +2180,8 @@ MOUNT.gsap = (el, api = {}) => {
 
 /* ---- 5. Anime.js grid stagger ---- */
 const animeGrid = el => {
-  const w = el.clientWidth, H = el.clientHeight - 40;
+  dkNote(el, '點任何一格，波紋從那裡擴散出去', { left: '14px', bottom: '16px' });
+  const foot = fitFoot(el) || 40, w = el.clientWidth, H = el.clientHeight - foot;
   const cell = Math.max(18, Math.min(36, Math.floor(Math.min((w - 32) / 22, (H - 24) / 13))));
   const cols = Math.floor((w - 32) / cell), rows = Math.floor((H - 24) / cell);
   const wrap = h('div', { class: 'an' }), grid = h('div', { class: 'an-grid' });
@@ -2177,7 +2194,7 @@ const animeGrid = el => {
     d.style.background = c; d.dataset.c = c; cellEl.dataset.i = i;
     cellEl.appendChild(d); grid.appendChild(cellEl); dots.push(d);
   }
-  wrap.appendChild(grid); el.appendChild(wrap);
+  wrap.style.bottom = foot + 'px'; wrap.appendChild(grid); el.appendChild(wrap);
   let lastClick = 0;
   function wave(from) {
     anime.remove(dots);
@@ -2194,7 +2211,6 @@ const animeGrid = el => {
   grid.addEventListener('pointerdown', e => { const c = e.target.closest('.an-cell'); if (!c) return; lastClick = performance.now(); wave(+c.dataset.i); });
   wave('center');
   const iv = setInterval(() => { if (performance.now() - lastClick > 4000) wave(Math.floor(Math.random() * dots.length)); }, 3000);
-  dkNote(el, '點任何一格，波紋從那裡擴散出去', { left: '14px', bottom: '16px' });
   return () => { clearInterval(iv); anime.remove(dots); };
 };
 
@@ -2240,6 +2256,7 @@ function animeSvg(el) {
     <text x="265" y="30" text-anchor="middle" fill="#8A93AD" font-family="JetBrains Mono, monospace" font-size="14">setDashoffset 描線 + anime.path 沿路徑</text>
   </svg><div class="anx-bar"><button class="dk-btn" type="button">重播</button><span>箭頭沿著曲線走，會自己轉向</span></div>`;
   el.appendChild(box);
+  if (el.clientWidth < 560) { const [t1, t2] = box.querySelectorAll('svg text'); t1.textContent = '頂點補間'; t2.textContent = '描線 + 沿路徑'; [t1, t2].forEach(t => t.setAttribute('font-size', '30')); }
   const svg = box.querySelector('svg'), arrow = svg.querySelector('.as-arrow'), morph = svg.querySelector('.as-morph'), draws = svg.querySelectorAll('.as-draw');
   const path = anime.path(svg.querySelector('.as-guide'));
   let anims = [];
@@ -2366,6 +2383,8 @@ function d3Bars(el) {
   auto.onclick = () => auto.setAttribute('aria-pressed', String(auto.getAttribute('aria-pressed') !== 'true'));
   bar.appendChild(auto); box.appendChild(bar);
   const note = h('div', { class: 'dk-bar' }); note.style.left = '14px'; note.style.bottom = '16px'; note.style.font = '11px var(--mono)'; note.style.color = '#5C6582'; note.textContent = '示範數據，隨機產生'; box.appendChild(note);
+  const foot = fitFoot(el);
+  if (foot) { note.style.bottom = foot + 'px'; M.b = foot + 40; gx.attr('transform', `translate(0,${H - M.b})`); }
   let lastUser = 0;
   update();
   const iv = setInterval(() => { if (auto.getAttribute('aria-pressed') === 'true' && performance.now() - lastUser > 3000) { acts['更新數值'](); update(); } }, 2200);
@@ -2382,18 +2401,23 @@ function d3Force(el) {
     bases.forEach(b => links.push({ source: 'l:' + name, target: b }));
   }));
   const svg = d3.select(el).append('svg').attr('width', w).attr('height', H);
+  let floor = 40;
   const link = svg.append('g').selectAll('line').data(links).join('line').attr('stroke', '#3A4260').attr('stroke-width', 1.2);
   const node = svg.append('g').selectAll('g').data(nodes).join('g').style('cursor', 'grab');
   node.append('circle').attr('r', d => d.r).attr('fill', d => d.api ? d.col : '#0B0E18').attr('stroke', d => d.col).attr('stroke-width', d => d.api ? 0 : 2);
   node.append('text').text(d => d.name).attr('x', d => d.r + 4).attr('dy', '0.32em').attr('fill', d => d.api ? '#E8ECF6' : '#8A93AD')
     .style('font', d => `${d.api ? 700 : 400} ${d.api ? 12 : 10.5}px "JetBrains Mono", monospace`).style('pointer-events', 'none');
+  // on a phone there isn't room for every name: keep the APIs and the libraries demoed on this page, show the rest on hover/tap
+  const thin = w < 560, txt = node.select('text'), quiet = () => txt.style('opacity', d => thin && d.r === 5 ? 0 : 1);
+  quiet();
+  const k = clamp(w / 640, 0.55, 1);
   const sim = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).id(d => d.id).distance(70).strength(0.35))
-    .force('charge', d3.forceManyBody().strength(d => d.api ? -420 : -90))
-    .force('collide', d3.forceCollide(d => d.r + 10))
+    .force('link', d3.forceLink(links).id(d => d.id).distance(70 * k).strength(0.35))
+    .force('charge', d3.forceManyBody().strength(d => (d.api ? -420 : -90) * k))
+    .force('collide', d3.forceCollide(d => d.r + 10 * k))
     .force('x', d3.forceX(w / 2).strength(0.05)).force('y', d3.forceY(H / 2).strength(0.08))
     .on('tick', () => {
-      nodes.forEach(d => { d.x = clamp(d.x, 18, w - 100); d.y = clamp(d.y, 18, H - 40); });
+      nodes.forEach(d => { d.x = clamp(d.x, 18, w - 100); d.y = clamp(d.y, 18, H - floor); });
       link.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
       node.attr('transform', d => `translate(${d.x},${d.y})`);
     });
@@ -2403,11 +2427,12 @@ function d3Force(el) {
     .on('end', (e, d) => { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }));
   node.on('mouseenter', (e, d) => {
     const nb = new Set([d.id]); links.forEach(l => { if (l.source.id === d.id) nb.add(l.target.id); if (l.target.id === d.id) nb.add(l.source.id); });
-    node.style('opacity', n => nb.has(n.id) ? 1 : 0.15);
+    node.style('opacity', n => nb.has(n.id) ? 1 : 0.15); txt.style('opacity', n => nb.has(n.id) || !thin || n.r !== 5 ? 1 : 0);
     link.attr('stroke', l => l.source.id === d.id || l.target.id === d.id ? d.col : '#3A4260').style('opacity', l => l.source.id === d.id || l.target.id === d.id ? 1 : 0.08);
-  }).on('mouseleave', () => { node.style('opacity', 1); link.attr('stroke', '#3A4260').style('opacity', 1); });
+  }).on('mouseleave', () => { node.style('opacity', 1); quiet(); link.attr('stroke', '#3A4260').style('opacity', 1); });
   dkBar(el, [['重新打散', () => { nodes.forEach(d => { d.x = Math.random() * w; d.y = Math.random() * H; }); sim.alpha(1).restart(); }]]);
   dkNote(el, '資料是上面分層圖的套件和 API · 節點可以拖', { left: '14px', bottom: '16px' });
+  floor = Math.max(40, fitFoot(el) + 12);
   return () => sim.stop();
 }
 
@@ -2485,12 +2510,16 @@ function d3Stream(el) {
   let auto = setInterval(() => { data = gen(); render(900); }, 3200);
   const offBtns = dkBar(el, [['換一組資料', () => { clearInterval(auto); data = gen(); render(900); }],
     ...OFFS.map(([lbl, fn], i) => [lbl, b => { off = fn; offBtns.forEach((x, j) => j && x.setAttribute('aria-pressed', String(x === b))); render(900); }, i === 0])]);
+  const foot = fitFoot(el); if (foot) { y.range([H - foot - 8, M.t]); render(0); }
   return () => { clearInterval(auto); svg.interrupt(); };
 }
 
 function d3Scatter(el) {
   const w = el.clientWidth, H = el.clientHeight, M = { t: 14, r: 18, b: 62, l: 44 };
   const CL = [[30, 35, 7, 'A', '#FF8257'], [62, 68, 9, 'B', '#9C85FF'], [74, 26, 5, 'C', '#3CCDB3']];
+  dkBar(el, [...CL.map(([, , , g], k) => [`放大群組 ${g}`, () => { stopAuto(); zoomTo(k); }]), ['重設', () => { stopAuto(); reset(); }]]);
+  dkNote(el, '游標移過去看最近的點 · 拖曳移動，⌘/Ctrl + 滾輪縮放', { left: '14px', bottom: '16px' });
+  const foot = fitFoot(el); if (foot) M.b = foot + 26;
   const data = []; CL.forEach(([cx, cy, sd], k) => { const rx = d3.randomNormal(cx, sd), ry = d3.randomNormal(cy, sd); for (let i = 0; i < 300; i++) data.push([rx(), ry(), k]); });
   const x = d3.scaleLinear([0, 100], [M.l, w - M.r]), y = d3.scaleLinear([0, 100], [H - M.b, M.t]);
   const svg = d3.select(el).append('svg').attr('width', w).attr('height', H).style('cursor', 'grab');
@@ -2520,8 +2549,6 @@ function d3Scatter(el) {
   let step = 0, auto = setInterval(() => { const k = step++ % 6; k % 2 ? reset() : zoomTo(k / 2); }, 2400);
   const stopAuto = () => clearInterval(auto);
   svg.on('pointerdown.auto', stopAuto);
-  dkBar(el, [...CL.map(([, , , g], k) => [`放大群組 ${g}`, () => { stopAuto(); zoomTo(k); }]), ['重設', () => { stopAuto(); reset(); }]]);
-  dkNote(el, '游標移過去看最近的點 · 拖曳移動，⌘/Ctrl + 滾輪縮放', { left: '14px', bottom: '16px' });
   return () => { stopAuto(); svg.interrupt(); };
 }
 
@@ -2672,7 +2699,7 @@ function pixiFilters(el) {
 
 function pixiDrag(el) {
   const { app, w, H, destroy } = pixiApp(el);
-  const cw = Math.min(150, w / 6), ch = cw * 0.62;
+  const cw = Math.min(150, Math.max(88, w / 6)), ch = cw * 0.62;
   let drag = null, lastFling = 0, idleFrom = performance.now();
   const off = new PIXI.Point();
   const cards = DEMOS.map(d => {
@@ -2862,9 +2889,12 @@ const PAL = ['#FF8257', '#F2B83A', '#3CCDB3', '#9C85FF', '#6DB2FF', '#E07AE6'];
 const pick = a => a[Math.floor(Math.random() * a.length)];
 
 function matterSandbox(el) {
-  const M = matterWorld(el), { w, H, engine } = M, { Bodies, Composite, Composites } = Matter;
+  const M = matterWorld(el), { w, H: H0, engine } = M, { Bodies, Composite, Composites } = Matter;
+  dkBar(el, [['丟一把', () => drop(15)], ['重力反轉', () => { engine.gravity.y *= -1; }], ['重來', build]]);
+  dkNote(el, '拖曳任何物體，用力甩出去', { left: '14px', bottom: '16px' });
+  const H = H0 - fitFoot(el);
   const wall = { isStatic: true, render: { fillStyle: '#262C3F' } };
-  Composite.add(engine.world, [Bodies.rectangle(w / 2, H + 20, w + 200, 60, wall), Bodies.rectangle(w / 2, -30, w + 200, 60, wall), Bodies.rectangle(-30, H / 2, 60, H * 3, wall), Bodies.rectangle(w + 30, H / 2, 60, H * 3, wall)]);
+  Composite.add(engine.world, [Bodies.rectangle(w / 2, H + 30, w + 200, 60, wall), Bodies.rectangle(w / 2, -30, w + 200, 60, wall), Bodies.rectangle(-30, H / 2, 60, H * 3, wall), Bodies.rectangle(w + 30, H / 2, 60, H * 3, wall)]);
   const sz = Math.max(16, Math.min(w, H) / 18);
   const shape = (x, y) => { const k = Math.random(), o = { render: { fillStyle: pick(PAL) } };
     return k < 0.4 ? Bodies.circle(x, y, sz * (0.4 + Math.random() * 0.4), Object.assign(o, { restitution: 0.6 }))
@@ -2879,8 +2909,6 @@ function matterSandbox(el) {
   }
   const drop = n => { for (let i = 0; i < n; i++) Composite.add(engine.world, shape(w * 0.1 + Math.random() * w * 0.8, 40 + Math.random() * 80)); const d = dynamic(); d.slice(0, Math.max(0, d.length - 170)).forEach(b => Composite.remove(engine.world, b, true)); };
   build();
-  dkBar(el, [['丟一把', () => drop(15)], ['重力反轉', () => { engine.gravity.y *= -1; }], ['重來', build]]);
-  dkNote(el, '拖曳任何物體，用力甩出去', { left: '14px', bottom: '16px' });
   let next = 2;
   return M.run(t => { if (t > next) { next = t + 3; if (M.idle(4000) && dynamic().length < 110) drop(4); } });
 }
@@ -3259,13 +3287,14 @@ function threeTower(el) {
   const spire = new THREE.Mesh(new THREE.ConeGeometry(0.5, 4, 4), slabMat); spire.position.y = FLOORS * FH + 2; spire.rotation.y = FLOORS * 0.045; spire.scale.set(0, 0, 0); scene.add(spire);
   // city
   const N = 240, boxGeo = new THREE.BoxGeometry(1, 1, 1); boxGeo.translate(0, .5, 0);
+  const tall = w / H < 1;
   const city = new THREE.InstancedMesh(boxGeo, new THREE.MeshStandardMaterial({ color: 0x151c33, roughness: .9 }), N);
   const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), up = new THREE.Vector3(0, 1, 0);
   const winPos = [], v = new THREE.Vector3();
   for (let i = 0; i < N; i++) {
     const rad = 7 + Math.pow(Math.random(), .8) * 38, ang = Math.random() * Math.PI * 2;
     const bx = Math.cos(ang) * rad, bz = Math.sin(ang) * rad;
-    const bw = 1.2 + Math.random() * 2.4, bd = 1.2 + Math.random() * 2.4, bh = 1 + Math.pow(Math.random(), 2) * (12 - rad * 0.18);
+    const bw = 1.2 + Math.random() * 2.4, bd = 1.2 + Math.random() * 2.4, bh = rad > 19 && rad < 31 ? 1 + Math.random() * 0.6 : Math.min(tall && rad < 19 ? 2 + rad * 0.2 : 99, 1 + Math.pow(Math.random(), 2) * (12 - rad * 0.18));
     const ry = Math.random() * Math.PI;
     q.setFromAxisAngle(up, ry); m4.compose(new THREE.Vector3(bx, 0, bz), q, new THREE.Vector3(bw, Math.max(1, bh), bd));
     city.setMatrixAt(i, m4);
@@ -3307,7 +3336,7 @@ function threeTower(el) {
     if (changed) wGeo.attributes.color.needsUpdate = true;
     if (lastX === null) { drag += dragV; dragV *= 0.94; }
     const p = easeInOut(clamp(t / 16));
-    const a = 0.7 + t * 0.2 + drag, rad = 27 - p * 5, camY = 2.5 + p * 26;
+    const a = 0.7 + t * 0.2 + drag, rad = 27 - p * 5, camY = (tall ? 8 : 2.5) + p * (tall ? 20.5 : 26);
     camera.position.set(Math.cos(a) * rad, camY, Math.sin(a) * rad);
     camera.lookAt(0, 3 + p * 15, 0);
     renderer.render(scene, camera);
@@ -3731,8 +3760,8 @@ void main(){
   const bg = g.createLinearGradient(0, 0, tw, th); bg.addColorStop(0, '#1d1b4b'); bg.addColorStop(.5, '#6b2d6e'); bg.addColorStop(1, '#f7a35c'); g.fillStyle = bg; g.fillRect(0, 0, tw, th);
   for (let y = 0; y < 6; y++) for (let x = 0; x < 10; x++) { g.fillStyle = PAL[(x + y) % PAL.length]; g.globalAlpha = .55; g.beginPath(); g.arc(60 + x * 102, th * 0.12 + y * th * 0.15, 20 + ((x * 7 + y * 3) % 5) * 5, 0, Math.PI * 2); g.fill(); }
   g.globalAlpha = 1; g.fillStyle = '#FFF4E6'; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.font = `900 ${Math.round(th * 0.3)}px Archivo, sans-serif`; g.fillText('GLSL', tw / 2, th * 0.45);
-  g.font = `600 ${Math.round(th * 0.06)}px "JetBrains Mono", monospace`; g.fillText('texture2D(u_tex, uv)', tw / 2, th * 0.7);
+  g.font = `900 ${Math.round(Math.min(th * 0.3, tw * 0.25))}px Archivo, sans-serif`; g.fillText('GLSL', tw / 2, th * 0.45);
+  g.font = `600 ${Math.round(Math.min(th * 0.06, tw * 0.05))}px "JetBrains Mono", monospace`; g.fillText('texture2D(u_tex, uv)', tw / 2, th * 0.7);
   g.strokeStyle = '#FFF4E6'; g.lineWidth = 3; for (let x = 0; x < tw; x += 32) { g.beginPath(); g.moveTo(x, th * 0.84); g.lineTo(x + 16, th * 0.94); g.stroke(); }
   const tx = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tx);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -4084,7 +4113,8 @@ function toneXY(el) {
     trail.forEach(([x, y], i) => { g.fillStyle = `rgba(242,184,58,${i / trail.length * 0.5})`; g.beginPath(); g.arc(x, y, 2 + i / trail.length * 6, 0, Math.PI * 2); g.fill(); });
     g.strokeStyle = holding ? '#F2B83A' : '#5A6488'; g.lineWidth = 1.5; g.beginPath(); g.arc(px * w, py * H, 14, 0, Math.PI * 2); g.stroke();
     g.fillStyle = '#8A93AD'; g.textAlign = 'left'; g.font = '11.5px "JetBrains Mono", monospace';
-    g.fillText(`cutoff ${Math.round(fc)} Hz · Q ${q.toFixed(1)} · ${holding ? chord + ' 和弦發聲中' : user ? '按住畫面發聲' : '按住畫面發聲 · 左右調亮暗（cutoff），上下調共鳴（Q）'}`, 14, 20);
+    const info = `cutoff ${Math.round(fc)} Hz · Q ${q.toFixed(1)}`, tip = holding ? chord + ' 和弦發聲中' : user ? '按住畫面發聲' : '按住畫面發聲 · 左右調亮暗（cutoff），上下調共鳴（Q）';
+    (w < 560 ? [info, ...tip.split(' · ')] : [info + ' · ' + tip]).forEach((ln, i) => g.fillText(ln, 14, 20 + i * 18));
   });
   return () => { stop(); up(); kit.kill(); };
 }
