@@ -69,8 +69,8 @@ h1 .js { display: inline-block; padding: 0 .14em; margin-right: .08em; backgroun
 .mount canvas, .mount svg { display: block; }
 .hud { position: absolute; z-index: 5; pointer-events: none; font-family: var(--mono); font-size: 11.5px; color: var(--stage-muted); }
 .hud-tl { top: 12px; left: 14px; right: 110px; display: grid; gap: 3px; }
-.hud-tl .nm { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--stage-ink); font-size: 12.5px; font-weight: 600; }
-.hud-tl .hint { text-shadow: 0 1px 3px #000a; }
+.hud-tl .nm { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; color: var(--stage-ink); font-size: 12.5px; font-weight: 600; }
+.hud-tl .nm-t { font: 800 21px/1.1 var(--display); font-stretch: 112%; letter-spacing: -.01em; }
 .hud-tr { top: 12px; right: 14px; display: flex; gap: 12px; font-variant-numeric: tabular-nums; text-shadow: 0 1px 3px #000a; }
 .hud-tr .mus { color: #6DB2FF; }
 .tag { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 99px; border: 1px solid currentColor; line-height: 1.5; white-space: nowrap; }
@@ -222,9 +222,10 @@ footer p b { color: var(--ink); font-weight: 700; }
 .gs-scrub { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 11.5px; color: #8A93AD; }
 .gs-scrub input { flex: 1; accent-color: #F2B83A; }
 .gsw { position: absolute; inset: 54px 0 0; display: flex; flex-direction: column; }
-.gs-tabs { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 14px 8px; }
-.gs-tab { background: transparent; color: #8A93AD; border: 1px solid #262C3F; border-radius: 99px; padding: 3px 12px; font: 600 12px var(--mono); }
-.gs-tab:hover { color: #E8ECF6; border-color: #5A6488; }
+.gs-tabs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 0 14px 10px; }
+.gs-lab { font: 600 11px var(--mono); color: var(--stage-muted); letter-spacing: .04em; margin-right: 4px; }
+.gs-tab { background: rgba(232,236,246,.04); color: #C3CAE0; border: 1px solid #3A4260; border-radius: 99px; padding: 5px 13px; font: 600 12.5px var(--mono); cursor: pointer; transition: border-color .15s, color .15s, background .15s; }
+.gs-tab:hover { color: #E8ECF6; border-color: #8A93AD; background: rgba(232,236,246,.08); }
 .gs-tab[aria-selected="true"] { background: #F2B83A; color: #0B0E18; border-color: #F2B83A; }
 .gsx { position: relative; flex: 1; min-height: 0; container-type: size; }
 /* ScrollTrigger */
@@ -323,7 +324,7 @@ footer p b { color: var(--ink); font-weight: 700; }
   .guide td.alt::before { content: '也可以看看：'; }
   .guide td.none { display: none; }
   .gs { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; align-content: center; }
-  .hud-tl .hint { display: none; }
+  .hud-tl .nm-t { font-size: 18px; }
   .controls .lbl-txt { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
@@ -420,7 +421,7 @@ footer p b { color: var(--ink); font-weight: 700; }
     <div class="stage-col">
       <div class="stage" id="stage">
         <div class="mount" id="mount"></div>
-        <div class="hud hud-tl"><div class="nm" id="hud-name"></div><div class="hint" id="hud-hint"></div></div>
+        <div class="hud hud-tl"><div class="nm" id="hud-name"></div></div>
         <div class="hud hud-tr"><span class="mus" id="hud-music"></span><span id="fps">— fps</span></div>
         <div class="veil" id="veil" hidden></div>
       </div>
@@ -735,6 +736,7 @@ function tabbed(el, api, key, TABS) {
   const hud = document.querySelector('.hud-tl');
   if (hud) wrap.style.top = Math.max(54, Math.ceil(hud.getBoundingClientRect().bottom - el.getBoundingClientRect().top + 8)) + 'px';
   let cur = -1, extra = null, cycle = null;
+  bar.appendChild(h('span', { class: 'gs-lab', 'aria-hidden': 'true' }, `${TABS.length} 種效果可切換`));
   const btns = TABS.map((t, i) => { const b = h('button', { class: 'gs-tab', type: 'button', role: 'tab', 'aria-selected': 'false' }); b.textContent = t.name; b.onclick = () => { stopCycle(); show(i); }; bar.appendChild(b); return b; });
   function teardown() { if (extra) { try { extra(); } catch (e) { console.error(e); } extra = null; } host.innerHTML = ''; }
   function show(i) {
@@ -4252,8 +4254,7 @@ async function select(i, opts = {}) {
   const d = DEMOS[current], my = ++token;
   if (dispose) { try { dispose(); } catch (e) { console.error(e); } dispose = null; }
   mountEl.innerHTML = '';
-  $('#hud-name').innerHTML = `${d.name} ${baseTags(d.base)}`;
-  $('#hud-hint').textContent = d.hint;
+  $('#hud-name').innerHTML = `<span class="nm-t">${d.name}</span>${baseTags(d.base)}`;
   renderInfo(d);
   document.querySelectorAll('.pick').forEach((b, k) => b.setAttribute('aria-pressed', String(k === current)));
   if (!opts.keepHash) { try { history.replaceState(null, '', '#' + d.id); } catch (e) {} }
