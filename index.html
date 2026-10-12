@@ -58,7 +58,7 @@ h1 .js { display: inline-block; padding: 0 .14em; margin-right: .08em; backgroun
 .stats { display: flex; gap: 28px; margin: 0; padding: 0; list-style: none; }
 .stats li { display: grid; }
 .stats b { font-family: var(--display); font-stretch: 112%; font-weight: 800; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
-.stats span { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.stats li > span { font-size: 12px; color: var(--muted); margin-top: 6px; }
 
 /* ---------- studio ---------- */
 .studio { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 18px; align-items: start; }
@@ -409,9 +409,9 @@ footer p b { color: var(--ink); font-weight: 700; }
     <p class="lede">2D、3D、動畫、物理、資料視覺化、聲音，<span class="nw">各挑代表套件</span><span class="nw">現場跑給你看。</span><span class="line">沒有圖片、影片或音檔，畫面和聲音全是 JavaScript 即時算出來的。</span></p>
   </div>
   <ul class="stats" aria-label="這一頁的組成">
-    <li><b id="st-demos">60</b><span>種即時效果</span></li>
-    <li><b id="st-apis">6</b><span>種瀏覽器 API</span></li>
-    <li><b>0</b><span>張圖片素材</span></li>
+    <li><b id="st-demos">60</b><span class="nw">種即時效果</span></li>
+    <li><b id="st-apis">6</b><span><span class="nw">種瀏覽器 API</span><wbr><span class="nw">（圖譜涵蓋）</span></span></li>
+    <li><b>0</b><span class="nw">張圖片素材</span></li>
   </ul>
 </header>
 
