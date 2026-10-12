@@ -574,7 +574,7 @@ tl.from(chars, { yPercent: <span class="n">120</span>, opacity: <span class="n">
     grid: [cols, rows], from: index
   })
 });` },
-  { id: 'd3', name: 'D3.js', cat: '資料視覺化', lib: 'd3', base: ['svg', 'canvas'], ver: 'd3 7.9.0',
+  { id: 'd3', name: 'D3.js', cat: '資料視覺化', lib: 'd3', base: ['svg'], ver: 'd3 7.9.0',
     blurb: '把資料變成圖表的工具。它不給現成圖表，而是把每一筆資料綁到一個圖形上，長相由你決定。',
     hint: '每一頁都能直接操作：拖曳、點擊或滑過',
     fit: '客製化圖表、關係網路、階層樹、可以縮放探索的大量資料，現成圖表庫做不到的版面',
@@ -585,7 +585,7 @@ tl.from(chars, { yPercent: <span class="n">120</span>, opacity: <span class="n">
   .transition().duration(<span class="n">750</span>)
   .attr(<span class="s">'y'</span>, d => y(d.value))
   .attr(<span class="s">'height'</span>, d => y(<span class="n">0</span>) - y(d.value));` },
-  { id: 'pixi', name: 'PixiJS', cat: '2D 繪圖', lib: 'pixi', base: ['webgl', 'webgpu'], ver: 'pixi.js 7.4.2',
+  { id: 'pixi', name: 'PixiJS', cat: '2D 繪圖', lib: 'pixi', base: ['webgl'], ver: 'pixi.js 7.4.2',
     blurb: '用顯示卡（GPU）畫 2D 的工具，同時畫上萬個圖形也很順，常用來做網頁遊戲。',
     hint: '每一頁都能用滑鼠玩，玩法寫在畫面左下角',
     fit: '2D 遊戲、大量精靈和粒子、濾鏡特效、可以拖曳的互動畫面',
@@ -618,7 +618,7 @@ Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</s
 <span class="k">else if</span> (empty(x + d, y + <span class="n">1</span>)) move(x, y, x + d, y + <span class="n">1</span>);
 <span class="c">// 3. 水多一條：往左右流</span>
 <span class="k">else if</span> (water && empty(x + d, y)) move(x, y, x + d, y);` },
-  { id: 'three', name: 'Three.js', cat: '3D', lib: 'three', base: ['webgl', 'webgpu'], ver: 'three.js r149',
+  { id: 'three', name: 'Three.js', cat: '3D', lib: 'three', base: ['webgl'], ver: 'three.js r149',
     blurb: '最常用的網頁 3D 工具，幫你處理相機、燈光、材質和模型，底下用 WebGL 叫顯示卡畫圖。',
     hint: '大多能拖曳轉動視角，玩法寫在畫面左下角',
     fit: '3D 場景、產品材質展示、粒子特效、可點選的立體介面、地形與資料地景',
