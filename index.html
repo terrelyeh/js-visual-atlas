@@ -430,7 +430,7 @@ footer p b { color: var(--ink); font-weight: 700; }
         <button class="btn" id="b-replay" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-4"/><path d="M2.5 2.5v3h3"/></svg>重播</button>
         <span class="spacer"></span>
         <button class="btn" id="b-music" type="button" aria-pressed="false" title="背景配樂由 Tone.js 即時合成"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 12.5V3.5l7-1.5v9"/><circle cx="4.3" cy="12.5" r="1.8"/><circle cx="11.3" cy="11" r="1.8"/></svg><span class="lbl-txt">配樂</span></button>
-        <button class="btn" id="b-tour" type="button" aria-pressed="false" title="每 11 秒換一個示範，配樂一路播放"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.8v10.4L13 8z"/></svg>自動巡覽</button>
+        <button class="btn" id="b-tour" type="button" aria-pressed="false" title="每 11 秒換一個示範（中間會換一次分頁），配樂一路播放"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.8v10.4L13 8z"/></svg>自動巡覽</button>
         <button class="btn" id="b-full" type="button" aria-label="全螢幕"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg></button>
       </div>
       <div class="tourbar" aria-hidden="true"><i id="tourbar"></i></div>
@@ -464,16 +464,16 @@ footer p b { color: var(--ink); font-weight: 700; }
       <table class="guide">
         <thead><tr><th>想做的東西</th><th>先試</th><th>也可以看看</th></tr></thead>
         <tbody>
-          <tr><td>3D 場景、產品展示、建築或地景</td><td class="lib">Three.js</td><td class="alt">Babylon.js、PlayCanvas<span class="cond">想要扁平插畫風的 3D：Zdog</span></td></tr>
-          <tr><td>大量 2D 角色或圖片、粒子、網頁小遊戲</td><td class="lib">PixiJS</td><td class="alt">Phaser（完整遊戲框架）</td></tr>
-          <tr><td>生成藝術、教學、快速做出一個想法</td><td class="lib">p5.js</td><td class="alt">直接寫 Canvas 2D</td></tr>
-          <tr><td>可拖拉、可編輯的圖形編輯器</td><td class="lib">Konva / Fabric.js</td><td class="alt">Paper.js（向量路徑運算）</td></tr>
-          <tr><td>網站動態、捲動動畫、複雜時間軸</td><td class="lib">GSAP</td><td class="alt">Motion<span class="cond">只要輕量的 DOM / SVG 動畫：Anime.js</span></td></tr>
-          <tr><td>拖、丟、碰撞的 2D 物理互動</td><td class="lib">Matter.js</td><td class="alt">3D 物理：Rapier 或 cannon-es<span class="cond">它們只算物理，畫面交給 Three.js</span></td></tr>
-          <tr><td>客製化資料視覺化、新聞圖表</td><td class="lib">D3.js</td><td class="alt">ECharts、Chart.js、Observable Plot<span class="cond">要開箱即用的現成圖表時</span></td></tr>
-          <tr><td>手繪草圖感的圖解</td><td class="lib">Rough.js</td><td class="alt none">—</td></tr>
-          <tr><td>背景特效、轉場、影像濾鏡</td><td class="lib">GLSL Shader</td><td class="alt">在 Three.js 裡用 ShaderMaterial 寫</td></tr>
-          <tr><td>互動音樂、合成音效、節奏遊戲</td><td class="lib">Tone.js</td><td class="alt">Howler.js<span class="cond">只要播放現成的音效檔時</span></td></tr>
+          <tr><td><span class="nw">3D 場景</span>、<span class="nw">產品材質展示</span>、<span class="nw">3D 粒子</span>、<span class="nw">地景</span></td><td class="lib">Three.js</td><td class="alt">Babylon.js、PlayCanvas<span class="cond">想要扁平插畫風的 3D：Zdog</span></td></tr>
+          <tr><td><span class="nw">大量 2D 角色或粒子</span>、<span class="nw">濾鏡特效</span>、<span class="nw">網頁小遊戲</span></td><td class="lib">PixiJS</td><td class="alt">Phaser（完整遊戲框架）</td></tr>
+          <tr><td><span class="nw">生成藝術</span>、<span class="nw">自然模擬</span>、<span class="nw">教學</span>，<span class="nw">快速做出一個想法</span></td><td class="lib">p5.js</td><td class="alt">直接寫 Canvas 2D</td></tr>
+          <tr><td><span class="nw">可拖拉</span>、<span class="nw">可編輯的圖形編輯器</span></td><td class="lib">Konva / Fabric.js</td><td class="alt">Paper.js（向量路徑運算）</td></tr>
+          <tr><td><span class="nw">網站動態</span>、<span class="nw">捲動敘事</span>、<span class="nw">文字和版面轉場</span>、<span class="nw">複雜時間軸</span></td><td class="lib">GSAP</td><td class="alt">Motion<span class="cond">只要輕量的 DOM / SVG 動畫：Anime.js</span></td></tr>
+          <tr><td><span class="nw">拖</span>、<span class="nw">丟</span>、<span class="nw">碰撞</span>、<span class="nw">繩索和布料的 2D 物理</span></td><td class="lib">Matter.js</td><td class="alt">3D 物理：Rapier 或 cannon-es<span class="cond">它們只算物理，畫面交給 Three.js</span></td></tr>
+          <tr><td><span class="nw">客製化圖表</span>、<span class="nw">關係網路</span>、<span class="nw">可縮放探索的大量資料</span></td><td class="lib">D3.js</td><td class="alt">ECharts、Chart.js、Observable Plot<span class="cond">要開箱即用的現成圖表時</span></td></tr>
+          <tr><td><span class="nw">手繪感的圖解</span>、<span class="nw">流程圖</span>、<span class="nw">圖表和小動畫</span></td><td class="lib">Rough.js</td><td class="alt none">—</td></tr>
+          <tr><td><span class="nw">背景特效</span>、<span class="nw">影像濾鏡</span>、<span class="nw">程序生成的圖樣和碎形</span></td><td class="lib">GLSL Shader</td><td class="alt">在 Three.js 裡用 ShaderMaterial 寫</td></tr>
+          <tr><td><span class="nw">網頁樂器</span>、<span class="nw">節奏編排</span>、<span class="nw">互動音樂</span>、<span class="nw">合成音效</span></td><td class="lib">Tone.js</td><td class="alt">Howler.js<span class="cond">只要播放現成的音效檔時</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -607,7 +607,7 @@ app.ticker.add(() => orbit(stars));` },
 });
 Matter.Composite.add(engine.world, ball);
 Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</span>);` },
-  { id: 'sand', name: 'Falling Sand', cat: '2D 繪圖', native: true, base: ['canvas'], ver: '不用套件 · ImageData',
+  { id: 'sand', name: 'Falling Sand', cat: '像素模擬', native: true, base: ['canvas'], ver: '不用套件 · ImageData',
     blurb: '不用套件，只給每一格幾條簡單規則，整個畫面就自己長出複雜的樣子。',
     hint: '每一頁都能在畫面上拖曳或點擊，玩法寫在畫面左下角',
     fit: '細胞自動機、像素風遊戲、火焰特效、有機紋路生成',
@@ -629,7 +629,7 @@ Matter.Engine.update(engine, <span class="n">1000</span> / <span class="n">60</s
   floor.rotation.y = i * <span class="n">0.045</span>;  <span class="c">// 每層多扭一點</span>
   tower.add(floor);
 }` },
-  { id: 'glsl', name: 'GLSL Shader', cat: '3D / GPU', native: true, base: ['webgl'], ver: '不用套件 · WebGL 1',
+  { id: 'glsl', name: 'GLSL Shader', cat: 'GPU 特效', native: true, base: ['webgl'], ver: '不用套件 · WebGL 1',
     blurb: '直接寫給顯示卡跑的小程式（shader）。每個像素同時各算一次，再重的特效也跑得動。',
     hint: '移動游標就會改變畫面，有幾頁右下角還能切換效果',
     fit: '背景特效、影像濾鏡、程序生成的圖樣和碎形、不用模型的立體畫面',
@@ -687,7 +687,7 @@ const CATS = [
   { name: '物理', libs: [['Matter.js', ['canvas'], 'matter'], ['Rapier', [], null, '只負責算物理（WebAssembly），畫面交給 Three.js 或 PixiJS'], ['cannon-es', [], null, '只負責算 3D 物理，畫面通常交給 Three.js']] },
   { name: '資料視覺化', libs: [['D3.js', ['svg', 'canvas'], 'd3'], ['ECharts', ['canvas', 'svg']], ['Chart.js', ['canvas']], ['Observable Plot', ['svg']]] },
   { name: '聲音', libs: [['Tone.js', ['audio'], 'tone'], ['Howler.js', ['audio']], ['wavesurfer.js', ['audio', 'canvas']]] },
-  { name: '不用套件', libs: [['Canvas 山景', ['canvas'], 'canvas'], ['Falling Sand', ['canvas'], 'sand'], ['GLSL Shader', ['webgl'], 'glsl']] },
+  { name: '不用套件', libs: [['手寫 Canvas', ['canvas'], 'canvas'], ['Falling Sand', ['canvas'], 'sand'], ['GLSL Shader', ['webgl'], 'glsl']] },
 ];
 
 /* ================= helpers ================= */
