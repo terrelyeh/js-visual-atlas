@@ -111,8 +111,16 @@ pre.code { margin: 0; background: var(--stage); color: #C9D1E6; border-radius: 8
 pre.code .k { color: #9C85FF; } pre.code .s { color: #F2B83A; } pre.code .c { color: #6B7590; } pre.code .n { color: #3CCDB3; }
 
 /* ask-the-AI section */
-.ask { border-top: 1px solid var(--line); padding-top: 14px; display: grid; gap: 10px; }
-.ask h3 { margin: 0; font-size: 15px; font-weight: 700; }
+.ask { grid-column: 1 / -1; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px 22px; display: grid; gap: 18px; min-width: 0; }
+.ask:empty { display: none; }
+.ask-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 28px; align-items: start; }
+.ask-head h3, .ask-head .seg { grid-column: 1 / -1; }
+.ask-body { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.ask-main, .ask-code { display: grid; gap: 10px; min-width: 0; align-content: start; }
+.ask-main > div:first-child { display: grid; gap: 10px; }
+.ask-main > div:first-child .lbl, .ask-code .lbl { margin-bottom: 0; min-height: 1.5em; }
+@media (max-width: 860px) { .ask-head, .ask-body { grid-template-columns: minmax(0, 1fr); } .ask { padding: 18px 16px; } }
+.ask h3 { margin: 0; font: 800 20px/1.2 var(--display); }
 .ask .steps { list-style: none; counter-reset: st; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 5px; font-size: 12.5px; }
 .ask .steps li { counter-increment: st; display: inline-flex; align-items: baseline; gap: 5px; padding: 2px 9px 2px 3px; border: 1px solid var(--line); border-radius: 99px; background: var(--bg); white-space: nowrap; }
 .ask .steps li::before { content: counter(st); display: inline-grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: var(--ink); color: var(--surface); font: 600 10.5px var(--mono); transform: translateY(-1px); }
@@ -450,6 +458,7 @@ footer p b { color: var(--ink); font-weight: 700; }
     </div>
 
     <aside class="info" id="info" aria-live="polite"></aside>
+    <section class="ask" id="ask" aria-label="跟 AI 這樣說"></section>
   </section>
 
   <section class="block" id="atlas">
@@ -4251,9 +4260,9 @@ function renderInfo(d) {
       <div id="info-play-row" style="display: none"><dt>這一頁怎麼玩</dt><dd id="info-play"></dd></div>
       <div><dt>適合拿來做</dt><dd>${phr(d.fit, 12)}</dd></div>
     </dl>
-    <pre class="code">${d.code}</pre>
-    <section class="ask" aria-label="跟 AI 這樣說"></section>
     <a href="${d.site}" target="_blank" rel="noopener">${d.native ? 'MDN 文件' : '官方網站'} ↗</a>`;
+  // show the demo's first-tab prompt right away; the tab that actually opens replaces it a moment later
+  askCode = d.code; renderAsk(ASK[d.id]);
   const lb = $('#info-link'), lt = lb.querySelector('span');
   lb.onclick = () => { const url = tabLink(d); copyText(url, ok => { lt.textContent = ok ? '已複製連結' : url; lb.title = url; setTimeout(() => { lt.textContent = '複製這一頁的連結'; }, ok ? 1800 : 6000); }); };
   renderAsk(ASK[d.id]);
@@ -4265,18 +4274,25 @@ let askVideo = false; try { askVideo = localStorage.getItem('jsatlas-video') ===
 const VIDEO_NOTE = '另外這是要錄成影片的版本：所有動畫用一條時間軸控制，可以跳到任一秒；不靠滑鼠、點擊或按鈕觸發，畫面上不放任何控制項；隨機效果用固定的種子，每次播放都一樣；畫面尺寸【1920×1080】，總長【10】秒。';
 // video version: drop the interaction step and add what a recorded video needs to the constraints
 const videoize = p => p.replace(/互動：[^]*?(?=限制：)/, '').trimEnd() + VIDEO_NOTE + (p.includes('Tone.js') ? '瀏覽器要點一下才會出聲，所以畫面照時間軸自己跑，聲音另外錄製或從程式匯出再合成。' : '');
+let askCode = '';
 function renderAsk(a) {
-  const box = $('#info .ask');
+  const box = $('#ask');
   if (!box || !a) return;
   const text = askVideo ? videoize(a.prompt) : a.prompt;
   box.innerHTML = `
+    <div class="ask-head">
     <h3>跟 AI 這樣說</h3>
     <div><div class="lbl">照這個順序描述，AI 最快做對</div>
       <ol class="steps"><li>用哪個套件</li><li>畫面上有什麼</li><li>怎麼動<small>順序、秒數、ease</small></li>${askVideo ? '<li class="off"><s>怎麼互動</s><small>影片版不需要</small></li>' : '<li>怎麼互動</li>'}<li>有什麼限制</li></ol></div>
     <div><div class="lbl">關鍵詞：直接用這些字，AI 比較不會猜錯</div><div class="terms">${a.terms.map(t => `<span>${esc(t)}</span>`).join('')}</div></div>
     <div class="seg" role="group" aria-label="提示詞版本"><button type="button" data-v="0" aria-pressed="${!askVideo}">網頁版</button><button type="button" data-v="1" aria-pressed="${askVideo}">影片版</button><span>${askVideo ? '拿掉互動，補上錄影片需要的限制' : '要錄成影片時切到「影片版」'}</span></div>
-    <div><div class="lbl">範例提示詞：${text.includes('【') ? '<span class="slot">【】</span>裡是這個示範的主題，換成你要的內容；其他部分是做出這個效果的寫法' : '整段都是做出這個效果的寫法'}</div><blockquote id="ask-prompt">${esc(text).replace(/【[^【】]*】/g, m => `<span class="slot">${m}</span>`).replace(/(畫面|怎麼動|互動|限制)：/g, '<br><b class="step">$1：</b>')}</blockquote></div>
-    <div class="copies"><button class="btn copy" type="button" id="ask-copy"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M3 10.5V3.8A1.3 1.3 0 0 1 4.3 2.5H10"/></svg>複製提示詞</button><button class="btn copy" type="button" id="ask-both" title="給同事或工程師：附上效果連結，再接提示詞"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6.8 9.2a3 3 0 0 0 4.2 0l2.1-2.1a3 3 0 0 0-4.2-4.2l-.9.9"/><path d="M9.2 6.8a3 3 0 0 0-4.2 0L2.9 8.9a3 3 0 0 0 4.2 4.2l.9-.9"/></svg>連結＋提示詞一起複製</button></div>`;
+    </div>
+    <div class="ask-body">
+    <div class="ask-main"><div><div class="lbl">範例提示詞：${text.includes('【') ? '<span class="slot">【】</span>裡是這個示範的主題，換成你要的內容；其他部分是做出這個效果的寫法' : '整段都是做出這個效果的寫法'}</div><blockquote id="ask-prompt">${esc(text).replace(/【[^【】]*】/g, m => `<span class="slot">${m}</span>`).replace(/(畫面|怎麼動|互動|限制)：/g, '<br><b class="step">$1：</b>')}</blockquote></div>
+    <div class="copies"><button class="btn copy" type="button" id="ask-copy"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="5" width="8.5" height="8.5" rx="1.5"/><path d="M3 10.5V3.8A1.3 1.3 0 0 1 4.3 2.5H10"/></svg>複製提示詞</button><button class="btn copy" type="button" id="ask-both" title="給同事或工程師：附上效果連結，再接提示詞"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6.8 9.2a3 3 0 0 0 4.2 0l2.1-2.1a3 3 0 0 0-4.2-4.2l-.9.9"/><path d="M9.2 6.8a3 3 0 0 0-4.2 0L2.9 8.9a3 3 0 0 0 4.2 4.2l.9-.9"/></svg>連結＋提示詞一起複製</button></div>
+    </div>
+    <div class="ask-code"><div class="lbl">程式碼片段：這個效果的核心寫法</div><pre class="code" id="ask-code">${askCode}</pre></div>
+    </div>`;
   box.querySelectorAll('.seg button').forEach(b => b.onclick = () => { askVideo = b.dataset.v === '1'; try { localStorage.setItem('jsatlas-video', askVideo ? '1' : '0'); } catch (e) {} renderAsk(a); });
   const btn = $('#ask-copy');
   btn.onclick = () => {
@@ -4315,7 +4331,7 @@ async function select(i, opts = {}) {
   }
   veil.hidden = true;
   lastSize = stage.clientWidth + 'x' + stage.clientHeight;
-  const api = { touring: tourOn, hashTab: !opts.keepHash, setCode: html => { const pre = $('#info pre.code'); if (pre) pre.innerHTML = html; }, setAsk: renderAsk, setPlay: t => { const dd = $('#info-play'); if (dd) { dd.innerHTML = phr(t); dd.parentElement.style.display = ''; } } };
+  const api = { touring: tourOn, hashTab: !opts.keepHash, setCode: html => { askCode = html; const pre = $('#ask-code'); if (pre) pre.innerHTML = html; }, setAsk: renderAsk, setPlay: t => { const dd = $('#info-play'); if (dd) { dd.innerHTML = phr(t); dd.parentElement.style.display = ''; } } };
   try { dispose = MOUNT[d.id](mountEl, api); }
   catch (e) { console.error(e); veil.hidden = false; veil.innerHTML = `<div>${d.name} 示範啟動失敗：${e.message}</div><button type="button" id="retry">再試一次</button>`; $('#retry').onclick = () => select(current); }
   if (tourOn) restartTour();
