@@ -351,7 +351,14 @@ footer p b { color: var(--ink); font-weight: 700; }
   .guide td.none { display: none; }
   .gs { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; align-content: center; }
   .hud-tl .nm-t { font-size: 18px; }
+  .controls { flex-wrap: nowrap; gap: 6px; }
   .controls .lbl-txt { display: none; }
+  .controls .btn { padding: 0 11px; flex: none; }
+  .controls .btn .lbl-tour { white-space: nowrap; }
+}
+@media (max-width: 380px) {
+  .controls .lbl-tour { display: none; }
+  .controls .btn { padding: 0 10px; }
 }
 @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
 /* tabs for the native / small-library demos */
@@ -454,10 +461,10 @@ footer p b { color: var(--ink); font-weight: 700; }
       <div class="controls">
         <button class="btn" id="b-prev" type="button" aria-label="上一個"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3 5 8l5 5"/></svg><span class="lbl-txt">上一個</span></button>
         <button class="btn" id="b-next" type="button" aria-label="下一個"><span class="lbl-txt">下一個</span><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 3 5 5-5 5"/></svg></button>
-        <button class="btn" id="b-replay" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-4"/><path d="M2.5 2.5v3h3"/></svg>重播</button>
+        <button class="btn" id="b-replay" type="button" aria-label="重播"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-4"/><path d="M2.5 2.5v3h3"/></svg><span class="lbl-txt">重播</span></button>
         <span class="spacer"></span>
-        <button class="btn" id="b-music" type="button" aria-pressed="false" title="背景配樂由 Tone.js 即時合成"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 12.5V3.5l7-1.5v9"/><circle cx="4.3" cy="12.5" r="1.8"/><circle cx="11.3" cy="11" r="1.8"/></svg><span class="lbl-txt">配樂</span></button>
-        <button class="btn" id="b-tour" type="button" aria-pressed="false" title="每 11 秒換一個示範（中間會換一次分頁），配樂一路播放"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.8v10.4L13 8z"/></svg>自動巡覽</button>
+        <button class="btn" id="b-music" type="button" aria-pressed="false" aria-label="配樂" title="背景配樂由 Tone.js 即時合成"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 12.5V3.5l7-1.5v9"/><circle cx="4.3" cy="12.5" r="1.8"/><circle cx="11.3" cy="11" r="1.8"/></svg><span class="lbl-txt">配樂</span></button>
+        <button class="btn" id="b-tour" type="button" aria-pressed="false" aria-label="自動巡覽" title="每 11 秒換一個示範（中間會換一次分頁），配樂一路播放"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.8v10.4L13 8z"/></svg><span class="lbl-tour">自動巡覽</span></button>
         <button class="btn" id="b-full" type="button" aria-label="全螢幕"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg></button>
       </div>
       <div class="tourbar" aria-hidden="true"><i id="tourbar"></i></div>
