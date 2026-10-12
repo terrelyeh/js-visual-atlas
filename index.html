@@ -99,6 +99,8 @@ h1 .js { display: inline-block; padding: 0 .14em; margin-right: .08em; backgroun
 .info .eyebrow { font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .info h2 { font-family: var(--display); font-stretch: 118%; font-weight: 800; font-size: 30px; line-height: 1.05; margin: 4px 0 0; }
 .info .ver { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.info .share { margin-top: 10px; height: 30px; font-size: 13px; padding: 0 11px; }
+.info .share span { overflow-wrap: anywhere; }
 .info p, .info dd { text-wrap: pretty; }
 .info p { margin: 0; }
 .info dl { margin: 0; display: grid; gap: 10px; }
@@ -4223,12 +4225,24 @@ let current = 0, dispose = null, token = 0, lastSize = '';
 
 function baseTags(list) { return list.map(b => `<span class="tag t-${b}">${BASES[b].name}</span>`).join(''); }
 
+// the address of the tab on screen, e.g. …/#gsap/3; inside the Artifact frame (or a local file) point at the public site instead
+const SITE = 'https://js-visual-atlas.vercel.app/';
+const tabLink = d => {
+  const framed = (() => { try { return window.top !== window.self; } catch (e) { return true; } })();
+  const base = framed || !/^https?:/.test(location.protocol) ? SITE : location.origin + location.pathname;
+  return `${base}#${d.id}/${(tabMemory[d.id] || 0) + 1}`;
+};
+function copyText(text, done) {
+  const legacy = () => { const t = document.createElement('textarea'); t.value = text; t.setAttribute('readonly', ''); t.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} t.remove(); done(ok); };
+  try { navigator.clipboard.writeText(text).then(() => done(true), legacy); } catch (e) { legacy(); }
+}
 function renderInfo(d) {
   $('#info').innerHTML = `
     <div>
       <div class="eyebrow">${d.cat} · ${d.native ? '不用套件' : '套件'}</div>
       <h2>${d.name}</h2>
       <div class="ver">${d.ver}</div>
+      <button class="btn share" type="button" id="info-link"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6.8 9.2a3 3 0 0 0 4.2 0l2.1-2.1a3 3 0 0 0-4.2-4.2l-.9.9"/><path d="M9.2 6.8a3 3 0 0 0-4.2 0L2.9 8.9a3 3 0 0 0 4.2 4.2l.9-.9"/></svg><span>複製這一頁的連結</span></button>
     </div>
     <p>${phr(d.blurb, 13)}</p>
     <dl>
@@ -4239,6 +4253,8 @@ function renderInfo(d) {
     <pre class="code">${d.code}</pre>
     <section class="ask" aria-label="跟 AI 這樣說"></section>
     <a href="${d.site}" target="_blank" rel="noopener">${d.native ? 'MDN 文件' : '官方網站'} ↗</a>`;
+  const lb = $('#info-link'), lt = lb.querySelector('span');
+  lb.onclick = () => { const url = tabLink(d); copyText(url, ok => { lt.textContent = ok ? '已複製連結' : url; lb.title = url; setTimeout(() => { lt.textContent = '複製這一頁的連結'; }, ok ? 1800 : 6000); }); };
   renderAsk(ASK[d.id]);
 }
 
