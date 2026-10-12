@@ -995,11 +995,12 @@ function canvasBrush(el) {
 function canvasClock(el) {
   const w = el.clientWidth, H = el.clientHeight;
   const { g } = canvasIn(el, w, H);
-  const R = Math.min(w, H) * 0.4, cx = w / 2, cy = H * 0.47;
   let smooth = true;
   const [btn] = dkBar(el, [['秒針：平滑', b => { smooth = !smooth; b.textContent = smooth ? '秒針：平滑' : '秒針：跳動'; }]]);
   btn.setAttribute('aria-label', '切換秒針走法');
   dkNote(el, '顯示現在的時間 · 右下角切換秒針要平滑走還是一格一格跳', { left: '14px', bottom: '16px' });
+  // the face and the digital time underneath it share the space above the controls
+  const room = H - (fitFoot(el) || 50), R = Math.min(w * 0.4, (room - 52) / 2), cx = w / 2, cy = (room - 2 * R - 36) / 2 + R, ty = cy + R + 22;
   function hand(angle, len, tail, wd, col) {
     g.save(); g.rotate(angle);
     g.strokeStyle = col; g.lineWidth = wd; g.lineCap = 'round';
@@ -1031,8 +1032,8 @@ function canvasClock(el) {
     g.fillStyle = '#FF8257'; g.beginPath(); g.arc(0, 0, R * 0.04, 0, Math.PI * 2); g.fill();
     g.restore();
     const pad = n => String(n).padStart(2, '0');
-    g.fillStyle = '#8A93AD'; g.font = `600 ${Math.round(clamp(R * 0.1, 11, 20))}px "JetBrains Mono", monospace`; g.textAlign = 'center'; g.textBaseline = 'middle';
-    g.fillText(`${pad(hr)}:${pad(m)}:${pad(s)}`, cx, cy + R * 0.36);
+    g.fillStyle = '#8A93AD'; g.font = `600 ${Math.round(clamp(R * 0.1, 13, 20))}px "JetBrains Mono", monospace`; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(`${pad(hr)}:${pad(m)}:${pad(s)}`, cx, ty);
   });
   return stop;
 }
@@ -2402,22 +2403,37 @@ function d3Force(el) {
   }));
   const svg = d3.select(el).append('svg').attr('width', w).attr('height', H);
   let floor = 40;
+  const fence = () => nodes.forEach(d => { d.x = clamp(d.x, 18, w - 18 - d.lw - d.r); d.y = clamp(d.y, 18, H - floor); });
   const link = svg.append('g').selectAll('line').data(links).join('line').attr('stroke', '#3A4260').attr('stroke-width', 1.2);
   const node = svg.append('g').selectAll('g').data(nodes).join('g').style('cursor', 'grab');
   node.append('circle').attr('r', d => d.r).attr('fill', d => d.api ? d.col : '#0B0E18').attr('stroke', d => d.col).attr('stroke-width', d => d.api ? 0 : 2);
   node.append('text').text(d => d.name).attr('x', d => d.r + 4).attr('dy', '0.32em').attr('fill', d => d.api ? '#E8ECF6' : '#8A93AD')
-    .style('font', d => `${d.api ? 700 : 400} ${d.api ? 12 : 10.5}px "JetBrains Mono", monospace`).style('pointer-events', 'none');
+    .style('font', d => `${d.api ? 700 : 400} ${d.api ? 12 : 10.5}px "JetBrains Mono", monospace`).style('pointer-events', 'none')
+    .attr('stroke', '#0B0E18').attr('stroke-width', 3.5).attr('stroke-linejoin', 'round').style('paint-order', 'stroke');
   // on a phone there isn't room for every name: keep the APIs and the libraries demoed on this page, show the rest on hover/tap
   const thin = w < 560, txt = node.select('text'), quiet = () => txt.style('opacity', d => thin && d.r === 5 ? 0 : 1);
   quiet();
+  txt.each(function (d) { d.lw = this.getComputedTextLength(); });
+  // nudge apart nodes whose labels would overlap another label or dot (a label is a box to the right of its dot)
+  const box = d => { const lab = !(thin && d.r === 5); return [d.x - d.r, d.x + d.r + (lab ? 4 + d.lw : 0), Math.max(d.r * 2, lab ? 15 : 0)]; };
+  const labels = alpha => {
+    const s = Math.max(alpha, 0.06);
+    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j], [a0, a1, ah] = box(a), [b0, b1, bh] = box(b);
+      if (a0 > b1 + 2 || b0 > a1 + 2) continue;
+      const dy = b.y - a.y, gap = (ah + bh) / 2 + 2 - Math.abs(dy);
+      if (gap <= 0) continue;
+      const f = gap * 0.5 * s * (dy < 0 ? -1 : 1); a.vy -= f; b.vy += f;
+    }
+  };
   const k = clamp(w / 640, 0.55, 1);
   const sim = d3.forceSimulation(nodes)
     .force('link', d3.forceLink(links).id(d => d.id).distance(70 * k).strength(0.35))
     .force('charge', d3.forceManyBody().strength(d => (d.api ? -420 : -90) * k))
     .force('collide', d3.forceCollide(d => d.r + 10 * k))
-    .force('x', d3.forceX(w / 2).strength(0.05)).force('y', d3.forceY(H / 2).strength(0.08))
+    .force('x', d3.forceX(w / 2).strength(0.05)).force('y', d3.forceY(H / 2).strength(0.08)).force('labels', labels)
     .on('tick', () => {
-      nodes.forEach(d => { d.x = clamp(d.x, 18, w - 100); d.y = clamp(d.y, 18, H - floor); });
+      fence();
       link.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
       node.attr('transform', d => `translate(${d.x},${d.y})`);
     });
@@ -2433,6 +2449,10 @@ function d3Force(el) {
   dkBar(el, [['重新打散', () => { nodes.forEach(d => { d.x = Math.random() * w; d.y = Math.random() * H; }); sim.alpha(1).restart(); }]]);
   dkNote(el, '資料是上面分層圖的套件和 API · 節點可以拖', { left: '14px', bottom: '16px' });
   floor = Math.max(40, fitFoot(el) + 12);
+  sim.force('y').y((18 + H - floor) / 2);
+  // run the layout ahead of time so the graph opens already spread out, then let it breathe gently
+  sim.stop(); for (let i = 0; i < 420; i++) { sim.tick(); fence(); }
+  sim.alpha(0.04).restart();
   return () => sim.stop();
 }
 
@@ -3754,26 +3774,28 @@ void main(){
 }`);
   if (!Q) return () => {};
   const { gl } = Q;
-  // the source image is drawn with Canvas 2D at mount time and uploaded as a texture, so no image file is needed
+  const MODES = ['原圖', '色差', '像素化', 'CRT 掃描線', '水波'];
+  let mode = 1, lastClick = 0;
+  const btns = dkBar(el, MODES.map((nm, i) => [nm, () => { mode = i; lastClick = performance.now(); sync(); }, i === mode]));
+  const sync = () => btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === mode)));
+  dkNote(el, '同一張圖套不同濾鏡 · 游標控制效果中心，右下角切換', { left: '14px', bottom: '16px' });
+  // the source image is drawn with Canvas 2D at mount time and uploaded as a texture, so no image file is needed;
+  // its content is laid out in the part not covered by the buttons and hint (vf = usable fraction of the height)
+  const vf = 1 - fitFoot(el) / Q.H;
   const tw = 1024, th = Math.round(1024 * Q.H / Q.w), tc = document.createElement('canvas'); tc.width = tw; tc.height = th;
   const g = tc.getContext('2d');
   const bg = g.createLinearGradient(0, 0, tw, th); bg.addColorStop(0, '#1d1b4b'); bg.addColorStop(.5, '#6b2d6e'); bg.addColorStop(1, '#f7a35c'); g.fillStyle = bg; g.fillRect(0, 0, tw, th);
-  for (let y = 0; y < 6; y++) for (let x = 0; x < 10; x++) { g.fillStyle = PAL[(x + y) % PAL.length]; g.globalAlpha = .55; g.beginPath(); g.arc(60 + x * 102, th * 0.12 + y * th * 0.15, 20 + ((x * 7 + y * 3) % 5) * 5, 0, Math.PI * 2); g.fill(); }
+  for (let y = 0; y < 6; y++) for (let x = 0; x < 10; x++) { g.fillStyle = PAL[(x + y) % PAL.length]; g.globalAlpha = .55; g.beginPath(); g.arc(60 + x * 102, (th * 0.12 + y * th * 0.15) * vf, 20 + ((x * 7 + y * 3) % 5) * 5, 0, Math.PI * 2); g.fill(); }
   g.globalAlpha = 1; g.fillStyle = '#FFF4E6'; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.font = `900 ${Math.round(Math.min(th * 0.3, tw * 0.25))}px Archivo, sans-serif`; g.fillText('GLSL', tw / 2, th * 0.45);
-  g.font = `600 ${Math.round(Math.min(th * 0.06, tw * 0.05))}px "JetBrains Mono", monospace`; g.fillText('texture2D(u_tex, uv)', tw / 2, th * 0.7);
-  g.strokeStyle = '#FFF4E6'; g.lineWidth = 3; for (let x = 0; x < tw; x += 32) { g.beginPath(); g.moveTo(x, th * 0.84); g.lineTo(x + 16, th * 0.94); g.stroke(); }
+  g.font = `900 ${Math.round(Math.min(th * vf * 0.3, tw * 0.25))}px Archivo, sans-serif`; g.fillText('GLSL', tw / 2, th * vf * 0.45);
+  g.font = `600 ${Math.round(Math.min(th * vf * 0.06, tw * 0.05))}px "JetBrains Mono", monospace`; g.fillText('texture2D(u_tex, uv)', tw / 2, th * vf * 0.7);
+  g.strokeStyle = '#FFF4E6'; g.lineWidth = 3; for (let x = 0; x < tw; x += 32) { g.beginPath(); g.moveTo(x, th * vf * 0.84); g.lineTo(x + 16, th * vf * 0.94); g.stroke(); }
   const tx = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tx);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, tc);
   [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(p => gl.texParameteri(gl.TEXTURE_2D, p, gl.CLAMP_TO_EDGE));
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
   gl.uniform1i(Q.U('u_tex'), 0);
-  const MODES = ['原圖', '色差', '像素化', 'CRT 掃描線', '水波'];
-  let mode = 1, lastClick = 0;
-  const btns = dkBar(el, MODES.map((nm, i) => [nm, () => { mode = i; lastClick = performance.now(); sync(); }, i === mode]));
-  const sync = () => btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === mode)));
-  dkNote(el, '同一張圖套不同濾鏡 · 游標控制效果中心，右下角切換', { left: '14px', bottom: '16px' });
   const stop = loop(t => {
     if (performance.now() - lastClick > 9000 && Math.floor(t / 4) % MODES.length !== mode) { mode = Math.floor(t / 4) % MODES.length; sync(); }
     gl.uniform1f(Q.U('u_mode'), mode); Q.frame(t);
