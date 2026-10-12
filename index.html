@@ -653,7 +653,7 @@ Tone.Transport.scheduleRepeat(time => {
 
 /* how to ask an AI for each effect: the vocabulary that gets it right on the first try, plus a sample prompt */
 const ASK = {
-  canvas: { terms: ['Canvas 2D', 'createLinearGradient', '分層山稜', '視差 parallax', 'easeOutCubic'],
+  canvas: { terms: ['Canvas 2D', 'createLinearGradient', '逐層錯開進場', '視差 parallax', 'easeOutCubic'],
     prompt: '用原生 Canvas 2D（不用套件）畫一張【黃昏山景】：天空是由上到下【深藍→洋紅→橘】的線性漸層，中間一顆【下半部有水平條紋缺口的太陽】，前面五層由遠到近、顏色越來越深的【山稜線】，最近兩層加【松樹剪影】。進場時【太陽】先升起，【山稜】再依序從下方滑上來（easeOutCubic，每層間隔 0.4 秒）。滑鼠左右移動時，各層用不同幅度做視差；點一下重新隨機生成【山形】。' },
   rough: { terms: ['Rough.js', 'rough.svg()', 'hachure / cross-hatch 填充', 'stroke-dashoffset 描線', 'seed'],
     prompt: '用 Rough.js 的 SVG 模式畫手繪風小插畫：【一棟房子】（牆用 hachure、屋頂用 cross-hatch 填充）、【一棵樹、一顆有光芒的太陽】，放在【有橫線的米色筆記紙卡】上。用 stroke-dasharray / stroke-dashoffset 讓每條路徑依序一筆一筆畫出來，先描外框再填色，總長約 7 秒。點紙卡就換一個 seed 重畫。' },
@@ -671,7 +671,7 @@ const ASK = {
     prompt: '用 Matter.js 做高爾頓釘板：12 排交錯的固定釘子，下面 13 個隔槽，從頂部中央逐顆放下【400 顆小球】，讓它們自己堆出常態分佈。用自己的 Canvas 2D 迴圈畫（不用 Matter.Render），每格呼叫 Engine.update。為了接近理想的二項分佈，每格稍微衰減小球的水平速度。球都停下後疊上一條 N(6, 3) 的常態曲線做對照；點畫面上方可以再倒 40 顆。' },
   sand: { terms: ['細胞自動機', 'falling sand', 'ImageData + Uint32Array', '由下往上掃描', 'image-rendering: pixelated'],
     prompt: '不用套件，用 Canvas 2D 的 ImageData 做 falling sand 細胞自動機。每一格是空、【沙、水或石頭】。規則：下面空就往下掉，不然試左下或右下；水多一條規則，會往左右流；沙可以沉進水裡。每格由下往上掃描，左右方向逐格交替，避免往一邊偏。用小解析度畫完，再用 image-rendering: pixelated 放大。上方【兩個出沙口】會左右擺動，滑鼠拖曳可以倒【沙、水、石頭】或擦掉。' },
-  three: { terms: ['Three.js', '程式生成 procedural', 'InstancedMesh', 'Points 當窗戶', 'emissive', '相機環繞'],
+  three: { terms: ['Three.js', '程式生成 procedural', 'InstancedMesh', 'Points 大量光點', 'emissive', '相機環繞'],
     prompt: '用 Three.js 做程式生成的【夜景】：中央一棟【44 層的扭轉高塔】，每層樓板比下一層多轉 0.045 弧度、越高越窄。樓板依序從上方落下就位，落定後玻璃慢慢亮起暖色 emissive。四周用 InstancedMesh 放【240 棟深色大樓】，【窗戶】用 Points 表示，隨時間隨機一盞盞點亮。相機在 16 秒內一邊繞塔旋轉一邊往上升，可以左右拖曳調整角度。' },
   glsl: { terms: ['fragment shader', 'fbm 分形噪聲', 'domain warping 域扭曲', 'uniform 時間與滑鼠', '全螢幕三角形'],
     prompt: '不用套件，用原生 WebGL 寫一個全螢幕 fragment shader：用 value noise 疊成 fbm，再做兩層 domain warping（q、r）產生液態流動的漸層，用【四個顏色】依 f、length(q)、r.x 混色。uniform 傳入時間和滑鼠位置，讓滑鼠附近的液面被推開；點一下切換【四組配色】。' },
@@ -1740,13 +1740,13 @@ ${K('for')} (${K('let')} i = ${N_(0)}; i < count; i++)
 pos.needsUpdate = ${K('true')};`,
 };
 const THREE_ASK = {
-  particles: { terms: ['THREE.Points', 'BufferGeometry', 'position 內插 morph', 'AdditiveBlending', 'TorusKnotGeometry 取樣'],
+  particles: { terms: ['THREE.Points', 'BufferGeometry', 'position 內插 morph', 'AdditiveBlending', '從幾何表面取樣目標點'],
     prompt: '用 Three.js 做 12,000 顆粒子的形狀變形：粒子用 THREE.Points + BufferGeometry，準備四組目標座標（【費氏球面、從 TorusKnotGeometry 取樣的環面結、立方體表面、DNA 雙螺旋】），每 3.6 秒切換一次。每顆粒子依序號稍微延遲，用 easeInOut 從目前位置內插到新位置。點用程式畫的圓形貼圖、AdditiveBlending 發光，顏色依序號漸層。可以拖曳旋轉，也有按鈕直接切換形狀。' },
   pbr: { terms: ['MeshStandardMaterial', 'metalness / roughness', 'PMREMGenerator', 'scene.environment', 'ACESFilmic tone mapping'],
     prompt: '用 Three.js 做 PBR 材質對照表：3 列 × 6 欄的【球】，每列 metalness 是 0、0.5、1，每欄 roughness 從 0 到 1，全部用 MeshStandardMaterial。環境光用 PMREMGenerator.fromScene 把一個【有三塊發光面板的攝影棚】場景烘成 scene.environment（不用 HDR 檔），開 ACESFilmic tone mapping 和 sRGB 輸出。加一顆繞圈的點光源，拖曳可以移動光源，旁邊用 HTML 標出每列每欄的數值。' },
   ray: { terms: ['Raycaster', 'InstancedMesh', 'instanceId', 'setMatrixAt / setColorAt', 'intersectPlane'],
     prompt: '用 Three.js 做能用滑鼠互動的【方塊地板】：【26 × 26 個方塊】用一個 InstancedMesh，平常有一圈圈的波浪起伏。滑鼠移動時用 Raycaster 對地面平面求交點，附近的方塊升高並變成【橘色】；同時用 intersectObject 取得游標下那個方塊的 instanceId，顯示在角落。點一下從那裡送出一圈【藍色】漣漪。每格用 setMatrixAt / setColorAt 更新。' },
-  terrain: { terms: ['PlaneGeometry 頂點位移', 'fbm 噪聲', 'flatShading 低多邊形', 'wireframe 疊加', 'Fog', 'synthwave'],
+  terrain: { terms: ['PlaneGeometry 頂點位移', 'fbm 噪聲', 'flatShading 低多邊形', 'wireframe 疊加', 'Fog', '噪聲取樣位移（無限前進）'],
     prompt: '用 Three.js 做【synthwave 風格】的低多邊形地形飛行：一張 70 × 70 段的 PlaneGeometry，每格用 fbm 噪聲重算頂點高度，取樣位置一直往前移，看起來像往前飛；中間留一條平坦的谷道。地形用【深紫色】flatShading 材質，上面疊一層【桃紅色】wireframe，加【紫色】Fog。遠方一顆用 CanvasTexture 畫的【條紋漸層夕陽】，天上撒一點【星星】。滑鼠左右移動時鏡頭跟著平移、微微傾斜。' },
 };
 const D3_CODE = {
@@ -1874,11 +1874,11 @@ ${K('for')} (${K('let')} y = ${N_(0)}; y < h; y += gap)
 ${C_('// 每顆粒子朝自己的目標點靠，游標附近被推開')}`,
 };
 const P5_ASK = {
-  tree: { terms: ['遞迴 recursion', 'push / pop / rotate', 'randomSeed', 'noise 風', '碎形樹'],
+  tree: { terms: ['遞迴 recursion', 'push / pop / rotate', 'randomSeed', 'noise 風', '碎形 fractal'],
     prompt: '用 p5.js（instance mode）畫會隨風擺動的【碎形樹】：從畫面底部中央開始遞迴，每層分 2～3 枝、角度和長度隨機（每格用同一個 randomSeed 讓樹形固定），用 push / pop / rotate 處理座標。枝幹從粗到細、從【褐色】漸變到末端的【粉紅花朵】。用 noise 依深度和時間算風的偏移，越末端擺越多；樹要從樹幹開始一層層長出來，滑鼠左右位置影響風向，點一下重新長一棵。' },
   boids: { terms: ['Boids 群聚', 'separation / alignment / cohesion', '限速', '邊界環繞 wrap', 'Nature of Code'],
     prompt: '用 p5.js 做 Boids 群聚模擬：約 180 隻【小三角形】，每隻看 42px 內的鄰居，套三條規則——分離（太近就散開）、對齊（跟鄰居同方向）、聚集（往鄰居中心靠），再限制速度範圍、畫面邊界環繞。三角形朝速度方向、依方向上色，背景用半透明覆蓋留下短拖尾。游標附近的鳥會躲開，點一下讓牠們炸開四散。' },
-  web: { terms: ['WEBGL 模式', 'normalMaterial', 'box / torus', 'push / translate', 'sin 波'],
+  web: { terms: ['WEBGL 模式', 'normalMaterial', '依距離算相位的波浪陣列', 'push / translate', 'sin 波'],
     prompt: '用 p5.js 的 WEBGL 模式做 3D 波浪方塊陣列：【9 × 9 根方柱】放在地面上，高度依「到中心的距離 + 時間」的 sin 波起伏，用 normalMaterial 上色；正上方浮著一個旋轉的【torus】。整個場景緩慢自轉，可以用滑鼠拖曳改變視角（自己寫拖曳，不要用 orbitControl 的滾輪縮放，避免搶走頁面捲動）。' },
   text: { terms: ['createGraphics 離屏畫布', 'loadPixels 取樣', 'arrive 轉向', '滑鼠排斥', '粒子文字'],
     prompt: '用 p5.js 做粒子文字：在一張 createGraphics 離屏畫布上寫大字，loadPixels 後每隔幾個像素取樣，有字的像素就當成一個目標點。畫面上的粒子用 arrive 行為（速度 × 阻尼 + 朝目標的力）飛到各自的目標，組成文字；游標 80px 內的粒子被推開。每 4 秒換一個字（【p5.js → 粒子 → CODE】），顏色依 x 位置從【橘】漸變到【紫】。' },
@@ -1921,7 +1921,7 @@ const MATTER_ASK = {
     prompt: '用 Matter.js 做布料：用 Composites.stack 建 22 × 14 個小圓點（collisionFilter.group 設負數讓它們互不碰撞），再用 Composites.mesh 把相鄰點用 Constraint 連起來，上緣每隔幾個點用 Body.setStatic 釘住。畫面只畫約束線，看起來像一張網布。加一顆可以拖曳的【大球】去撞布；提供「起風」（隨機對點 applyForce）、「剪開」（移除中間一欄的約束）和「重來」按鈕。' },
   cradle: { terms: ['牛頓擺', 'Constraint 擺錘', 'restitution: 1', 'inertia: Infinity', '子步 substeps'],
     prompt: '用 Matter.js 做牛頓擺：5 顆並排的球，各用一條 Constraint 從上方橫桿垂下，球設 restitution 1、friction 0、frictionAir 0.0001、inertia Infinity、slop 1，讓碰撞能量盡量完整傳遞。每格分 4 個子步呼叫 Engine.update 提高精準度。提供「拉一顆／兩顆／三顆」按鈕（把左邊的球沿圓弧拉起後放開），也可以用滑鼠直接拖球。球用放射漸層畫出【金屬感】。' },
-  bridge: { terms: ['Composites.chain', 'Body.nextGroup', 'chamfer 圓角', 'Constraint 錨點', '吊橋'],
+  bridge: { terms: ['Composites.chain', 'Body.nextGroup', 'chamfer 圓角', 'Constraint 錨點', '鏈條承重下垂'],
     prompt: '用 Matter.js 做吊橋：兩側各一座靜態【懸崖】，中間【14 片木板】用 Composites.stack 排成一列（同一個 Body.nextGroup(true) 讓木板之間不互撞），再用 Composites.chain 把相鄰木板頭尾相連，第一片和最後一片用 Constraint 綁到懸崖邊。上方定時掉下【箱子和球】，壓得橋面下沉晃動，掉出畫面就移除。按鈕：「丟大箱子」「丟一堆球」；物體可以用滑鼠拖。' },
 };
 
@@ -2002,7 +2002,7 @@ loop(t => {
 const ROUGH_ASK = {
   chart: { terms: ['Rough.js', 'rough.svg()', 'rc.rectangle 長條', 'rc.arc 圓餅', 'fillStyle 變化', '描線動畫'],
     prompt: '用 Rough.js（SVG 模式）在【米色紙卡】上畫手繪風圖表：左邊 6 根長條（【每月訪客，隨機示範數據】），每根不同顏色、hachure 填充、角度略有不同，加手寫風的【月份】和數值標籤；右邊一個 4 片的圓餅，用 rc.arc 畫、四片分別用 hachure、cross-hatch、zigzag、dots 填充，標上百分比。所有路徑用 stroke-dashoffset 依序描出來，文字最後淡入。點紙卡就換一組數據重畫。' },
-  flow: { terms: ['Rough.js', '流程圖 flowchart', '固定 seed', 'getScreenCTM 座標轉換', '箭頭裁到圖形邊緣'],
+  flow: { terms: ['Rough.js', '拖曳時即時重畫連線', '固定 seed', 'getScreenCTM 座標轉換', '箭頭裁到圖形邊緣'],
     prompt: '用 Rough.js（SVG 模式）做可以拖曳的手繪流程圖：【「想做的效果」（橢圓）→「要 3D 嗎？」（菱形）是 → Three.js，否 →「上千個物件？」是 → PixiJS，否 →「要綁資料？」是 → D3.js、否 → Canvas / p5】。連線畫成手繪箭頭，起點和終點要裁到圖形邊緣，旁邊標「是／否」。每個節點可以拖曳（用 getScreenCTM().inverse() 換算 SVG 座標），拖曳時整張圖重畫，但每個圖形固定自己的 seed，筆觸不會亂跳。按鈕：換筆觸、重排。' },
   fills: { terms: ['Rough.js', 'fillStyle 八種', 'roughness', 'hachureGap', 'seed'],
     prompt: '用 Rough.js（SVG 模式）做一張填充樣式對照表：2 × 4 格，每格一個圖形（【方形、圓、六角形、橢圓】輪流），分別用 hachure、solid、zigzag、cross-hatch、dots、dashed、zigzag-line、sunburst 八種 fillStyle，下方標名稱。提供按鈕切換 roughness（0.5、1.5、3）和 hachureGap（5、8、14），以及「換 seed」，按下立即重畫。第一次載入時用描線動畫畫出來。' },
@@ -2169,7 +2169,7 @@ const TONE_ASK = {
     prompt: '用 Tone.js 做 16 步音序器：9 列 × 16 格的按鈕網格，上面 6 列是【A 小調五聲音階（A4 G4 E4 D4 C4 A3，用方波 PolySynth）】，下面 3 列是 Hi-hat（NoiseSynth + highpass）、Snare（NoiseSynth + bandpass）、Kick（MembraneSynth），附一組預設節奏。用 Tone.Clock 以 16 分音符觸發（頻率 = BPM / 60 × 4），所有聲音用 callback 給的 time 排程，播放頭用 Tone.Draw.schedule 同步亮起。按鈕：播放／停止、90 / 110 / 130 BPM、隨機旋律、清空。' },
   xy: { terms: ['Tone.js', 'Tone.Filter lowpass', 'cutoff / Q 共振', 'XY pad', 'Tone.FFT', 'Distortion / FeedbackDelay'],
     prompt: '用 Tone.js 做濾波器 XY 控制板：按住畫面時用 fatsawtooth 的 PolySynth 發出一個和弦（可切【Am、F、C、G】），經過 lowpass Filter → Distortion → FeedbackDelay。游標 X 軸以對數方式控制 cutoff（60 Hz–9 kHz），Y 軸控制 Q 共振，用 rampTo(…, 0.05) 避免爆音。畫面用 Canvas 畫：對數頻率格線、Tone.FFT 頻譜長條、依目前 cutoff 和 Q 算出來的二階低通頻率響應曲線，以及游標的拖尾。按鈕切換失真和延遲；沒人操作時讓一個幽靈游標慢慢掃過（不發聲）。' },
-  sfx: { terms: ['Tone.js', '合成音效 sfx', 'frequency.exponentialRampTo', 'NoiseSynth 爆炸', '一次性音源 dispose'],
+  sfx: { terms: ['Tone.js', '合成音效 sfx', 'frequency.exponentialRampTo', 'NoiseSynth 噪聲音效', '一次性音源 dispose'],
     prompt: '用 Tone.js 當場合成 8 種【遊戲音效】，不用任何音檔：雷射（鋸齒波 1600→120 Hz 下滑）、金幣（方波 B5 接 E6）、跳躍（方波 220→900 Hz 上滑）、爆炸（brown noise 經 lowpass 從 2400 掃到 60 Hz，再疊一個 MembraneSynth 低頻）、升級（三角波琶音 C5 E5 G5 C6 E6）、受傷（方波下滑 + Distortion）、按鈕（30ms 正弦短音）、警報（880/660 交替 4 次）。每次觸發都 new 一個新的 synth、播完 setTimeout 後 dispose，避免連按時排程衝突。做成 4 × 2 的按鈕格，也能用數字鍵 1–8 觸發，上方用 Tone.Waveform 畫示波器。' },
 };
 
