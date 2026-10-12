@@ -559,10 +559,15 @@ svg.append(rc.circle(<span class="n">660</span>, <span class="n">110</span>, <sp
     hint: '每一頁都會自己播放，也能用下方的按鈕、進度條或捲動來控制',
     fit: '網站進場和文字動畫、捲動敘事、版面切換、要精準排時間的長段動畫',
     site: 'https://gsap.com',
-    code: `<span class="k">const</span> tl = gsap.timeline();
-tl.from(chars, { yPercent: <span class="n">120</span>, opacity: <span class="n">0</span>,
-                 stagger: <span class="n">0.05</span>, ease: <span class="s">'back.out(1.7)'</span> })
-  .from(rule, { scaleX: <span class="n">0</span>, ease: <span class="s">'expo.inOut'</span> }, <span class="s">'-=0.4'</span>);` },
+    code: `<span class="k">const</span> tl = gsap.timeline({
+  defaults: { ease: <span class="s">'back.out(1.7)'</span> }
+});
+tl.from(line1Chars, { yPercent: <span class="n">120</span>,
+    opacity: <span class="n">0</span>, stagger: <span class="n">0.06</span> })
+  .from(line2Chars, { yPercent: <span class="n">120</span>,
+    opacity: <span class="n">0</span>, stagger: <span class="n">0.035</span>
+  }, <span class="s">'-=0.55'</span>)
+  .from(rule, { scaleX: <span class="n">0</span> }, <span class="s">'-=0.5'</span>);` },
   { id: 'anime', name: 'Anime.js', cat: '動畫', lib: 'anime', base: ['dom', 'svg'], ver: 'animejs 3.2.2',
     blurb: '輕量的動畫工具，讓網頁元素和 SVG 動起來，寫法比 GSAP 更精簡；錯開、時間軸、描線變形、數字滾動都內建。',
     hint: '每一頁都會自己播放；可以點畫面，或用下方的按鈕、進度條控制',
@@ -1496,10 +1501,15 @@ MOUNT.p5 = (el, api = {}) => tabbed(el, api, 'p5', [
 /* ---- 4. GSAP: core timeline + official plugins ---- */
 const K = t => `<span class="k">${t}</span>`, S_ = t => `<span class="s">${t}</span>`, N_ = t => `<span class="n">${t}</span>`, C_ = t => `<span class="c">${t}</span>`;
 const GS_CODE = {
-  timeline: `${K('const')} tl = gsap.timeline();
-tl.from(chars, { yPercent: ${N_(120)}, opacity: ${N_(0)},
-                 stagger: ${N_(0.05)}, ease: ${S_("'back.out(1.7)'")} })
-  .from(rule, { scaleX: ${N_(0)}, ease: ${S_("'expo.inOut'")} }, ${S_("'-=0.4'")});`,
+  timeline: `${K('const')} tl = gsap.timeline({
+  defaults: { ease: ${S_("'back.out(1.7)'")} }
+});
+tl.from(line1Chars, { yPercent: ${N_(120)},
+    opacity: ${N_(0)}, stagger: ${N_(0.06)} })
+  .from(line2Chars, { yPercent: ${N_(120)},
+    opacity: ${N_(0)}, stagger: ${N_(0.035)}
+  }, ${S_("'-=0.55'")})
+  .from(rule, { scaleX: ${N_(0)} }, ${S_("'-=0.5'")});`,
   scroll: `gsap.to(shape, {
   rotate: ${N_(360)}, borderRadius: ${S_("'50%'")},
   scrollTrigger: {
